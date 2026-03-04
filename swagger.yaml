@@ -1,0 +1,767 @@
+openapi: 3.0.3
+info:
+  title: Dracin API Gateway
+  description: API Gateway untuk mengakses konten dari Dracin platform (Dramabox + ReelShort)
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@dracin.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:4343
+    description: Development Server
+
+paths:
+  /dramabox/latest:
+    get:
+      tags:
+        - Dramas
+      summary: Get latest dramas
+      description: Mengambil daftar drama terbaru
+      parameters:
+        - name: pageNo
+          in: query
+          description: Nomor halaman
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: pageSize
+          in: query
+          description: Jumlah item per halaman
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+              example:
+                - bookId: "42000005973"
+                  bookName: "Menantu Ibu Mertua"
+                  coverWap: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005973/42000005973.jpg"
+                  chapterCount: 96
+                  introduction: "Cerita tentang menantu dan ibu mertua..."
+                  tags: ["Drama", "Keluarga"]
+                  protagonist: "Nama karakter"
+
+  /dramabox/trending:
+    get:
+      tags:
+        - Dramas
+      summary: Get trending dramas
+      description: Mengambil daftar drama yang sedang tren
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+
+  /dramabox/for-you:
+    get:
+      tags:
+        - Dramas
+      summary: Get recommended dramas
+      description: Mengambil daftar drama yang direkomendasikan untuk user
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+
+  /dramabox/vip:
+    get:
+      tags:
+        - Dramas
+      summary: Get VIP dramas
+      description: Mengambil daftar drama VIP/premium
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+
+  /dramabox/random:
+    get:
+      tags:
+        - Dramas
+      summary: Get random drama
+      description: Mengambil drama acak
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+
+  /dramabox/search:
+    get:
+      tags:
+        - Search
+      summary: Search dramas
+      description: Mencari drama berdasarkan keyword
+      parameters:
+        - name: query
+          in: query
+          description: Kata kunci pencarian
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+        "400":
+          description: Bad request - query parameter required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dramabox/popular-searches:
+    get:
+      tags:
+        - Search
+      summary: Get popular searches
+      description: Mengambil daftar pencarian yang populer
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PopularSearch"
+
+  /dramabox/dubbed:
+    get:
+      tags:
+        - Dramas
+      summary: Get dubbed dramas
+      description: Mengambil daftar drama yang sudah dubbing
+      parameters:
+        - name: classify
+          in: query
+          description: Klasifikasi (terpopuler/terbaru)
+          required: true
+          schema:
+            type: string
+            enum: [terpopuler, terbaru]
+        - name: page
+          in: query
+          description: Nomor halaman
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+        "400":
+          description: Bad request - invalid classify parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dramabox/detail:
+    get:
+      tags:
+        - Details
+      summary: Get drama details
+      description: Mengambil detail lengkap drama berdasarkan ID
+      parameters:
+        - name: bookId
+          in: query
+          description: ID drama (format 4200000XXXXX)
+          required: true
+          schema:
+            type: string
+            example: "42000005973"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DramaDetail"
+        "400":
+          description: Bad request - bookId required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dramabox/episodes:
+    get:
+      tags:
+        - Details
+      summary: Get drama episodes
+      description: Mengambil daftar episode drama berdasarkan ID
+      parameters:
+        - name: bookId
+          in: query
+          description: ID drama (format 4200000XXXXX)
+          required: true
+          schema:
+            type: string
+            example: "42000005973"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Episode"
+        "400":
+          description: Bad request - bookId required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /reelshort/search:
+    get:
+      tags:
+        - ReelShort
+      summary: Search ReelShort dramas
+      description: Cari drama berdasarkan kata kunci
+      parameters:
+        - name: keywords
+          in: query
+          required: true
+          description: Kata kunci pencarian
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ReelShortSearchResult"
+
+  /reelshort/episodes/{bookId}:
+    get:
+      tags:
+        - ReelShort
+      summary: Get ReelShort episodes
+      description: Dapatkan daftar episode dari drama
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: ID dari hasil search
+          schema:
+            type: string
+        - name: filtered_title
+          in: query
+          required: true
+          description: Slug dari hasil search
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ReelShortEpisode"
+
+  /reelshort/video/{bookId}/{episodeNum}:
+    get:
+      tags:
+        - ReelShort
+      summary: Get ReelShort video URL
+      description: Dapatkan URL video episode
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: ID dari hasil search
+          schema:
+            type: string
+        - name: episodeNum
+          in: path
+          required: true
+          description: Nomor episode
+          schema:
+            type: integer
+        - name: filtered_title
+          in: query
+          required: true
+          description: Slug dari hasil search
+          schema:
+            type: string
+        - name: chapter_id
+          in: query
+          required: true
+          description: ID chapter dari episodes
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortVideo"
+
+  /reelshort/recommend:
+    get:
+      tags:
+        - ReelShort
+      summary: Get recommended ReelShort dramas
+      description: Mendapatkan drama yang direkomendasikan
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
+
+  /reelshort/dramadub:
+    get:
+      tags:
+        - ReelShort
+      summary: Get drama with dubbing
+      description: Mendapatkan drama dengan dubbing
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
+
+  /reelshort/newrelease:
+    get:
+      tags:
+        - ReelShort
+      summary: Get new releases
+      description: Mendapatkan drama rilis terbaru
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
+
+components:
+  schemas:
+    Drama:
+      type: object
+      properties:
+        bookId:
+          type: string
+          description: Unique identifier for drama
+          example: "42000005973"
+        bookName:
+          type: string
+          description: Title of the drama
+          example: "Menantu Ibu Mertua"
+        coverWap:
+          type: string
+          format: uri
+          description: URL to cover image
+          example: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005973/42000005973.jpg"
+        chapterCount:
+          type: integer
+          description: Number of chapters/episodes
+          example: 96
+        introduction:
+          type: string
+          description: Brief description of the drama
+          example: "Cerita tentang menantu dan ibu mertua yang penuh konflik..."
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of genre tags
+          example: ["Drama", "Keluarga", "Romantis"]
+        protagonist:
+          type: string
+          description: Main characters
+          example: "Sarah, Bunda Siti"
+        dataFrom:
+          type: string
+          description: Data source
+          example: "大数据"
+        cardType:
+          type: integer
+          description: Card type identifier
+          example: 1
+        rankVo:
+          $ref: "#/components/schemas/RankInfo"
+        markNamesConnectKey:
+          type: string
+          description: Connector for tag names
+          example: ", "
+        bookShelfTime:
+          type: integer
+          format: int64
+          description: Book shelf timestamp
+          example: 1772528400000
+        shelfTime:
+          type: string
+          description: Formatted shelf time
+          example: "2026-03-03 17:00:00"
+        inLibrary:
+          type: boolean
+          description: Whether drama is in user's library
+          example: false
+
+    DramaDetail:
+      allOf:
+        - $ref: "#/components/schemas/Drama"
+        - type: object
+          properties:
+            tagV3s:
+              type: array
+              items:
+                $ref: "#/components/schemas/TagV3"
+            isEntry:
+              type: integer
+              description: Entry status
+              example: 0
+            index:
+              type: integer
+              description: Index position
+              example: 0
+
+    Episode:
+      type: object
+      properties:
+        chapterId:
+          type: string
+          description: Episode ID
+          example: "42000005973_1"
+        chapterName:
+          type: string
+          description: Episode title
+          example: "Episode 1: Pertemuan Pertama"
+        chapterIndex:
+          type: integer
+          description: Episode number
+          example: 1
+        isFree:
+          type: boolean
+          description: Whether episode is free
+          example: true
+        coverWap:
+          type: string
+          format: uri
+          description: Episode cover image
+          example: "https://hwztchapter.dramaboxdb.com/episode/cover.jpg"
+
+    TagV3:
+      type: object
+      properties:
+        tagId:
+          type: integer
+          description: Tag ID
+          example: 1399
+        tagName:
+          type: string
+          description: Tag name in Indonesian
+          example: "Serangan Balik"
+        tagEnName:
+          type: string
+          description: Tag name in English
+          example: "Counterattack"
+
+    RankInfo:
+      type: object
+      properties:
+        rankType:
+          type: integer
+          description: Type of ranking
+          example: 3
+        hotCode:
+          type: string
+          description: Hotness code
+          example: "3.3K"
+        sort:
+          type: integer
+          description: Sort order
+          example: 7
+
+    PopularSearch:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: Search keyword
+          example: "cinta"
+        searchCount:
+          type: integer
+          description: Number of searches
+          example: 1500
+        rank:
+          type: integer
+          description: Popularity rank
+          example: 1
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Parameter query dibutuhkan"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2026-03-03T20:00:00.000Z"
+
+    # ReelShort Schemas
+    ReelShortSearchResult:
+      type: object
+      properties:
+        book_id:
+          type: string
+          description: Unique identifier for drama
+          example: "691e7400967bec54170e4a87"
+        book_title:
+          type: string
+          description: Title of the drama
+          example: "Balas Dendam Pewaris Sejati"
+        filtered_title:
+          type: string
+          description: Slug for URL
+          example: "balas-dendam-pewaris-sejati"
+        book_pic:
+          type: string
+          format: uri
+          description: URL to cover image
+          example: "https://v-mps.crazymaplestudios.com/images/df084650-c5fb-11f0-84ad-6b5693b490dc.jpg"
+        chapter_count:
+          type: integer
+          description: Number of episodes
+          example: 59
+        bookshelf_name:
+          type: string
+          description: Bookshelf category
+          example: "Lebih Direkomendasikan "
+
+    ReelShortEpisode:
+      type: object
+      properties:
+        episode:
+          type: integer
+          description: Episode number
+          example: 1
+        chapter_id:
+          type: string
+          description: Chapter ID for video
+          example: "ncqn2kbi1h"
+
+    ReelShortVideo:
+      type: object
+      properties:
+        video_url:
+          type: string
+          format: uri
+          description: URL to video file (m3u8)
+          example: "https://v-mps.crazymaplestudios.com/vod-112094/d0e3d150034771f1bfee4077c0c20102/0da7c5d8d259433895c74035295127d2-446a937ef65e3c44c36fdaab5e8a134f-sd.m3u8"
+        serial_number:
+          type: integer
+          description: Episode number
+          example: 1
+        duration:
+          type: integer
+          description: Duration in seconds
+          example: 118
+        next_episode:
+          type: object
+          nullable: true
+          description: Next episode info
+          properties:
+            episode_num:
+              type: integer
+            chapter_id:
+              type: string
+            filtered_title:
+              type: string
+            book_id:
+              type: string
+        prev_episode:
+          type: object
+          nullable: true
+          description: Previous episode info
+          properties:
+            episode_num:
+              type: integer
+            chapter_id:
+              type: string
+            filtered_title:
+              type: string
+            book_id:
+              type: string
+
+    ReelShortBookshelf:
+      type: object
+      properties:
+        bs_id:
+          type: integer
+          description: Bookshelf ID
+          example: 119143
+        bookshelf_name:
+          type: string
+          description: Bookshelf name
+          example: "Lebih Direkomendasikan "
+        type:
+          type: integer
+          example: 1
+        ui_style:
+          type: integer
+          example: 5
+        rule_style:
+          type: integer
+          example: 1
+        sort:
+          type: integer
+          example: 11
+        sort_type:
+          type: integer
+          example: 7
+        sort_style:
+          type: integer
+          example: 1
+        see_all:
+          type: integer
+          example: 0
+        books:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReelShortBook"
+
+    ReelShortBook:
+      type: object
+      properties:
+        book_id:
+          type: string
+          description: Book ID
+          example: "6970736798bc70fa510e0291"
+        book_title:
+          type: string
+          description: Book title
+          example: "Ayah Anakku, Musuh Dunia"
+        book_pic:
+          type: string
+          format: uri
+          description: Cover image URL
+        chapter_count:
+          type: integer
+          description: Number of chapters
+          example: 45
+        special_desc:
+          type: string
+          description: Special description
+        chapter_base:
+          type: array
+          items:
+            type: object
+            properties:
+              chapter_id:
+                type: string
+              chapter_name:
+                type: string
+              like_count:
+                type: integer
+              publish_at:
+                type: string
+              create_time:
+                type: string
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (optional for public endpoints)
+
+security:
+  - ApiKeyAuth: []
+  - {}
