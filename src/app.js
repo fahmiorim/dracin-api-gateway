@@ -11,6 +11,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { healthCheck } from './controllers/health.controller.js';
 import apiRoutes from './routes/api.js';
 import reelshortRoutes from './routes/reelshort.js';
+import meloloRoutes from './routes/melolo.js';
 
 // Load Swagger specification
 let swaggerDocument;
@@ -83,6 +84,7 @@ app.get('/health', healthCheck);
 // API routes - MUST be before Swagger UI
 app.use('/dramabox', apiRoutes);
 app.use('/reelshort', reelshortRoutes);
+app.use('/melolo', meloloRoutes);
 
 // Swagger UI at /docs path (not root to avoid conflicts)
 if (swaggerDocument) {
