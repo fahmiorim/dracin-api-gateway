@@ -427,6 +427,198 @@ paths:
                   data:
                     $ref: "#/components/schemas/ReelShortBookshelf"
 
+  /melolo/search:
+    get:
+      tags:
+        - Melolo
+      summary: Search Melolo novels
+      description: Mencari novel berdasarkan kata kunci
+      parameters:
+        - name: query
+          in: query
+          description: Kata kunci pencarian
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+        - name: offset
+          in: query
+          description: Offset untuk pagination
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: limit
+          in: query
+          description: Jumlah hasil per halaman
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 50
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MeloloSearchResult"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        "400":
+          description: Bad request - query parameter required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No novels found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /melolo/video-details:
+    get:
+      tags:
+        - Melolo
+      summary: Get video details for a series
+      description: Mendapatkan detail video untuk series tertentu
+      parameters:
+        - name: series_id
+          in: query
+          description: ID series novel
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MeloloVideoDetail"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        "400":
+          description: Bad request - series_id parameter required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Video details not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /melolo/video-model:
+    get:
+      tags:
+        - Melolo
+      summary: Get video URL by video ID
+      description: Mendapatkan URL streaming video berdasarkan video ID
+      parameters:
+        - name: video_id
+          in: query
+          description: ID video
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/MeloloVideoUrl"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        "400":
+          description: Bad request - video_id parameter required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Video URL not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /melolo/recommend:
+    get:
+      tags:
+        - Melolo
+      summary: Get recommended novels
+      description: Mendapatkan daftar novel yang direkomendasikan
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MeloloRecommendation"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        "404":
+          description: No recommendations found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Drama:
@@ -754,6 +946,74 @@ components:
                 type: string
               create_time:
                 type: string
+
+    # Melolo Schemas
+    MeloloSearchResult:
+      type: object
+      properties:
+        series_id:
+          type: string
+          description: Unique identifier for novel series
+          example: "1234567890"
+        title:
+          type: string
+          description: Title of the novel
+          example: "Kisah Cinta Abadi"
+        last_chapter_index:
+          type: string
+          description: Index of the last chapter
+          example: "150"
+        thumb_url:
+          type: string
+          format: uri
+          description: URL to thumbnail image
+          example: "https://example.com/thumb.jpg"
+
+    MeloloVideoDetail:
+      type: object
+      properties:
+        duration:
+          type: integer
+          description: Video duration in seconds
+          example: 120
+        digged_count:
+          type: integer
+          description: Number of likes/diggs
+          example: 1500
+        video_id:
+          type: string
+          description: Unique video identifier
+          example: "vid123456"
+        chapter:
+          type: string
+          description: Chapter number or identifier
+          example: "1"
+
+    MeloloVideoUrl:
+      type: object
+      properties:
+        main_url:
+          type: string
+          format: uri
+          description: Primary video streaming URL
+          example: "https://example.com/video.m3u8"
+        backup_url:
+          type: string
+          format: uri
+          description: Backup video streaming URL
+          example: "https://backup.example.com/video.m3u8"
+
+    MeloloRecommendation:
+      type: object
+      properties:
+        drama_name:
+          type: string
+          description: Name of the recommended drama/novel
+          example: "Cinta Pertama"
+        series_id:
+          type: string
+          description: Series ID for the recommendation
+          example: "9876543210"
 
   securitySchemes:
     ApiKeyAuth:

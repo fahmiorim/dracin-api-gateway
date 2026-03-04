@@ -115,7 +115,6 @@ class MeloloAPI {
                 "X-Ss-Stub": "238B6268DE1F0B757306031C76B5397E",
                 "Content-Encoding": "gzip",
                 "Content-Type": "application/json; charset=utf-8",
-                "Content-Length": "157",
             });
             
             const params = { ...this.common_params };
@@ -139,6 +138,13 @@ class MeloloAPI {
             logger.info(`Request data: ${JSON.stringify(data, null, 2)}`);
             
             const response = await axios.post(url, data, { headers, params });
+            
+            console.log('=== MELOLO DEBUG ===');
+            console.log('Response status:', response.status);
+            console.log('Response data:', JSON.stringify(response.data, null, 2));
+            console.log('Response keys:', Object.keys(response.data));
+            console.log('Data keys:', response.data ? Object.keys(response.data) : 'No data');
+            console.log('==================');
             
             logger.info(`Response status: ${response.status}`);
             logger.info(`Response headers: ${JSON.stringify(response.headers, null, 2)}`);
