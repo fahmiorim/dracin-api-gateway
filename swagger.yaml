@@ -11,7 +11,7 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: http://localhost:4343
+  - url: http://localhost:3000
     description: Development Server
 
 paths:
@@ -45,17 +45,93 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Drama"
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Latest dramas retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Drama"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2026-03-04T12:47:43.938Z"
+                  requestId:
+                    type: string
+                    format: uuid
+                    example: "6b31b37d-0c23-4da5-8354-17d162ce3734"
               example:
-                - bookId: "42000005973"
-                  bookName: "Menantu Ibu Mertua"
-                  coverWap: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005973/42000005973.jpg"
-                  chapterCount: 96
-                  introduction: "Cerita tentang menantu dan ibu mertua..."
-                  tags: ["Drama", "Keluarga"]
-                  protagonist: "Nama karakter"
+                success: true
+                message: "Latest dramas retrieved successfully"
+                data:
+                  - bookId: "42000005549"
+                    bookName: "Bangkitnya Naga Tersembunyi"
+                    coverWap: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005549/42000005549.jpg?t=1770086733628"
+                    chapterCount: 78
+                    introduction: "Evan Parta, pewaris perguruan Tao..."
+                    tags: ["Pembalikan Identitas", "Serangan Balik"]
+                    tagV3s:
+                      - tagId: 1338
+                        tagName: "Pembalikan Identitas"
+                        tagEnName: "Hidden Identity"
+                    protagonist: "Evan Parta, Ayu Wangsa"
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 10
+                timestamp: "2026-03-04T12:47:43.938Z"
+                requestId: "6b31b37d-0c23-4da5-8354-17d162ce3734"
+
+  /dramabite/homepage:
+    get:
+      tags:
+        - Dramabite
+      summary: Get homepage dramas
+      description: Mengambil daftar drama dari homepage Dramabite
+      parameters:
+        - name: page
+          in: query
+          description: Nomor halaman
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Homepage dramas retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DramabiteModule"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2026-03-04T22:41:45.223Z"
+                  requestId:
+                    type: string
+                    format: uuid
+                    example: "e15c3e9c-15c7-4b49-84d9-0c8a2c27134f"
 
   /dramabox/trending:
     get:
@@ -943,40 +1019,185 @@ paths:
 
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          description: Items per page
+          example: 20
+        total:
+          type: integer
+          description: Total items returned
+          example: 10
+    
+    DramabiteModule:
+      type: object
+      properties:
+        module_id:
+          type: integer
+          description: Module ID
+          example: 542
+        module_name:
+          type: string
+          description: Module name
+          example: "🔥Paling Populer"
+        module_style_type:
+          type: integer
+          description: Module style type
+          example: 7
+        video_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/DramabiteVideo"
+          description: List of videos in this module
+    
+    DramabiteVideo:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Video title
+          example: "Takdir Sang Alfa Liar"
+        cover_url:
+          type: string
+          description: Cover image URL
+          example: "episode/cdebe2eb8281ed9aa170d755dc591b0d"
+        cid:
+          type: string
+          description: Video ID
+          example: "10938"
+        vid:
+          type: integer
+          description: Video number
+          example: 1
+        total_episode:
+          type: integer
+          description: Total episodes
+          example: 70
+        max_episode_can_watch:
+          type: integer
+          description: Maximum free episodes
+          example: 11
+        pay_episode:
+          type: integer
+          description: Episode where payment starts
+          example: 12
+        desc:
+          type: string
+          description: Video description
+          example: "Digerakkan oleh tarikan naluri yang kuat..."
+        linkInfo:
+          $ref: "#/components/schemas/DramabiteLinkInfo"
+        tagV3s:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagV3"
+          description: Video tags
+        tags:
+          type: array
+          items:
+            type: string
+          description: Simple tag list
+          example: ["Pembalikan Identitas", "Kekuatan Khusus"]
+    
+    DramabiteLinkInfo:
+      type: object
+      properties:
+        video_link:
+          type: string
+          format: uri
+          description: Direct video streaming link
+          example: "video/10938/1/72bdfedb9825fa82ccc619819ee2b2b05.m3u8?wsSecret=cc9"
+        validity_period:
+          type: integer
+          description: Link validity period in seconds
+          example: 1800
+        video_link_m3u8:
+          type: string
+          format: uri
+          description: M3U8 streaming link
+          example: "video/10938/1/72bdfedb9825fa82ccc619819ee2b2b05.m3u8?wsSecret=cc9"
+        cid:
+          type: integer
+          description: Content ID
+          example: 10938
+
+    TagV3:
+      type: object
+      properties:
+        tagId:
+          type: integer
+          description: Tag ID
+          example: 1395
+        tagName:
+          type: string
+          description: Tag name in Indonesian
+          example: "Pembalikan Identitas"
+        tagEnName:
+          type: string
+          description: Tag name in English
+          example: "Hidden Identity"
+    
+    RankInfo:
+      type: object
+      properties:
+        rankType:
+          type: integer
+          description: Type of ranking
+          example: 3
+        hotCode:
+          type: string
+          description: Hot code metric
+          example: "24.8K"
+        sort:
+          type: integer
+          description: Sort order
+          example: 1
+    
     Drama:
       type: object
       properties:
         bookId:
           type: string
           description: Unique identifier for drama
-          example: "42000005973"
+          example: "42000005549"
         bookName:
           type: string
           description: Title of the drama
-          example: "Menantu Ibu Mertua"
+          example: "Bangkitnya Naga Tersembunyi"
         coverWap:
           type: string
           format: uri
           description: URL to cover image
-          example: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005973/42000005973.jpg"
+          example: "https://hwztchapter.dramaboxdb.com/data/cppartner/4x2/42x0/420x0/42000005549/42000005549.jpg?t=1770086733628"
         chapterCount:
           type: integer
           description: Number of chapters/episodes
-          example: 96
+          example: 78
         introduction:
           type: string
           description: Brief description of the drama
-          example: "Cerita tentang menantu dan ibu mertua yang penuh konflik..."
+          example: "Evan Parta, pewaris perguruan Tao, turun gunung ke Sagara membawa tanda pertunangan. Namun karena tampil sederhana, ia dihina dan pertunangannya dengan Tara Chandra dibatalkan di depan umum..."
         tags:
           type: array
           items:
             type: string
           description: List of genre tags
-          example: ["Drama", "Keluarga", "Romantis"]
+          example: ["Pembalikan Identitas", "Serangan Balik", "Kekuatan Khusus", "Modern", "Pria Dominan", "Kembali Bangkit"]
+        tagV3s:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagV3"
+          description: Detailed tag information
         protagonist:
           type: string
           description: Main characters
-          example: "Sarah, Bunda Siti"
+          example: "Evan Parta, Ayu Wangsa"
         dataFrom:
           type: string
           description: Data source
@@ -991,6 +1212,30 @@ components:
           type: string
           description: Connector for tag names
           example: ", "
+        bookShelfTime:
+          type: integer
+          description: Book shelf timestamp
+          example: 1772442000000
+        shelfTime:
+          type: string
+          description: Formatted shelf time
+          example: "2026-03-02 17:00:00"
+        inLibrary:
+          type: boolean
+          description: Whether drama is in user's library
+          example: false
+        isEntry:
+          type: integer
+          description: Entry status
+          example: 0
+        index:
+          type: integer
+          description: Index position
+          example: 0
+        hotCode:
+          type: string
+          description: Hot code metric
+          example: "24.8K"
         bookShelfTime:
           type: integer
           format: int64

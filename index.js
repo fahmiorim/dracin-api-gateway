@@ -9,11 +9,6 @@ const server = app.listen(config.port, () => {
     environment: config.nodeEnv,
     pid: process.pid
   });
-  
-  console.log(`🚀 Dracin API Gateway running on http://localhost:${config.port}`);
-  console.log(`📡 API Base: http://localhost:${config.port}`);
-  console.log(`🏥 Health Check: http://localhost:${config.port}/health`);
-  console.log(`🌍 Environment: ${config.nodeEnv}`);
 });
 
 // Graceful shutdown

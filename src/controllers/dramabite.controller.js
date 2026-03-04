@@ -1,4 +1,5 @@
 import logger from '../utils/logger.js';
+import { createPaginatedResponse, createSuccessResponse, createErrorResponse } from '../utils/responseHelper.js';
 import { 
   homepage as getHomepageData, 
   endModule as getEndModuleData, 
@@ -26,21 +27,17 @@ export const getHomepage = async (req, res, next) => {
 
     logger.info('Dramabite homepage retrieved successfully', {
       requestId: req.id,
-      count: result.data?.drama_module?.length || 0
+      count: result?.module_list?.length || 0
     });
 
-    res.json({
-      success: true,
-      message: 'Homepage dramas retrieved successfully',
-      data: result.data || result,
-      pagination: {
-        page: parseInt(page),
-        limit: 20,
-        total: result.data?.drama_module?.length || 0
-      },
-      timestamp: new Date().toISOString(),
-      requestId: req.id
-    });
+    res.json(createPaginatedResponse(
+      result?.module_list || [],
+      parseInt(page),
+      20,
+      result?.module_list?.length || 0,
+      'Homepage dramas retrieved successfully',
+      { requestId: req.id }
+    ));
   } catch (error) {
     logger.error('Error getting Dramabite homepage', {
       error: error.message,
@@ -299,15 +296,15 @@ export const getPlayEndRecommend = async (req, res, next) => {
     logger.info('Dramabite play end recommendations retrieved successfully', {
       requestId: req.id,
       cid: parseInt(cid),
-      count: result.data?.length || 0
+      count: result?.data?.length || 0
     });
 
     res.json({
       success: true,
       message: 'Play end recommendations retrieved successfully',
-      data: result.data || result,
+      data: result?.data || [],
       cid: parseInt(cid),
-      count: result.data?.length || 0,
+      count: result?.data?.length || 0,
       timestamp: new Date().toISOString(),
       requestId: req.id
     });

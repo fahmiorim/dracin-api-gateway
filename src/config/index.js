@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
-  port: process.env.PORT || 4343,
+  port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   cors: {
     origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
@@ -11,7 +11,7 @@ export const config = {
   },
   rateLimit: {
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.RATE_LIMIT_MAX || 100
+    max: process.env.RATE_LIMIT_MAX || 50 // Kurangi dari 100 ke 50 untuk testing
   },
   logging: {
     level: process.env.LOG_LEVEL || 'info'

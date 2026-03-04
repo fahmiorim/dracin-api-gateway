@@ -139,13 +139,6 @@ class MeloloAPI {
             
             const response = await axios.post(url, data, { headers, params });
             
-            console.log('=== MELOLO DEBUG ===');
-            console.log('Response status:', response.status);
-            console.log('Response data:', JSON.stringify(response.data, null, 2));
-            console.log('Response keys:', Object.keys(response.data));
-            console.log('Data keys:', response.data ? Object.keys(response.data) : 'No data');
-            console.log('==================');
-            
             logger.info(`Response status: ${response.status}`);
             logger.info(`Response headers: ${JSON.stringify(response.headers, null, 2)}`);
             logger.info(`Response data: ${JSON.stringify(response.data, null, 2)}`);
@@ -154,8 +147,7 @@ class MeloloAPI {
                 return { result: null, error: `HTTP ${response.status}` };
             }
             
-            const videos = this._extractVideosFromDetails(response.data);
-            return { result: videos, error: null };
+            return { result: response.data };
         } catch (error) {
             logger.error(`Error getting video details: ${error.message}`);
             logger.error(`Error stack: ${error.stack}`);
@@ -164,26 +156,19 @@ class MeloloAPI {
     }
 
     _extractVideosFromDetails(jsonData) {
-        logger.debug(`Video details response keys: ${JSON.stringify(Object.keys(jsonData), null, 2)}`);
-        logger.debug(`Video details data: ${JSON.stringify(jsonData.data, null, 2)}`);
-        
         const videos = [];
         
-        // Try multiple possible paths for video list
         let videoList = [];
         
-        if (jsonData.data?.video_data?.video_list) {
-            videoList = jsonData.data.video_data.video_list;
-        } else if (jsonData.data?.video_list) {
+        if (jsonData.data && Array.isArray(jsonData.data)) {
+            videoList = jsonData.data;
+        } else if (jsonData.data && jsonData.data.video_list) {
             videoList = jsonData.data.video_list;
         } else if (jsonData.data?.videos) {
             videoList = jsonData.data.videos;
         } else if (Array.isArray(jsonData.data)) {
             videoList = jsonData.data;
         }
-        
-        logger.debug(`Video list length: ${videoList.length}`);
-        logger.debug(`First video item: ${JSON.stringify(videoList[0] || {}, null, 2)}`);
         
         for (const video of videoList) {
             const videoInfo = {

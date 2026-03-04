@@ -19,7 +19,6 @@ import dramabiteRoutes from './routes/dramabite.js';
 let swaggerDocument;
 try {
   swaggerDocument = YAML.load('./swagger.yaml');
-  logger.info('Swagger specification loaded successfully');
 } catch (error) {
   logger.error('Error loading swagger.yaml:', error.message);
 }
@@ -116,8 +115,6 @@ if (swaggerDocument) {
   app.get('/', (req, res) => {
     res.redirect('/docs');
   });
-  
-  logger.info('Swagger UI configured at /docs path');
 } else {
   // Fallback if swagger not loaded
   app.get('/', (req, res) => {

@@ -22,7 +22,7 @@ class ReelShortAPI {
             
             const response = await axios.get(homeUrl, { 
                 headers: this.headers, 
-                timeout: 10000 
+                timeout: 15000 
             });
             
             // Look for buildId in the HTML
@@ -43,7 +43,6 @@ class ReelShortAPI {
                 }
             }
         } catch (error) {
-            logger.error(`Error getting build ID: ${error.message}`);
             // Fallback to hardcoded build ID
             this.buildId = "acf624d";
             this.baseUrl = `https://www.reelshort.com/_next/data/${this.buildId}/id`;
@@ -53,7 +52,6 @@ class ReelShortAPI {
 
     async makeRequest(url) {
         try {
-            logger.debug(`Making request to: ${url}`);
             const response = await axios.get(url, {
                 headers: this.headers,
                 timeout: 15000
@@ -61,7 +59,7 @@ class ReelShortAPI {
             return response.data;
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                logger.warn("Build ID expired, updating...");
+                throw new Error("Build ID expired, updating...");
                 await this.updateBuildId();
                 // Retry with new build ID
                 const newUrl = url.replace(/\/_next\/data\/[^\/]+/, `/_next/data/${this.buildId}`);
