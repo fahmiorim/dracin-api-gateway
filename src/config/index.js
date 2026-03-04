@@ -15,8 +15,17 @@ export const config = {
   },
   logging: {
     level: process.env.LOG_LEVEL || 'info'
+  },
+  timeout: {
+    request: parseInt(process.env.REQUEST_TIMEOUT) || 30000, // 30 seconds
+    external: parseInt(process.env.EXTERNAL_TIMEOUT) || 15000 // 15 seconds
+  },
+  api: {
+    key: process.env.API_KEY || null,
+    version: process.env.npm_package_version || '1.0.0'
   }
 };
 
 export const isDevelopment = config.nodeEnv === 'development';
 export const isProduction = config.nodeEnv === 'production';
+export const isTest = config.nodeEnv === 'test';

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Dracin API Gateway
-  description: API Gateway untuk mengakses konten dari Dracin platform (Dramabox + ReelShort)
+  description: API Gateway untuk mengakses konten dari Dracin platform (Dramabox + ReelShort + Dramabite)
   version: 1.0.0
   contact:
     name: API Support
@@ -18,7 +18,7 @@ paths:
   /dramabox/latest:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get latest dramas
       description: Mengambil daftar drama terbaru
       parameters:
@@ -60,7 +60,7 @@ paths:
   /dramabox/trending:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get trending dramas
       description: Mengambil daftar drama yang sedang tren
       responses:
@@ -76,7 +76,7 @@ paths:
   /dramabox/for-you:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get recommended dramas
       description: Mengambil daftar drama yang direkomendasikan untuk user
       responses:
@@ -92,7 +92,7 @@ paths:
   /dramabox/vip:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get VIP dramas
       description: Mengambil daftar drama VIP/premium
       responses:
@@ -108,7 +108,7 @@ paths:
   /dramabox/random:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get random drama
       description: Mengambil drama acak
       responses:
@@ -124,7 +124,7 @@ paths:
   /dramabox/search:
     get:
       tags:
-        - Search
+        - Dramabox
       summary: Search dramas
       description: Mencari drama berdasarkan keyword
       parameters:
@@ -155,7 +155,7 @@ paths:
   /dramabox/popular-searches:
     get:
       tags:
-        - Search
+        - Dramabox
       summary: Get popular searches
       description: Mengambil daftar pencarian yang populer
       responses:
@@ -171,7 +171,7 @@ paths:
   /dramabox/dubbed:
     get:
       tags:
-        - Dramas
+        - Dramabox
       summary: Get dubbed dramas
       description: Mengambil daftar drama yang sudah dubbing
       parameters:
@@ -209,7 +209,7 @@ paths:
   /dramabox/detail:
     get:
       tags:
-        - Details
+        - Dramabox
       summary: Get drama details
       description: Mengambil detail lengkap drama berdasarkan ID
       parameters:
@@ -237,7 +237,7 @@ paths:
   /dramabox/episodes:
     get:
       tags:
-        - Details
+        - Dramabox
       summary: Get drama episodes
       description: Mengambil daftar episode drama berdasarkan ID
       parameters:
@@ -618,6 +618,328 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  # Dramabite API Endpoints
+  /dramabite/homepage:
+    get:
+      tags:
+        - Dramabite
+      summary: Get homepage dramas
+      description: Mengambil daftar drama utama dari halaman beranda Dramabite
+      parameters:
+        - name: page
+          in: query
+          description: Nomor halaman untuk pagination
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Homepage dramas retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      drama_module:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DramabiteDrama"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+
+  /dramabite/end-module:
+    get:
+      tags:
+        - Dramabite
+      summary: Get additional modules
+      description: Mengambil modul tambahan untuk infinite scroll
+      parameters:
+        - name: page
+          in: query
+          description: Nomor halaman untuk pagination
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "End module retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      drama_module:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DramabiteDrama"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+
+  /dramabite/all:
+    get:
+      tags:
+        - Dramabite
+      summary: Get all available dramas
+      description: Mengambil semua drama yang tersedia dari homepage dan modules
+      parameters:
+        - name: maxPages
+          in: query
+          description: Jumlah maksimal halaman yang akan diambil
+          required: false
+          schema:
+            type: integer
+            default: 3
+            minimum: 1
+            maximum: 10
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "All dramas retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DramabiteDrama"
+                  count:
+                    type: integer
+                    example: 50
+
+  /dramabite/search:
+    get:
+      tags:
+        - Dramabite
+      summary: Search dramas
+      description: Mencari drama berdasarkan judul
+      parameters:
+        - name: query
+          in: query
+          description: Kata kunci pencarian
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 100
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Search completed successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DramabiteDrama"
+                  query:
+                    type: string
+                  count:
+                    type: integer
+
+  /dramabite/episodes:
+    get:
+      tags:
+        - Dramabite
+      summary: Get episode list
+      description: Mengambil daftar episode untuk drama tertentu
+      parameters:
+        - name: cid
+          in: query
+          description: Drama ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Episode list retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DramabiteEpisode"
+                  cid:
+                    type: integer
+                  episodeCount:
+                    type: integer
+
+  /dramabite/episode-detail:
+    get:
+      tags:
+        - Dramabite
+      summary: Get episode details
+      description: Mengambil detail episode termasuk link streaming video
+      parameters:
+        - name: cid
+          in: query
+          description: Drama ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - name: vid
+          in: query
+          description: Episode number
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Episode detail retrieved successfully"
+                  data:
+                    $ref: "#/components/schemas/DramabiteEpisodeDetail"
+                  cid:
+                    type: integer
+                  vid:
+                    type: integer
+
+  /dramabite/recommendations:
+    get:
+      tags:
+        - Dramabite
+      summary: Get play end recommendations
+      description: Mengambil rekomendasi drama setelah video selesai
+      parameters:
+        - name: cid
+          in: query
+          description: Drama ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Play end recommendations retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DramabiteDrama"
+                  cid:
+                    type: integer
+                  count:
+                    type: integer
+
+  /dramabite/drama-complete:
+    get:
+      tags:
+        - Dramabite
+      summary: Get complete drama information
+      description: Mengambil informasi lengkap drama termasuk episode dan rekomendasi
+      parameters:
+        - name: cid
+          in: query
+          description: Drama ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Complete drama information retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      episodes:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DramabiteEpisode"
+                      recommendations:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DramabiteDrama"
+                  cid:
+                    type: integer
+                  episodeCount:
+                    type: integer
+                  recommendationCount:
+                    type: integer
 
 components:
   schemas:
@@ -1014,6 +1336,162 @@ components:
           type: string
           description: Series ID for the recommendation
           example: "9876543210"
+
+    # Dramabite Schemas
+    DramabiteDrama:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Drama title
+          example: "The Missing Love"
+        cover_url:
+          type: string
+          format: uri
+          description: Cover image URL
+          example: "episode/4480d0e713f029184c9ff3a0699979d5"
+        desc:
+          type: string
+          description: Drama description
+          example: "After five years in a loveless marriage..."
+        cid:
+          type: integer
+          description: Drama ID
+          example: 10542
+        vid:
+          type: integer
+          description: First episode number
+          example: 1
+        total_episode:
+          type: integer
+          description: Total number of episodes
+          example: 77
+        max_episode_can_watch:
+          type: integer
+          description: Maximum free episodes that can be watched
+          example: 10
+        pay_episode:
+          type: integer
+          description: Episode number where payment starts
+          example: 11
+        linkInfo:
+          $ref: "#/components/schemas/DramabiteLinkInfo"
+        label_list:
+          type: array
+          items:
+            type: string
+          description: List of genre tags
+          example: ["Family", "Romance", "Drama"]
+        video_poster_url:
+          type: string
+          format: uri
+          description: Video poster URL
+          example: "video/dynamic_cover/1747390013724/31611c7f5b2b2c98519011ded9fa4734f.m3u8"
+        root_id:
+          type: string
+          description: Root drama ID
+          example: "R10234"
+
+    DramabiteLinkInfo:
+      type: object
+      properties:
+        video_link:
+          type: string
+          format: uri
+          description: Direct video streaming link
+          example: "video/10542/1/2cdf2289e9c9b39ed2b3405ecb73d0af.m3u8?wsSecret=e4e5ba814f7d5c9dafaad4f4a00e949c&wsTime=1772614164"
+        validity_period:
+          type: integer
+          description: Link validity period in seconds
+          example: 1800
+        video_link_m3u8:
+          type: string
+          format: uri
+          description: M3U8 streaming link
+          example: "video/10542/1/2cdf2289e9c9b39ed2b3405ecb73d0af.m3u8?wsSecret=e4e5ba814f7d5c9dafaad4f4a00e949c&wsTime=1772614164"
+        cid:
+          type: integer
+          description: Drama ID
+          example: 10542
+        vid:
+          type: integer
+          description: Episode number
+          example: 1
+        multi_rate_m3u8:
+          type: string
+          format: uri
+          description: Multi-rate M3U8 streaming link
+          example: "video/10542/1/e214e35f18699486fa7f264956634b9f.m3u8?wsSecret=eb507842e3a493f9c6a504c8463fbbfc&wsTime=1772614164"
+        cover:
+          type: string
+          format: uri
+          description: Episode cover image
+          example: "video/10542/1/b212739565b980ede7bcdceb25517b3d.webp"
+
+    DramabiteEpisode:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Episode title
+          example: "The Missing Love-1"
+        vid:
+          type: integer
+          description: Episode number
+          example: 1
+        status:
+          type: integer
+          description: Episode status (0=free, 1=paid)
+          example: 0
+        coin_fee:
+          type: integer
+          description: Coins required to unlock episode
+          example: 18000
+
+    DramabiteEpisodeDetail:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Drama title
+          example: "The Missing Love"
+        cover_url:
+          type: string
+          format: uri
+          description: Cover image URL
+          example: "episode/4480d0e713f029184c9ff3a0699979d5"
+        desc:
+          type: string
+          description: Drama description
+          example: "After five years in a loveless marriage..."
+        link_info:
+          $ref: "#/components/schemas/DramabiteLinkInfo"
+        next_video:
+          $ref: "#/components/schemas/DramabiteLinkInfo"
+        update_episode:
+          type: integer
+          description: Latest episode number
+          example: 77
+        total_episode:
+          type: integer
+          description: Total number of episodes
+          example: 77
+        video_cover:
+          type: string
+          format: uri
+          description: Video cover image
+          example: "episode/4480d0e713f029184c9ff3a0699979d5"
+        label_list:
+          type: array
+          items:
+            type: string
+          description: List of genre tags
+          example: ["Family", "Romance", "Drama"]
+        preload_episode_links:
+          type: array
+          items:
+            $ref: "#/components/schemas/DramabiteLinkInfo"
+          description: Preloaded episode links for smooth playback
 
   securitySchemes:
     ApiKeyAuth:

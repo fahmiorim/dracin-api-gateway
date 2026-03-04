@@ -8,10 +8,12 @@ import { config } from './config/index.js';
 import logger from './utils/logger.js';
 import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { apiKeyAuth, requestTimeout } from './middleware/auth.js';
 import { healthCheck } from './controllers/health.controller.js';
 import apiRoutes from './routes/api.js';
 import reelshortRoutes from './routes/reelshort.js';
 import meloloRoutes from './routes/melolo.js';
+import dramabiteRoutes from './routes/dramabite.js';
 
 // Load Swagger specification
 let swaggerDocument;
@@ -66,6 +68,18 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Request ID middleware
 app.use(requestId);
 
+// Request timeout middleware
+app.use(requestTimeout);
+
+// API Key authentication (optional, only if API_KEY is configured)
+if (config.api.key) {
+  app.use('/api', apiKeyAuth);
+  app.use('/dramabox', apiKeyAuth);
+  app.use('/reelshort', apiKeyAuth);
+  app.use('/melolo', apiKeyAuth);
+  app.use('/dramabite', apiKeyAuth);
+}
+
 // Request logging
 app.use((req, res, next) => {
   logger.info('Request received', {
@@ -85,6 +99,7 @@ app.get('/health', healthCheck);
 app.use('/dramabox', apiRoutes);
 app.use('/reelshort', reelshortRoutes);
 app.use('/melolo', meloloRoutes);
+app.use('/dramabite', dramabiteRoutes);
 
 // Swagger UI at /docs path (not root to avoid conflicts)
 if (swaggerDocument) {

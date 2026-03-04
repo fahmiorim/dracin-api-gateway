@@ -11,9 +11,8 @@ const server = app.listen(config.port, () => {
   });
   
   console.log(`🚀 Dracin API Gateway running on http://localhost:${config.port}`);
-  console.log(`📡 API Base: http://localhost:${config.port}/api`);
+  console.log(`📡 API Base: http://localhost:${config.port}`);
   console.log(`🏥 Health Check: http://localhost:${config.port}/health`);
-  console.log(`📋 Swagger: Import swagger.yaml to Postman`);
   console.log(`🌍 Environment: ${config.nodeEnv}`);
 });
 

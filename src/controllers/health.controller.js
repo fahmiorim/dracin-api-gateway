@@ -1,21 +1,45 @@
 import logger from '../utils/logger.js';
+import { config } from '../config/index.js';
 
 /**
  * Health check endpoint
  */
 export const healthCheck = (req, res) => {
+  const memoryUsage = process.memoryUsage();
   const health = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    memory: process.memoryUsage(),
+    memory: {
+      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+      heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+      external: `${Math.round(memoryUsage.external / 1024 / 1024)}MB`,
+    },
     version: process.env.npm_package_version || '1.0.0',
-    environment: process.env.NODE_ENV || 'development',
-    requestId: req.id
+    environment: config.nodeEnv,
+    port: config.port,
+    requestId: req.id,
+    services: {
+      database: 'N/A (API Gateway)',
+      external_apis: 'Active'
+    }
   };
 
-  logger.info('Health check accessed', { requestId: req.id });
-  res.status(200).json(health);
+  // Check if memory usage is too high (> 500MB)
+  if (memoryUsage.heapUsed > 500 * 1024 * 1024) {
+    health.status = 'warning';
+    health.warning = 'High memory usage detected';
+  }
+
+  logger.info('Health check accessed', { 
+    requestId: req.id,
+    status: health.status,
+    memoryUsage: health.memory.heapUsed
+  });
+
+  const statusCode = health.status === 'healthy' ? 200 : 200; // Still return 200 for warnings
+  res.status(statusCode).json(health);
 };
 
 /**
