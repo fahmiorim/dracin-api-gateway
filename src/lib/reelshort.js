@@ -59,7 +59,7 @@ class ReelShortAPI {
             return response.data;
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                throw new Error("Build ID expired, updating...");
+                logger.warn("Build ID expired, updating...");
                 await this.updateBuildId();
                 // Retry with new build ID
                 const newUrl = url.replace(/\/_next\/data\/[^\/]+/, `/_next/data/${this.buildId}`);

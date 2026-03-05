@@ -7,15 +7,6 @@ import reelshortAPI from '../lib/reelshort.js';
 export const searchReelShort = async (req, res, next) => {
   try {
     const { keywords } = req.query;
-    
-    if (!keywords) {
-      return res.status(400).json({
-        success: false,
-        message: 'Keywords parameter is required',
-        timestamp: new Date().toISOString(),
-        requestId: req.id
-      });
-    }
 
     logger.info('Searching ReelShort dramas', {
       requestId: req.id,

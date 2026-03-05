@@ -112,13 +112,10 @@ export const headers = {
           "p": "51",
           "package-name": "com.storymatrix.drama",
           "pline": "ANDROID",
-          // "sn":
-          //   "MfRjQ1HTcBCf5jX3XU4IPqF3w0/DA/osrXA5BWd4P6R2N4fZhLHomNzaUtK7ANCblV1FmO1W4njfzOL1WUT9FPKIJxs1geI+nw6wxFFlZLlpEnpoPCSAWbjfdovg3CLXt7Nfm1PAzETQcoOQCppfjyQn+DeHHtR1aoAOoMXkEc+haAVlN2k4+O1LpXWFA+5vntVQVzwA4w8oemj4Usm7tF9XmG5s9hYAcziOh/bVm2O2uLmz+KC0CGm12Xr+gZN3L9XPRirE4oCt5AfmVXQAAsR7ntC6M6VejiOoD3xx4NAJmsSXVq8uS/rHk5ocNHumCtFtB2b8ADkpc+a9ikw9Zw==",
           "srn": "900x1600",
           "store-source": "store_google",
           "time-zone": "+0800",
-          "tn":
-            "Bearer ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnlaV2RwYzNSbGNsUjVjR1VpT2lKVVJVMVFJaXdpZFhObGNrbGtJam96TURNeE5qVXpOREo5LkZqak1QT2sxbGo3Rkp3Z2NQdElBU0d3eWRzUnFDbXYyMV90RlJSN0dHTms=",
+          "tn": process.env.DRAMABOX_TOKEN || "",
           "tz": "-480",
           "user-agent": "okhttp/4.10.0",
           "userid": "359146421",

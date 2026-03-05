@@ -67,6 +67,15 @@ export const schemas = {
     })
   }),
   
+  keywords: Joi.object({
+    keywords: Joi.string().required().min(2).max(100).messages({
+      'string.empty': 'Keywords parameter is required',
+      'string.min': 'Keywords must be at least 2 characters long',
+      'string.max': 'Keywords must not exceed 100 characters',
+      'any.required': 'Keywords parameter is required'
+    })
+  }),
+
   dubbed: Joi.object({
     classify: Joi.string().valid('terpopuler', 'terbaru').required().messages({
       'any.only': 'Classify must be either "terpopuler" or "terbaru"',

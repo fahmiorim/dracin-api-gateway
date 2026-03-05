@@ -7,15 +7,6 @@ import logger from '../utils/logger.js';
 export const searchMelolo = async (req, res, next) => {
   try {
     const { query, offset = '0', limit = '10' } = req.query;
-    
-    if (!query) {
-      return res.status(400).json({
-        success: false,
-        message: 'Query parameter is required',
-        timestamp: new Date().toISOString(),
-        requestId: req.id
-      });
-    }
 
     logger.info('Searching Melolo novels', {
       requestId: req.id,

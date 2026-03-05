@@ -3,3 +3,70 @@
 {"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":21736,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:27:57.660Z"}
 {"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:27:57.826Z"}
 {"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:27:58.242Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:15.046Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":45332,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:29:15.137Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":45332,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:15.152Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:15.315Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:15.722Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"c0bada57-aa13-4c5c-9482-fd5b1e8b12b1","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.055Z","url":"/docs/","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"1845ea48-dd42-4ccd-906b-00cad7668f37","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.132Z","url":"/docs/swagger-ui.css","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"462c1e3f-6912-466d-9862-8ced047aa1d8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.136Z","url":"/docs/swagger-ui-bundle.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"e26d8e07-83df-4435-8f71-fe1eb03e7102","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.140Z","url":"/docs/swagger-ui-standalone-preset.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"a6f2c0e2-7d27-43a2-bae2-29607773079d","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.145Z","url":"/docs/swagger-ui-init.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"25655f2d-7c1f-4691-8e33-b0f67e0e6b94","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:23.743Z","url":"/docs/favicon-32x32.png","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"d7563c7d-c252-4949-b0b0-dc899f9f1582","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:25.956Z","url":"/melolo/recommend","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting Melolo recommendations","requestId":"d7563c7d-c252-4949-b0b0-dc899f9f1582","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:25.957Z"}
+{"count":10,"level":"info","message":"Melolo recommendations retrieved successfully","requestId":"d7563c7d-c252-4949-b0b0-dc899f9f1582","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:26.552Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"2ac1b12b-a7e1-4bd4-bfc3-2c2b5f204b32","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:30.901Z","url":"/dramabox/latest?pageNo=1&pageSize=20","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"20"},"requestId":"2ac1b12b-a7e1-4bd4-bfc3-2c2b5f204b32","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:30.902Z"}
+{"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"2ac1b12b-a7e1-4bd4-bfc3-2c2b5f204b32","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:29:32.014Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:04.753Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:17.698Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":33956,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:32:17.790Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":33956,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:17.804Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:18.453Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:18.532Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:24.973Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":48788,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:32:25.069Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":48788,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:25.087Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:25.236Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:25.689Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:41.320Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":4776,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:32:41.411Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":4776,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:41.426Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:41.570Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:32:42.021Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:19.345Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":8372,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:33:19.440Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":8372,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:19.456Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:19.631Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:20.470Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:59.290Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":11448,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:33:59.383Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":11448,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:59.399Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:33:59.581Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:00.031Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:08.113Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":43564,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:34:08.207Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":43564,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:08.222Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:08.387Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:08.860Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:16.977Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":8836,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:34:17.073Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":8836,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:17.090Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:17.250Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:34:17.732Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:16.110Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:18.369Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":27100,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:35:18.458Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":27100,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:18.472Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:18.772Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:19.227Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"6e65ada7-1548-485d-b843-614d82944a08","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:25.803Z","url":"/docs/","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"27d7c006-cae8-468f-9cdd-64d107dae53e","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:25.861Z","url":"/docs/swagger-ui.css","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"bb4d7afa-9c0a-4a2f-971c-dbba5e09ffb7","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:25.867Z","url":"/docs/swagger-ui-bundle.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"71a43dbe-15fa-43a0-8742-ee3f768f2cee","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:25.869Z","url":"/docs/swagger-ui-standalone-preset.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"7c20428b-a281-4e6b-b7ec-e2d3ad2b52fc","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:25.871Z","url":"/docs/swagger-ui-init.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:28.786Z","url":"/dramabox/latest?pageNo=1&pageSize=20","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"20"},"requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:28.789Z"}
+{"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:30.254Z"}

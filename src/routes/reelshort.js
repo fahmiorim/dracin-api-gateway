@@ -17,7 +17,7 @@ const router = Router();
  * @access  Public
  * @param   {string} keywords - Search keywords
  */
-router.get('/search', validateQuery(schemas.search), searchReelShort);
+router.get('/search', validateQuery(schemas.keywords), searchReelShort);
 
 /**
  * @route   GET /api/reelshort/episodes/:bookId

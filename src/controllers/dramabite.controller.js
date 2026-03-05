@@ -130,16 +130,7 @@ export const getAllDramas = async (req, res, next) => {
 export const searchDramas = async (req, res, next) => {
   try {
     const { query } = req.query;
-    
-    if (!query) {
-      return res.status(400).json({
-        success: false,
-        message: 'Search query is required',
-        timestamp: new Date().toISOString(),
-        requestId: req.id
-      });
-    }
-    
+
     logger.info('Searching Dramabite dramas', {
       requestId: req.id,
       query
