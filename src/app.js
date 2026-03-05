@@ -10,7 +10,7 @@ import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { apiKeyAuth, requestTimeout, tenantApiKeyAuth, tenantRateLimit } from './middleware/auth.js';
 import { healthCheck } from './controllers/health.controller.js';
-import apiRoutes from './routes/api.js';
+import dramaboxRoutes from './routes/dramabox.js';
 import reelshortRoutes from './routes/reelshort.js';
 import meloloRoutes from './routes/melolo.js';
 import dramabiteRoutes from './routes/dramabite.js';
@@ -54,9 +54,9 @@ const limiter = rateLimit({
 app.use(limiter);
 
 logger.info('🚀 Dracin API Gateway started', {
-  environment: config.NODE_ENV,
+  environment: config.nodeEnv,
   pid: process.pid,
-  port: config.PORT,
+  port: config.port,
   service: 'dracin-api-gateway',
   timestamp: new Date().toISOString()
 });
@@ -96,7 +96,7 @@ app.use((req, res, next) => {
 app.get('/health', healthCheck);
 
 // API routes - MUST be before Swagger UI
-app.use('/dramabox', tenantApiKeyAuth, tenantRateLimit, apiRoutes);
+app.use('/dramabox', tenantApiKeyAuth, tenantRateLimit, dramaboxRoutes);
 app.use('/reelshort', tenantApiKeyAuth, tenantRateLimit, reelshortRoutes);
 app.use('/melolo', tenantApiKeyAuth, tenantRateLimit, meloloRoutes);
 app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);

@@ -1,26 +1,7 @@
 import axios from "axios";
-import crypto from "crypto";
 import { DramaboxApp, headers, getSignatureHeaders } from "./sign.js";
 import token from "./token.js";
 import logger from "../utils/logger.js";
-
-// Simple rate limiter to prevent API abuse
-const requestTimestamps = new Map();
-const RATE_LIMIT_MS = 1000; // 1 second between requests
-
-const checkRateLimit = (functionName) => {
-  const now = Date.now();
-  const lastRequest = requestTimestamps.get(functionName) || 0;
-  
-  if (now - lastRequest < RATE_LIMIT_MS) {
-    const waitTime = RATE_LIMIT_MS - (now - lastRequest);
-    logger.warn(`⚠️ ${functionName}: Rate limiting active, waiting ${waitTime}ms`);
-    return false;
-  }
-  
-  requestTimestamps.set(functionName, now);
-  return true;
-};
 
 // Helper function untuk validasi response dari API Dramabox
 const validateApiResponse = (response, functionName, fallbackValue = []) => {
@@ -156,53 +137,8 @@ const queue = [];
 const cache = new Map();
 const CACHE_DURATION = 120 * 60 * 1000;
 
-// Template Header
-const BASE_HEADERS = {
-    "accept-encoding": "gzip",
-    "active-time": "48610",
-    "afid": "1765426707100-3399426610238541236",
-    "android-id": "ffffffffbc0195cebc03a54e00000000",
-    "apn": "0",
-    "brand": "vivo",
-    "build": "Build/PQ3A.190705.09121607",
-    "cid": "DAUAG1050238",
-    "connection": "Keep-Alive",
-    "content-type": "application/json; charset=UTF-8",
-    "country-code": "ID",
-    "current-language": "in",
-    "device-id": "dab6c1c5-7248-3e12-898d-37f045b1acff",
-    "device-score": "55",
-    "host": "sapi.dramaboxdb.com",
-    "ins": "1765426707269",
-    "instanceid": "8f1ff8f305a5fe5a1a09cb6f0e6f1265",
-    "is_emulator": "0",
-    "is_root": "1",
-    "is_vpn": "1",
-    "language": "in",
-    "lat": "0",
-    "local-time": "2025-12-11 12:32:12.278 +0800",
-    "locale": "in_ID",
-    "mbid": "60000000000",
-    "mcc": "510",
-    "mchid": "DAUAG1050238",
-    "md": "V2309A",
-    "mf": "VIVO",
-    "nchid": "DRA1000042",
-    "ov": "9",
-    "over-flow": "new-fly",
-    "p": "51",
-    "package-name": "com.storymatrix.drama",
-    "pline": "ANDROID",
-    "srn": "900x1600",
-    "store-source": "store_google",
-    "time-zone": "+0800",
-    "tn": "",
-    "tz": "-480",
-    "user-agent": "okhttp/4.10.0",
-    "userid": "359146421",
-    "version": "490",
-    "vn": "4.9.0"
-}
+// Template Header (alias dari headers sign.js untuk fungsi yang butuh token dinamis)
+const BASE_HEADERS = headers;
 
 // Fungsi Helper
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -452,8 +388,6 @@ const populersearch = async () => {
             "rankType": 2
         }
 
-
-        // Coba generate signature saja untuk tes
         const testSig = getSignatureHeaders(payload);
 
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${testSig.timestamp}`;
@@ -474,8 +408,6 @@ const trendings = async () => {
             "rankType": 1
         }
 
-
-        // Coba generate signature saja untuk tes
         const testSig = getSignatureHeaders(payload);
 
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${testSig.timestamp}`;
@@ -498,7 +430,6 @@ const foryou = async () => {
             "pageNo": getRandomNumber()
         }
 
-        // Coba generate signature saja untuk tes
         const testSig = getSignatureHeaders(payload);
 
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/recommendChannel?timestamp=${testSig.timestamp}`;
@@ -540,7 +471,6 @@ const vip = async () => {
             "channelId": 205
         }
 
-        // Coba generate signature saja untuk tes
         const testSig = getSignatureHeaders(payload);
 
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/theater?timestamp=${testSig.timestamp}`;
@@ -647,7 +577,6 @@ const dubindo = async (classify, page) => {
             "pageSize": 15
         }
 
-        // Coba generate signature saja untuk tes
         const testSig = getSignatureHeaders(payload);
 
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/classify?timestamp=${testSig.timestamp}`;

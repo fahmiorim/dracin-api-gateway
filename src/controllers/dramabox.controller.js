@@ -11,7 +11,9 @@ export const getLatest = async (req, res, next) => {
       query: req.query 
     });
 
-    const result = await latest();
+    const pageNo = parseInt(req.query.pageNo) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 20;
+    const result = await latest(pageNo, pageSize);
 
     logger.info('Latest dramas retrieved successfully', {
       requestId: req.id,

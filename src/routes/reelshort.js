@@ -7,6 +7,7 @@ import {
   getNewRelease,
   getRecommended
 } from '../controllers/reelshort.controller.js';
+import { validateQuery, schemas } from '../middleware/validation.js';
 
 const router = Router();
 
@@ -16,7 +17,7 @@ const router = Router();
  * @access  Public
  * @param   {string} keywords - Search keywords
  */
-router.get('/search', searchReelShort);
+router.get('/search', validateQuery(schemas.search), searchReelShort);
 
 /**
  * @route   GET /api/reelshort/episodes/:bookId

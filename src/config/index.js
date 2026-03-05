@@ -35,9 +35,9 @@ export const config = {
   },
   database: {
     type: 'supabase',
-    url: process.env.SUPABASE_URL || 'https://ltaidrdtjixykdrklolx.supabase.co',
-    key: process.env.SUPABASE_ANON_KEY || 'sb_publishable_iVPHyp1H7YiH303t2agNVQ_oEuIeCpe',
-    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:D3iTcpbPFKBIKDEn@db.ltaidrdtjixykdrklolx.supabase.co:5432/postgres'
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_ANON_KEY,
+    connectionString: process.env.DATABASE_URL
   }
 };
 

@@ -1,19 +1,20 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   searchMelolo,
   getMeloloVideoDetails,
   getMeloloVideoUrl,
   getMeloloRecommendations
 } from '../controllers/melolo.controller.js';
+import { validateQuery, schemas } from '../middleware/validation.js';
 
-const router = express.Router();
+const router = Router();
 
 /**
  * @route   GET /melolo/search
  * @desc    Search Melolo novels
  * @access  Public
  */
-router.get('/search', searchMelolo);
+router.get('/search', validateQuery(schemas.search), searchMelolo);
 
 /**
  * @route   GET /melolo/video-details

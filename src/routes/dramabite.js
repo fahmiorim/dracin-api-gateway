@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   getHomepage,
   getEndModule,
@@ -9,8 +9,9 @@ import {
   getPlayEndRecommend,
   getDramaWithEpisodes
 } from '../controllers/dramabite.controller.js';
+import { validateQuery, schemas } from '../middleware/validation.js';
 
-const router = express.Router();
+const router = Router();
 
 // Homepage dramas
 router.get('/homepage', getHomepage);
@@ -19,10 +20,10 @@ router.get('/homepage', getHomepage);
 router.get('/end-module', getEndModule);
 
 // Get all available dramas
-router.get('/all', getAllDramas);
+router.get('/all', validateQuery(schemas.pagination), getAllDramas);
 
 // Search dramas
-router.get('/search', searchDramas);
+router.get('/search', validateQuery(schemas.search), searchDramas);
 
 // Get episode list for a drama
 router.get('/episodes', getEpisodeList);

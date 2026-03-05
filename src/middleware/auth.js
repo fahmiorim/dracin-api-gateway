@@ -4,36 +4,50 @@ import { cache } from '../utils/cache.js';
 import supabaseService from '../database/supabase.js';
 
 // Fallback in-memory storage for development
-const fallbackClients = new Map([
-  ['admin_key_2026', {
-    clientId: 'admin_client',
-    name: 'Administrator',
-    email: 'admin@dracin-api.com',
-    rateLimit: 10000,
-    allowedEndpoints: ['*'],
-    isActive: true,
-    expiresAt: new Date('2027-12-31'),
-    role: 'admin'
-  }],
-  ['client_demo_key', {
-    clientId: 'demo_client',
-    name: 'Demo Client',
-    email: 'demo@example.com',
-    rateLimit: 100,
-    allowedEndpoints: ['*'],
-    isActive: true,
-    expiresAt: new Date('2026-12-31')
-  }],
-  ['client_premium_key', {
-    clientId: 'premium_client', 
-    name: 'Premium Client',
-    email: 'premium@example.com',
-    rateLimit: 1000,
-    allowedEndpoints: ['*'],
-    isActive: true,
-    expiresAt: new Date('2026-12-31')
-  }]
-]);
+const buildFallbackClients = () => {
+  const clients = new Map();
+
+  if (process.env.ADMIN_API_KEY) {
+    clients.set(process.env.ADMIN_API_KEY, {
+      clientId: 'admin_client',
+      name: 'Administrator',
+      email: 'admin@dracin-api.com',
+      rateLimit: 10000,
+      allowedEndpoints: ['*'],
+      isActive: true,
+      expiresAt: new Date('2027-12-31'),
+      role: 'admin'
+    });
+  }
+
+  if (process.env.DEMO_API_KEY) {
+    clients.set(process.env.DEMO_API_KEY, {
+      clientId: 'demo_client',
+      name: 'Demo Client',
+      email: 'demo@example.com',
+      rateLimit: 100,
+      allowedEndpoints: ['*'],
+      isActive: true,
+      expiresAt: new Date('2026-12-31')
+    });
+  }
+
+  if (process.env.PREMIUM_API_KEY) {
+    clients.set(process.env.PREMIUM_API_KEY, {
+      clientId: 'premium_client',
+      name: 'Premium Client',
+      email: 'premium@example.com',
+      rateLimit: 1000,
+      allowedEndpoints: ['*'],
+      isActive: true,
+      expiresAt: new Date('2026-12-31')
+    });
+  }
+
+  return clients;
+};
+
+const fallbackClients = buildFallbackClients();
 
 // Get client by API key (from Supabase or fallback)
 const getClientByApiKey = async (apiKey) => {
