@@ -70,3 +70,18 @@
 {"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:28.786Z","url":"/dramabox/latest?pageNo=1&pageSize=20","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
 {"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"20"},"requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:28.789Z"}
 {"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"9e794b5a-3ece-4cb9-a3a3-a5d5da5f9cb8","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:35:30.254Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:39:48.603Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":41824,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:39:48.701Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":41824,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:39:48.716Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:39:49.473Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:39:50.025Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:29.581Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":43236,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:40:29.680Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":43236,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:29.695Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:29.878Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:30.323Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:48.876Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":31484,"port":"3000","service":"dracin-api-gateway","timestamp":"2026-03-05T23:40:48.979Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":31484,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:48.994Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:49.166Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:40:49.589Z"}
