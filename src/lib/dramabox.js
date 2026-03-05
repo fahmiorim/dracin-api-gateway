@@ -2,7 +2,7 @@ import axios from "axios";
 import crypto from "crypto";
 import { DramaboxApp, headers, getSignatureHeaders } from "./sign.js";
 import token from "./token.js";
-import logger from "../src/utils/logger.js";
+import logger from "../utils/logger.js";
 
 // Simple rate limiter to prevent API abuse
 const requestTimestamps = new Map();

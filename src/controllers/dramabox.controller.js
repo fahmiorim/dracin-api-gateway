@@ -1,5 +1,5 @@
 import logger from '../utils/logger.js';
-import { latest, trendings, foryou, vip, randomdrama, populersearch, linkStream, search, detail, dubindo } from '../../lib/dramabox.js';
+import { latest, trendings, foryou, vip, randomdrama, populersearch, linkStream, search, detail, dubindo } from '../lib/dramabox.js';
 
 /**
  * Get latest dramas

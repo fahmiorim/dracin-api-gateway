@@ -9,7 +9,7 @@ import {
   getAllDramas as getAllAvailableDramas, 
   searchDramas as searchDramasData, 
   getDramaWithEpisodes as getDramaWithEpisodesData 
-} from '../../lib/dramabite.js';
+} from '../lib/dramabite.js';
 
 /**
  * Get homepage dramas

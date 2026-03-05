@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import logger from "../src/utils/logger.js";
+import logger from "../utils/logger.js";
 import axios from "axios";
 
 export function decodeString (str = "") {

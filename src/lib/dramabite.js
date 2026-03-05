@@ -1,5 +1,5 @@
 import axios from 'axios';
-import logger from '../src/utils/logger.js';
+import logger from '../utils/logger.js';
 
 const BASE_URL = 'https://www.dramabite.media/short_video/video_svr';
 

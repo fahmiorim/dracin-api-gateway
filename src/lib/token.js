@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import logger from "../src/utils/logger.js";
+import logger from "../utils/logger.js";
 export function decodeString (str = "") {
   let result = "";
   for (let i = 0; i < str.length; i++) {

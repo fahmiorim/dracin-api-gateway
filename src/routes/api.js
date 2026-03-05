@@ -10,7 +10,7 @@ import {
   getDramaDetail, 
   getDubbedDramas,
   getEpisodes
-} from '../controllers/drama.controller.js';
+} from '../controllers/dramabox.controller.js';
 import { validateQuery, schemas } from '../middleware/validation.js';
 
 const router = Router();

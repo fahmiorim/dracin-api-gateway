@@ -647,3 +647,14 @@
 {"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"82b00bd5-2638-4b80-b76a-673feb9e357d","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.832Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
 {"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.959Z"}
 {"level":"warn","message":"Supabase list failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.960Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:04:38.122Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":33212,"service":"dracin-api-gateway","timestamp":"2026-03-05T23:04:38.224Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":33212,"port":3000,"service":"dramabox-api-gateway","timestamp":"2026-03-05T23:04:38.242Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:04:38.581Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:04:38.968Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:05:10.428Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:06:29.293Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":32416,"service":"dracin-api-gateway","timestamp":"2026-03-05T23:06:29.386Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":32416,"port":3000,"service":"dramabox-api-gateway","timestamp":"2026-03-05T23:06:29.400Z"}
+{"level":"info","message":"Supabase connected successfully","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:06:29.591Z"}
+{"level":"info","message":"Successfully updated build ID: a65224a","service":"dramabox-api-gateway","timestamp":"2026-03-05T23:06:29.969Z"}
