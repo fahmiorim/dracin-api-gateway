@@ -426,3 +426,224 @@
 {"level":"info","message":"🚀 Dracin API Gateway started","pid":37816,"service":"dracin-api-gateway","timestamp":"2026-03-04T22:55:53.246Z"}
 {"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":37816,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:55:53.255Z"}
 {"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:55:53.869Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f7267bcb-2882-40f3-befc-69124128c3f1","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:49.515Z","url":"/dramabox/latest?pageNo=1&pageSize=5","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"5"},"requestId":"f7267bcb-2882-40f3-befc-69124128c3f1","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:49.517Z"}
+{"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"f7267bcb-2882-40f3-befc-69124128c3f1","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.430Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"3e72e971-8826-45a2-8628-ee727e18f878","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.494Z","url":"/dramabox/trending?pageNo=1&pageSize=5","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting trending dramas","requestId":"3e72e971-8826-45a2-8628-ee727e18f878","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.495Z"}
+{"count":10,"level":"info","message":"Trending dramas retrieved successfully","requestId":"3e72e971-8826-45a2-8628-ee727e18f878","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.580Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"8d14b3e4-4845-4506-b37c-43bd93ab5613","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.749Z","url":"/dramabite/homepage","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting Dramabite homepage","page":0,"requestId":"8d14b3e4-4845-4506-b37c-43bd93ab5613","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:50.750Z"}
+{"count":1,"level":"info","message":"Dramabite homepage retrieved successfully","requestId":"8d14b3e4-4845-4506-b37c-43bd93ab5613","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.373Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"1c8b2e7b-756a-4f38-81ee-15c8cbcd028b","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.444Z","url":"/dramabite/all?maxPages=1","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","maxPages":1,"message":"Getting all Dramabite dramas","requestId":"1c8b2e7b-756a-4f38-81ee-15c8cbcd028b","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.445Z"}
+{"count":7,"level":"info","message":"All Dramabite dramas retrieved successfully","requestId":"1c8b2e7b-756a-4f38-81ee-15c8cbcd028b","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.638Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"fe689a62-8ab2-4166-bb73-7fc645f27802","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.774Z","url":"/reelshort/search?keywords=love","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"keywords":"love","level":"info","message":"Searching ReelShort dramas","requestId":"fe689a62-8ab2-4166-bb73-7fc645f27802","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.775Z"}
+{"level":"info","message":"Searching for: love","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.775Z"}
+{"level":"info","message":"Fetching bookshelves from: https://www.reelshort.com/_next/data/e98778a/id.json","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:51.775Z"}
+{"level":"info","message":"Found 9 bookshelves","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:52.445Z"}
+{"level":"info","message":"Found 0 results for \"love\"","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:52.446Z"}
+{"count":0,"keywords":"love","level":"info","message":"ReelShort search completed","requestId":"fe689a62-8ab2-4166-bb73-7fc645f27802","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:52.446Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"4a894bdb-c82b-4dc1-bfe2-d305f78400e4","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:52.568Z","url":"/melolo/search?keywords=action","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"4dffc945-ebf5-4269-b237-b5b4d75040e4","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:54.096Z","url":"/dramabox/latest?pageNo=1&pageSize=5","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"5"},"requestId":"4dffc945-ebf5-4269-b237-b5b4d75040e4","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:54.097Z"}
+{"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"4dffc945-ebf5-4269-b237-b5b4d75040e4","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:56:54.951Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"cb4c1e8e-ec03-4381-a06c-1e801c15af9e","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:01.615Z","url":"/dramabite/homepage","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting Dramabite homepage","page":0,"requestId":"cb4c1e8e-ec03-4381-a06c-1e801c15af9e","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:01.616Z"}
+{"count":1,"level":"info","message":"Dramabite homepage retrieved successfully","requestId":"cb4c1e8e-ec03-4381-a06c-1e801c15af9e","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:01.737Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"5c6591b1-d7ac-489a-85d6-96e981e2d283","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.288Z","url":"/reelshort/search?keywords=love","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"keywords":"love","level":"info","message":"Searching ReelShort dramas","requestId":"5c6591b1-d7ac-489a-85d6-96e981e2d283","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.288Z"}
+{"level":"info","message":"Searching for: love","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.288Z"}
+{"level":"info","message":"Fetching bookshelves from: https://www.reelshort.com/_next/data/e98778a/id.json","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.288Z"}
+{"level":"info","message":"Found 9 bookshelves","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.845Z"}
+{"level":"info","message":"Found 0 results for \"love\"","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.847Z"}
+{"count":0,"keywords":"love","level":"info","message":"ReelShort search completed","requestId":"5c6591b1-d7ac-489a-85d6-96e981e2d283","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:13.848Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"e9e53340-7bbf-4eab-97ac-29da2b08015a","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:20.727Z","url":"/docs/","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f0a18e3e-fc96-459c-8ca0-7016976fc4b1","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:20.769Z","url":"/docs/swagger-ui.css","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f944828f-34cd-4b2c-ab3c-e5a1373e1554","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:20.773Z","url":"/docs/swagger-ui-bundle.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"3cb70fa0-8436-487e-8460-33b8b206a0e7","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:20.777Z","url":"/docs/swagger-ui-standalone-preset.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"0ff24ea5-5808-439f-b6b4-e24bd849e9e2","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:20.779Z","url":"/docs/swagger-ui-init.js","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"aa4f6434-70fd-4292-b539-2417a48b7c8b","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:21.189Z","url":"/melolo/search?keywords=action","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"98981667-ad2d-456f-bc23-6d0dd706ed96","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:21.211Z","url":"/docs/favicon-32x32.png","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"3c98f324-837c-437f-852c-5e1044b84e05","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:27.474Z","url":"/dramabox/latest?pageNo=1&pageSize=20","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting latest dramas","query":{"pageNo":"1","pageSize":"20"},"requestId":"3c98f324-837c-437f-852c-5e1044b84e05","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:27.475Z"}
+{"count":10,"level":"info","message":"Latest dramas retrieved successfully","requestId":"3c98f324-837c-437f-852c-5e1044b84e05","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:29.146Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"ac6de7a2-cb3c-4e1a-971e-954ce9c74ff7","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:58.090Z","url":"/reelshort/recommend","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting Lebih Direkomendasikan bookshelf","requestId":"ac6de7a2-cb3c-4e1a-971e-954ce9c74ff7","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:58.091Z"}
+{"level":"info","message":"Fetching bookshelves from: https://www.reelshort.com/_next/data/e98778a/id.json","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:58.091Z"}
+{"level":"info","message":"Found 9 bookshelves","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:58.703Z"}
+{"count":30,"level":"info","message":"Lebih Direkomendasikan retrieved successfully","requestId":"ac6de7a2-cb3c-4e1a-971e-954ce9c74ff7","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:57:58.704Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f76f8354-29bf-40ba-b781-71a2954c4687","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:12.542Z","url":"/melolo/recommend","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting Melolo recommendations","requestId":"f76f8354-29bf-40ba-b781-71a2954c4687","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:12.543Z"}
+{"count":10,"level":"info","message":"Melolo recommendations retrieved successfully","requestId":"f76f8354-29bf-40ba-b781-71a2954c4687","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:12.947Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"e56d458b-01e9-4776-9237-c223816d0ae9","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:21.686Z","url":"/dramabite/homepage?page=0","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"level":"info","message":"Getting Dramabite homepage","page":0,"requestId":"e56d458b-01e9-4776-9237-c223816d0ae9","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:21.687Z"}
+{"count":1,"level":"info","message":"Dramabite homepage retrieved successfully","requestId":"e56d458b-01e9-4776-9237-c223816d0ae9","service":"dramabox-api-gateway","timestamp":"2026-03-04T22:58:21.804Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:03:11.928Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":23692,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:03:12.021Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":23692,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:03:12.029Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:03:13.033Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:09.110Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":1120,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:07:09.209Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":1120,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:09.219Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:10.108Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:12.839Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":16880,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:07:12.943Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":16880,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:12.951Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:13.630Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"POST","requestId":"0f866c80-3d66-4207-8fbd-b8efed352a3b","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:16.820Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"clientId":"client_1772665636822","email":"test@example.com","level":"info","message":"New API client created","name":"Test Client","requestId":"0f866c80-3d66-4207-8fbd-b8efed352a3b","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:16.822Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"8dc8170c-695f-40d8-a505-fc86d0c07097","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:22.338Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"80383181-a999-4b00-a5f8-aa4ae043329a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:27.969Z","url":"/dramabite/homepage","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting Dramabite homepage","page":0,"requestId":"80383181-a999-4b00-a5f8-aa4ae043329a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:27.970Z"}
+{"count":1,"level":"info","message":"Dramabite homepage retrieved successfully","requestId":"80383181-a999-4b00-a5f8-aa4ae043329a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:07:28.129Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:45.794Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":1904,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:12:45.888Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":1904,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:45.896Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:46.747Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:53.243Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":7880,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:12:53.343Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":7880,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:53.357Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:12:53.939Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:04.673Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":26172,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:04.785Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":26172,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:04.792Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:05.363Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.176Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":12276,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:11.273Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":12276,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.288Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.773Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.774Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.866Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:11.902Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:15.831Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":47328,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:15.931Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":47328,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:15.949Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:16.087Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:16.088Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:16.153Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:16.872Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:23.960Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":30932,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:24.072Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":30932,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:24.092Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:24.228Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:24.229Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:24.302Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:24.931Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:33.353Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":16976,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:33.446Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":16976,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:33.461Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:33.684Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:33.685Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:33.756Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:34.029Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:38.412Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":48640,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:38.509Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":48640,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:38.524Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:38.726Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:38.727Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:38.817Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:39.164Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.001Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":21620,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:49.095Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":21620,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.110Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.253Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.254Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.309Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:49.740Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.219Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":23488,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:54.320Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":23488,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.342Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.481Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.482Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.539Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:54.930Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:57.915Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":8036,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:13:58.011Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":8036,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:58.025Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:58.155Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:58.156Z"}
+{"code":"PGRST202","details":"Searched for the function public.exec_sql with parameter sql or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.","hint":null,"level":"error","message":"Failed to create api_clients table: Could not find the function public.exec_sql(sql) in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:58.214Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:13:58.609Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"POST","requestId":"5ab3bd58-147f-4c6e-9fad-aa477b6ff547","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:09.508Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error creating client:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:09.641Z"}
+{"error":"Could not find the table 'public.api_clients' in the schema cache","ip":"::1","level":"error","message":"Unhandled error:","method":"POST","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:09.642Z","url":"/admin/clients"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.441Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":36772,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:14:21.536Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":36772,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.553Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.705Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.706Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.774Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:21.774Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:22.410Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:37.639Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":31564,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:14:37.741Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":31564,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:37.756Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:38.021Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:38.022Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:38.173Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:38.174Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:38.538Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"POST","requestId":"059b937e-2253-40f5-872b-93851b56ca6b","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:43.052Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error creating client:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:43.172Z"}
+{"error":"Could not find the table 'public.api_clients' in the schema cache","ip":"::1","level":"error","message":"Unhandled error:","method":"POST","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:43.173Z","url":"/admin/clients"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:58.705Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":40652,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:14:58.810Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":40652,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:58.827Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:58.955Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:58.955Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:59.096Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:59.097Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:14:59.455Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.454Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":47084,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:15:02.559Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":47084,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.584Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.708Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.709Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.779Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:02.780Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:03.177Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"POST","requestId":"70adfb22-2f07-4c5c-b2b9-9258f509dabf","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:07.355Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error creating client:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:07.506Z"}
+{"level":"warn","message":"Supabase failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:07.507Z"}
+{"clientId":"client_1772666107356","level":"info","message":"New API client created (fallback)","name":"Test Client","requestId":"70adfb22-2f07-4c5c-b2b9-9258f509dabf","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:07.507Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f5ef0706-d5dd-457d-85cc-4477fe590abb","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:13.132Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:13.245Z"}
+{"error":"Could not find the table 'public.api_clients' in the schema cache","ip":"::1","level":"error","message":"Unhandled error:","method":"GET","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:13.246Z","url":"/admin/clients"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.177Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":39104,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:15:22.293Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":39104,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.308Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.432Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.432Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.492Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.492Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:22.907Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"0ad836fd-b734-41ab-bb10-7d8a1305af73","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:26.109Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:26.168Z"}
+{"level":"warn","message":"Supabase list failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:26.168Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"5de2fd6d-97ca-4a0e-965c-be8ad3d64369","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:31.755Z","url":"/dramabite/homepage","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"info","message":"Getting Dramabite homepage","page":0,"requestId":"5de2fd6d-97ca-4a0e-965c-be8ad3d64369","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:31.756Z"}
+{"count":1,"level":"info","message":"Dramabite homepage retrieved successfully","requestId":"5de2fd6d-97ca-4a0e-965c-be8ad3d64369","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:31.911Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:39.689Z"}
+{"level":"info","message":"Fetching build ID from https://www.reelshort.com/id","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:41.901Z"}
+{"level":"info","message":"🚀 Dracin API Gateway started","pid":23240,"service":"dracin-api-gateway","timestamp":"2026-03-04T23:15:41.994Z"}
+{"environment":"development","level":"info","message":"🚀 Dracin API Gateway started","pid":23240,"port":"3000","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.010Z"}
+{"level":"warn","message":"Supabase connection test failed, table may not exist:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.135Z"}
+{"level":"info","message":"Creating Supabase tables...","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.136Z"}
+{"code":"PGRST205","details":null,"hint":null,"level":"error","message":"Failed to insert admin client: Could not find the table 'public.api_clients' in the schema cache","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.191Z"}
+{"level":"info","message":"Supabase setup completed","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.191Z"}
+{"level":"info","message":"Successfully updated build ID: e98778a","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:15:42.552Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"f481beae-0514-4c98-8fc6-253dd283d3b1","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:54.187Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:54.358Z"}
+{"level":"warn","message":"Supabase list failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:54.359Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"b0819a53-a6a6-4260-bbe2-6a7cf70693fe","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:56.655Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:56.716Z"}
+{"level":"warn","message":"Supabase list failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:16:56.716Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"POST","requestId":"6925d043-5684-47b1-85a9-c5bc42e8c3c2","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:36.802Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error creating client:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:37.317Z"}
+{"level":"warn","message":"Supabase failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:37.317Z"}
+{"clientId":"client_1772666316803","level":"info","message":"New API client created (fallback)","name":"Supabase Test Client","requestId":"6925d043-5684-47b1-85a9-c5bc42e8c3c2","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:37.318Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"82b00bd5-2638-4b80-b76a-673feb9e357d","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.832Z","url":"/admin/clients","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7920"}
+{"level":"error","message":"Error listing clients:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.959Z"}
+{"level":"warn","message":"Supabase list failed, using fallback:","service":"dramabox-api-gateway","timestamp":"2026-03-04T23:18:42.960Z"}

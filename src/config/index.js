@@ -6,8 +6,17 @@ export const config = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   cors: {
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
-    credentials: true
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+      'http://localhost:3001',
+      'http://localhost:3002', 
+      'http://localhost:5173',
+      'http://localhost:8080',
+      'https://yourdomain.com',
+      'https://www.yourdomain.com'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'X-Client-ID']
   },
   rateLimit: {
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -23,6 +32,12 @@ export const config = {
   api: {
     key: process.env.API_KEY || null,
     version: process.env.npm_package_version || '1.0.0'
+  },
+  database: {
+    type: 'supabase',
+    url: process.env.SUPABASE_URL || 'https://ltaidrdtjixykdrklolx.supabase.co',
+    key: process.env.SUPABASE_ANON_KEY || 'sb_publishable_iVPHyp1H7YiH303t2agNVQ_oEuIeCpe',
+    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:D3iTcpbPFKBIKDEn@db.ltaidrdtjixykdrklolx.supabase.co:5432/postgres'
   }
 };
 

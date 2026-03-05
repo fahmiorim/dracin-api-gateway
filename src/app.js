@@ -8,12 +8,13 @@ import { config } from './config/index.js';
 import logger from './utils/logger.js';
 import { requestId } from './middleware/requestId.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
-import { apiKeyAuth, requestTimeout } from './middleware/auth.js';
+import { apiKeyAuth, requestTimeout, tenantApiKeyAuth, tenantRateLimit } from './middleware/auth.js';
 import { healthCheck } from './controllers/health.controller.js';
 import apiRoutes from './routes/api.js';
 import reelshortRoutes from './routes/reelshort.js';
 import meloloRoutes from './routes/melolo.js';
 import dramabiteRoutes from './routes/dramabite.js';
+import adminRoutes from './routes/admin.js';
 
 // Load Swagger specification
 let swaggerDocument;
@@ -95,10 +96,13 @@ app.use((req, res, next) => {
 app.get('/health', healthCheck);
 
 // API routes - MUST be before Swagger UI
-app.use('/dramabox', apiRoutes);
-app.use('/reelshort', reelshortRoutes);
-app.use('/melolo', meloloRoutes);
-app.use('/dramabite', dramabiteRoutes);
+app.use('/dramabox', tenantApiKeyAuth, tenantRateLimit, apiRoutes);
+app.use('/reelshort', tenantApiKeyAuth, tenantRateLimit, reelshortRoutes);
+app.use('/melolo', tenantApiKeyAuth, tenantRateLimit, meloloRoutes);
+app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
+
+// Admin routes - requires admin authentication
+app.use('/admin', adminRoutes);
 
 // Swagger UI at /docs path (not root to avoid conflicts)
 if (swaggerDocument) {
