@@ -313,7 +313,6 @@ export const getPlayEndRecommend = async (req, res, next) => {
       data,
       cid: parseInt(cid),
       count: data.length,
-      rawKeys: Object.keys(result || {}),
       timestamp: new Date().toISOString(),
       requestId: req.id
     });

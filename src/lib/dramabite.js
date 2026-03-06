@@ -27,6 +27,7 @@ const apiRequest = async (endpoint, params = {}) => {
     });
     
     // Dramabite API returns response directly, not wrapped in .data
+    logger.debug(`[dramabite] ${endpoint} status=${response.status} keys=${JSON.stringify(Object.keys(response.data || {})).slice(0,200)}`);
     return response.data ?? {};
   } catch (error) {
     logger.error(`Error fetching ${endpoint}:`, error.message);
