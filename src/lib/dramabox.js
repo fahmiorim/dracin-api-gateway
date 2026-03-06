@@ -38,28 +38,16 @@ function getRandomNumber() {
 
 const randomdrama = async () => {
     try {
-        const payload = {
-            "pageNo": getRandomNumber(), // default 1
-            "pageFlag": "", // ini harusnya hilang
-            "startType": 0,
-            "firstStartUp": false
-        }
-
-        // Coba generate signature saja untuk tes
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/recommendChannel?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        
-        // Add delay untuk menghindari rate limiting
-        await delay(Math.random() * 1000 + 500); // 500-1500ms random delay
-        
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        const responseData = validateApiResponse(res, 'GET CHAPTERS');
-        return responseData.chapterList || []
+        const payload = { "pageNo": getRandomNumber(), "pageFlag": "", "startType": 0, "firstStartUp": false };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        await delay(Math.random() * 1000 + 500);
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/recommendChannel?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
+        const responseData = validateApiResponse(res, 'GET RANDOM');
+        return responseData.chapterList || responseData.recommendList?.records || [];
     } catch (error) {
         throw error;
     }

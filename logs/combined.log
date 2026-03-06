@@ -4374,3 +4374,19 @@
 {"count":5,"level":"info","message":"For-you dramas retrieved successfully","requestId":"d7a6c76c-3bb6-4978-a9d8-5081c3bdcbf3","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:36:07.016Z"}
 {"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:36:54.824Z"}
 {"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:36:54.861Z"}
+{"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:06.659Z"}
+{"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:06.696Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:38.553Z"}
+{"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:40.669Z"}
+{"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:40.704Z"}
+{"clientId":"admin_client","clientName":"Administrator","level":"info","message":"Admin API key authentication successful","requestId":"cd69b551-9563-4bee-a669-30f5362efb46","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:42.560Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"cd69b551-9563-4bee-a669-30f5362efb46","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:42.561Z","url":"/dramabox/vip","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"clientId":"admin_client","clientName":"Administrator","level":"info","message":"API key authentication successful","requestId":"cd69b551-9563-4bee-a669-30f5362efb46","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:42.668Z"}
+{"level":"info","message":"Getting VIP dramas","requestId":"cd69b551-9563-4bee-a669-30f5362efb46","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:42.669Z"}
+{"count":1,"level":"info","message":"VIP dramas retrieved successfully","requestId":"cd69b551-9563-4bee-a669-30f5362efb46","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:43.113Z"}
+{"clientId":"admin_client","clientName":"Administrator","level":"info","message":"Admin API key authentication successful","requestId":"45a0eb7c-b46a-4433-95f1-f915b5e6732a","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:53.444Z"}
+{"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"45a0eb7c-b46a-4433-95f1-f915b5e6732a","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:53.445Z","url":"/dramabox/random","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
+{"clientId":"admin_client","clientName":"Administrator","level":"info","message":"API key authentication successful","requestId":"45a0eb7c-b46a-4433-95f1-f915b5e6732a","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:53.445Z"}
+{"level":"info","message":"Getting random drama","requestId":"45a0eb7c-b46a-4433-95f1-f915b5e6732a","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:53.446Z"}
+{"dataKeys":["status","message","timestamp","ip","region","path","success"],"level":"error","message":"❌ GET CHAPTERS: No data.data in response","service":"dramabox-api-gateway","status":200,"timestamp":"2026-03-06T20:37:55.113Z"}
+{"count":0,"level":"info","message":"Random drama retrieved successfully","requestId":"45a0eb7c-b46a-4433-95f1-f915b5e6732a","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:37:55.113Z"}
