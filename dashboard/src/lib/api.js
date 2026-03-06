@@ -29,5 +29,14 @@ export const api = {
     axios.post(`${BASE}/clients/${clientId}/regenerate`, {}, { headers: getHeaders() }),
 
   getClientStats: (clientId) =>
-    axios.get(`${BASE}/clients/${clientId}/stats`, { headers: getHeaders() })
+    axios.get(`${BASE}/clients/${clientId}/stats`, { headers: getHeaders() }),
+
+  getAnalytics: (days = 7) =>
+    axios.get(`${BASE}/analytics?days=${days}`, { headers: getHeaders() }),
+
+  getLogs: (params = {}) =>
+    axios.get(`${BASE}/logs`, { headers: getHeaders(), params }),
+
+  getExpiringClients: (days = 30) =>
+    axios.get(`${BASE}/expiring?days=${days}`, { headers: getHeaders() })
 };

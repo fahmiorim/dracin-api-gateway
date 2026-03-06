@@ -4,6 +4,8 @@ import Layout from './components/Layout.jsx';
 import Overview from './pages/Overview.jsx';
 import ApiKeys from './pages/ApiKeys.jsx';
 import ClientDetail from './pages/ClientDetail.jsx';
+import Analytics from './pages/Analytics.jsx';
+import ActivityLog from './pages/ActivityLog.jsx';
 
 function PrivateRoute({ children }) {
   const key = localStorage.getItem('adminKey');
@@ -27,6 +29,8 @@ export default function App() {
           <Route path="overview" element={<Overview />} />
           <Route path="api-keys" element={<ApiKeys />} />
           <Route path="api-keys/:clientId" element={<ClientDetail />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="logs" element={<ActivityLog />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

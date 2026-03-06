@@ -1,9 +1,11 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Key, LogOut, Zap } from 'lucide-react';
+import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity } from 'lucide-react';
 
 const navItems = [
   { to: '/overview', icon: LayoutDashboard, label: 'Overview' },
-  { to: '/api-keys', icon: Key, label: 'API Keys' }
+  { to: '/api-keys', icon: Key, label: 'API Keys' },
+  { to: '/analytics', icon: BarChart2, label: 'Analytics' },
+  { to: '/logs', icon: Activity, label: 'Activity Log' }
 ];
 
 export default function Layout() {

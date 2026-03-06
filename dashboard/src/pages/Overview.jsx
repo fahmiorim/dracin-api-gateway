@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, CheckCircle, XCircle, BarChart3, RefreshCw, ArrowRight } from 'lucide-react';
+import { Users, CheckCircle, XCircle, BarChart3, RefreshCw, ArrowRight, AlertTriangle } from 'lucide-react';
 import { api } from '../lib/api.js';
 
 function StatCard({ icon: Icon, label, value, color }) {
@@ -29,6 +29,7 @@ function StatusBadge({ isActive, expiresAt }) {
 export default function Overview() {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
+  const [expiring, setExpiring] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -36,8 +37,12 @@ export default function Overview() {
     setLoading(true);
     setError('');
     try {
-      const res = await api.getStats();
-      setStats(res.data.data);
+      const [statsRes, expiringRes] = await Promise.all([
+        api.getStats(),
+        api.getExpiringClients(30)
+      ]);
+      setStats(statsRes.data.data);
+      setExpiring(expiringRes.data.data || []);
     } catch (err) {
       if (err.response?.status === 401) {
         localStorage.removeItem('adminKey');
@@ -71,6 +76,32 @@ export default function Overview() {
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-6">{error}</div>
+      )}
+
+      {/* Expiry Warning */}
+      {expiring.length > 0 && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-orange-500 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-orange-800 mb-2">
+                {expiring.length} client akan expire dalam 30 hari
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {expiring.map(c => (
+                  <button
+                    key={c.clientId}
+                    onClick={() => navigate(`/api-keys/${c.clientId}`)}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-orange-200 rounded-lg text-xs text-orange-700 hover:bg-orange-50 transition-colors"
+                  >
+                    <span className="font-medium">{c.name}</span>
+                    <span className="text-orange-400">— {c.daysLeft}h lagi</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Stats Cards */}

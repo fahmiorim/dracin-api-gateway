@@ -4,11 +4,6 @@ import logger from './src/utils/logger.js';
 
 // Start server
 const server = app.listen(config.port, () => {
-  logger.info('🚀 Dracin API Gateway started', {
-    port: config.port,
-    environment: config.nodeEnv,
-    pid: process.pid
-  });
 });
 
 // Graceful shutdown

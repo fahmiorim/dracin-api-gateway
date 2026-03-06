@@ -3,6 +3,9 @@ import { apiKeyAuth } from '../middleware/auth.js';
 import {
   adminLogin,
   getAdminStats,
+  getAdminAnalytics,
+  getAdminLogs,
+  getExpiringClients,
   createApiClient,
   listApiClients,
   updateApiClient,
@@ -20,6 +23,9 @@ router.post('/login', adminLogin);
 router.use(apiKeyAuth);
 
 router.get('/stats', getAdminStats);
+router.get('/analytics', getAdminAnalytics);
+router.get('/logs', getAdminLogs);
+router.get('/expiring', getExpiringClients);
 
 /**
  * @swagger

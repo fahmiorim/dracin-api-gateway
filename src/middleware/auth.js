@@ -3,6 +3,8 @@ import { config, isDevelopment } from '../config/index.js';
 import { cache } from '../utils/cache.js';
 import supabaseService from '../database/supabase.js';
 
+const SKIP_LOG_CLIENTS = new Set(['dev_client', 'default_client', 'admin_client']);
+
 // Fallback in-memory storage for development
 const buildFallbackClients = () => {
   const clients = new Map();
@@ -291,6 +293,18 @@ export const tenantRateLimit = (req, res, next) => {
     'X-RateLimit-Remaining': Math.max(0, limit - current.count),
     'X-RateLimit-Reset': new Date(current.resetTime).toISOString()
   });
+
+  // Log usage after response (fire and forget)
+  if (!SKIP_LOG_CLIENTS.has(clientId) && supabaseService.isReady()) {
+    res.on('finish', () => {
+      supabaseService.logUsage({
+        client_id: clientId,
+        endpoint: req.path,
+        method: req.method,
+        status_code: res.statusCode
+      }).catch(() => {});
+    });
+  }
 
   next();
 };

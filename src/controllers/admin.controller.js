@@ -93,6 +93,86 @@ export const getAdminStats = async (req, res, next) => {
 };
 
 /**
+ * Get usage analytics (aggregated by day)
+ */
+export const getAdminAnalytics = async (req, res, next) => {
+  try {
+    const days = parseInt(req.query.days) || 7;
+    const analytics = await supabaseService.getAnalytics(days);
+    res.json(createSuccessResponse(analytics, 'Analytics retrieved successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get activity logs
+ */
+export const getAdminLogs = async (req, res, next) => {
+  try {
+    const { limit = 100, clientId, endpoint, statusCode, days = 7 } = req.query;
+    const logs = await supabaseService.getLogs({
+      limit: parseInt(limit),
+      clientId,
+      endpoint,
+      statusCode: statusCode ? parseInt(statusCode) : undefined,
+      days: parseInt(days)
+    });
+
+    // Enrich logs with client names if possible
+    let clients = [];
+    if (supabaseService.isReady()) {
+      try { clients = await supabaseService.listClients(); } catch {}
+    }
+    const clientMap = Object.fromEntries(clients.map(c => [c.client_id, c.name]));
+
+    const enriched = logs.map(log => ({
+      ...log,
+      clientName: clientMap[log.client_id] || log.client_id
+    }));
+
+    res.json(createSuccessResponse(enriched, 'Logs retrieved successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get clients expiring soon
+ */
+export const getExpiringClients = async (req, res, next) => {
+  try {
+    const days = parseInt(req.query.days) || 30;
+    const threshold = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    const now = new Date();
+
+    if (supabaseService.isReady()) {
+      try {
+        const clients = await supabaseService.listClients();
+        const expiring = clients
+          .filter(c => c.expires_at && new Date(c.expires_at) > now && new Date(c.expires_at) <= threshold && c.is_active)
+          .map(c => ({
+            clientId: c.client_id,
+            name: c.name,
+            email: c.email,
+            expiresAt: c.expires_at,
+            daysLeft: Math.ceil((new Date(c.expires_at) - now) / (24 * 60 * 60 * 1000))
+          }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+
+        return res.json(createSuccessResponse(expiring, 'Expiring clients retrieved'));
+      } catch (supabaseError) {
+        logger.warn('Supabase expiring clients failed:', supabaseError.message);
+      }
+    }
+
+    res.json(createSuccessResponse([], 'Expiring clients retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Generate API Key
  */
 const generateApiKey = () => {

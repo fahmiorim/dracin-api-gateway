@@ -18,7 +18,6 @@ class ReelShortAPI {
     async updateBuildId() {
         try {
             const homeUrl = "https://www.reelshort.com/id";
-            logger.info(`Fetching build ID from ${homeUrl}`);
             
             const response = await axios.get(homeUrl, { 
                 headers: this.headers, 
@@ -30,7 +29,6 @@ class ReelShortAPI {
             if (buildIdMatch) {
                 this.buildId = buildIdMatch[1];
                 this.baseUrl = `https://www.reelshort.com/_next/data/${this.buildId}/id`;
-                logger.info(`Successfully updated build ID: ${this.buildId}`);
             } else {
                 // Try alternative pattern
                 const altMatch = response.data.match(/\/id\/_next\/data\/([^\/]+)\//);

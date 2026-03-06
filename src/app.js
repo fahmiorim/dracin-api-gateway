@@ -53,14 +53,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-logger.info('🚀 Dracin API Gateway started', {
-  environment: config.nodeEnv,
-  pid: process.pid,
-  port: config.port,
-  service: 'dracin-api-gateway',
-  timestamp: new Date().toISOString()
-});
-
 // Request parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -102,7 +94,7 @@ app.use('/melolo', tenantApiKeyAuth, tenantRateLimit, meloloRoutes);
 app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
 
 // Admin routes - requires admin authentication
-app.use('/admin', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Swagger UI at /docs path (not root to avoid conflicts)
 if (swaggerDocument) {
