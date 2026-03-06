@@ -58,7 +58,9 @@ export const episodeList = async (cid) => {
   if (!cid) {
     throw new Error('CID (drama ID) is required');
   }
-  return await apiRequest('/episode_list', { cid });
+  const raw = await apiRequest('/episode_list', { cid });
+  logger.debug('episodeList raw:', JSON.stringify(raw).slice(0, 300));
+  return raw;
 };
 
 /**
@@ -81,7 +83,9 @@ export const playEndRecommend = async (cid) => {
   if (!cid) {
     throw new Error('CID (drama ID) is required');
   }
-  return await apiRequest('/play_end_recommend', { cid });
+  const raw = await apiRequest('/play_end_recommend', { cid });
+  logger.debug('playEndRecommend raw:', JSON.stringify(raw).slice(0, 300));
+  return raw;
 };
 
 /**
@@ -91,28 +95,27 @@ export const playEndRecommend = async (cid) => {
 export const getAllDramas = async (maxPages = 3) => {
   try {
     const allDramas = [];
+
+    const extractVideos = (moduleList) => {
+      if (!Array.isArray(moduleList)) return;
+      moduleList.forEach(mod => {
+        const videoList = mod.video_list || mod.drama_list || [];
+        if (Array.isArray(videoList)) allDramas.push(...videoList);
+      });
+    };
     
     // Get homepage first
     const homepageData = await homepage(0);
-    if (homepageData && homepageData.module_list) {
-      homepageData.module_list.forEach(module => {
-        if (module.video_list && Array.isArray(module.video_list)) {
-          allDramas.push(...module.video_list);
-        }
-      });
-    }
+    // homepage returns { module_list: [...] } at top level
+    extractVideos(homepageData?.module_list);
     
     // Get additional modules
     for (let page = 0; page < maxPages; page++) {
       try {
         const moduleData = await endModule(page);
-        if (moduleData && moduleData.module_list) {
-          moduleData.module_list.forEach(module => {
-            if (module.video_list && Array.isArray(module.video_list)) {
-              allDramas.push(...module.video_list);
-            }
-          });
-        }
+        // endModule returns { data: { drama_module: [...] } }
+        const modules = moduleData?.data?.drama_module || moduleData?.data?.module_list || moduleData?.module_list || [];
+        extractVideos(modules);
       } catch (error) {
         logger.warn(`Failed to fetch module page ${page}:`, error.message);
         break;
@@ -142,9 +145,11 @@ export const searchDramas = async (query) => {
   
   try {
     const allDramas = await getAllDramas();
-    const searchResults = allDramas.filter(drama => 
-      drama.title && drama.title.toLowerCase().includes(query.toLowerCase())
-    );
+    const q = query.toLowerCase();
+    const searchResults = allDramas.filter(drama => {
+      const titleFields = [drama.title, drama.video_title, drama.name, drama.drama_name, drama.video_name];
+      return titleFields.some(t => t && t.toLowerCase().includes(q));
+    });
     
     return searchResults;
   } catch (error) {
@@ -157,6 +162,15 @@ export const searchDramas = async (query) => {
  * Get complete drama information with episodes
  * @param {number} cid - Drama ID
  */
+const extractArray = (raw, ...keys) => {
+  if (Array.isArray(raw)) return raw;
+  for (const key of keys) {
+    const val = key.split('.').reduce((o, k) => o?.[k], raw);
+    if (Array.isArray(val)) return val;
+  }
+  return [];
+};
+
 export const getDramaWithEpisodes = async (cid) => {
   try {
     const [episodeListData, recommendData] = await Promise.all([
@@ -165,8 +179,8 @@ export const getDramaWithEpisodes = async (cid) => {
     ]);
     
     return {
-      episodes: episodeListData.data || [],
-      recommendations: recommendData.data || []
+      episodes: extractArray(episodeListData, 'data', 'data.episode_list', 'episode_list'),
+      recommendations: extractArray(recommendData, 'data', 'data.recommend_list', 'data.video_list', 'recommend_list')
     };
   } catch (error) {
     logger.error('Error getting drama with episodes:', error.message);

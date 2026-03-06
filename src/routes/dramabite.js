@@ -20,7 +20,7 @@ router.get('/homepage', getHomepage);
 router.get('/end-module', getEndModule);
 
 // Get all available dramas
-router.get('/all', validateQuery(schemas.pagination), getAllDramas);
+router.get('/all', validateQuery(schemas.dramabiteAll), getAllDramas);
 
 // Search dramas
 router.get('/search', validateQuery(schemas.search), searchDramas);

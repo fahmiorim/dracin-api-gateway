@@ -86,5 +86,31 @@ export const schemas = {
       'number.integer': 'Page must be an integer',
       'number.min': 'Page must be at least 1'
     })
+  }),
+
+  dramabiteAll: Joi.object({
+    maxPages: Joi.number().integer().min(1).max(20).default(3).messages({
+      'number.base': 'maxPages must be a number',
+      'number.integer': 'maxPages must be an integer',
+      'number.min': 'maxPages must be at least 1',
+      'number.max': 'maxPages must not exceed 20'
+    })
+  }),
+
+  meloloSearch: Joi.object({
+    query: Joi.string().required().min(2).max(100).messages({
+      'string.empty': 'Query parameter is required',
+      'string.min': 'Query must be at least 2 characters long',
+      'string.max': 'Query must not exceed 100 characters',
+      'any.required': 'Query parameter is required'
+    }),
+    offset: Joi.alternatives().try(
+      Joi.number().integer().min(0),
+      Joi.string().pattern(/^\d+$/)
+    ).default('0'),
+    limit: Joi.alternatives().try(
+      Joi.number().integer().min(1).max(50),
+      Joi.string().pattern(/^\d+$/)
+    ).default('10')
   })
 };

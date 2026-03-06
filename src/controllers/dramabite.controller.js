@@ -192,12 +192,21 @@ export const getEpisodeList = async (req, res, next) => {
       episodeCount: result.data?.length || 0
     });
 
+    const episodes = Array.isArray(result?.data)
+      ? result.data
+      : Array.isArray(result?.data?.episode_list)
+        ? result.data.episode_list
+        : Array.isArray(result?.episode_list)
+          ? result.episode_list
+          : result?.data || result || [];
+
     res.json({
       success: true,
       message: 'Episode list retrieved successfully',
-      data: result.data || result,
+      data: episodes,
       cid: parseInt(cid),
-      episodeCount: result.data?.length || 0,
+      episodeCount: Array.isArray(episodes) ? episodes.length : 0,
+      rawKeys: Object.keys(result || {}),
       timestamp: new Date().toISOString(),
       requestId: req.id
     });
@@ -290,12 +299,21 @@ export const getPlayEndRecommend = async (req, res, next) => {
       count: result?.data?.length || 0
     });
 
+    const data = Array.isArray(result?.data)
+      ? result.data
+      : Array.isArray(result?.data?.recommend_list)
+        ? result.data.recommend_list
+        : Array.isArray(result?.data?.video_list)
+          ? result.data.video_list
+          : [];
+
     res.json({
       success: true,
       message: 'Play end recommendations retrieved successfully',
-      data: result?.data || [],
+      data,
       cid: parseInt(cid),
-      count: result?.data?.length || 0,
+      count: data.length,
+      rawKeys: Object.keys(result || {}),
       timestamp: new Date().toISOString(),
       requestId: req.id
     });

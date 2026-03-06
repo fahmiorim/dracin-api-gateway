@@ -14,7 +14,7 @@ const router = Router();
  * @desc    Search Melolo novels
  * @access  Public
  */
-router.get('/search', validateQuery(schemas.search), searchMelolo);
+router.get('/search', validateQuery(schemas.meloloSearch), searchMelolo);
 
 /**
  * @route   GET /melolo/video-details
