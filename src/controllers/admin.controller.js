@@ -188,31 +188,62 @@ export const getPlans = (req, res) => {
 };
 
 /**
- * Health monitor - check all platform statuses
+ * Health monitor - check all platform statuses by calling external APIs directly
  */
 export const getPlatformHealth = async (req, res, next) => {
   try {
-    const baseUrl = `http://localhost:${process.env.PORT || 3000}`;
-    const adminKey = process.env.ADMIN_API_KEY;
-
-    const platforms = [
-      { name: 'Dramabox', endpoint: '/dramabox/latest?pageNo=1&pageSize=1' },
-      { name: 'ReelShort', endpoint: '/reelshort/newrelease' },
-      { name: 'Melolo', endpoint: '/melolo/search?query=cinta' },
-      { name: 'Dramabite', endpoint: '/dramabite/homepage' }
+    const checks = [
+      {
+        name: 'Dramabox',
+        fn: async () => {
+          const res = await axios.get('https://sapi.dramaboxdb.com', { timeout: 8000 });
+          return res.status < 500;
+        }
+      },
+      {
+        name: 'ReelShort',
+        fn: async () => {
+          const res = await axios.get('https://www.reelshort.com/id', {
+            headers: { 'User-Agent': 'Mozilla/5.0' },
+            timeout: 8000
+          });
+          return res.status < 500;
+        }
+      },
+      {
+        name: 'Melolo',
+        fn: async () => {
+          const res = await axios.get('https://api.tmtreader.com/i18n_novel/search/page/v1/', {
+            params: { query: 'cinta', limit: 1, offset: 0 },
+            headers: { 'User-Agent': 'com.worldance.drama/49819 (Linux; U; Android 9; in; SM-N976N; Build/QP1A.190711.020;tt-ok/3.12.13.17)' },
+            timeout: 8000,
+            validateStatus: () => true
+          });
+          return res.status < 500;
+        }
+      },
+      {
+        name: 'Dramabite',
+        fn: async () => {
+          const res = await axios.get('https://www.dramabite.media/short_video/video_svr/homepage', {
+            params: { lang: 'id', time: Date.now() },
+            headers: { 'User-Agent': 'Mozilla/5.0' },
+            timeout: 8000,
+            validateStatus: () => true
+          });
+          return res.status < 500;
+        }
+      }
     ];
 
     const results = await Promise.allSettled(
-      platforms.map(async (p) => {
+      checks.map(async (p) => {
         const start = Date.now();
         try {
-          await axios.get(`${baseUrl}${p.endpoint}`, {
-            headers: { 'x-api-key': adminKey },
-            timeout: 10000
-          });
-          return { name: p.name, status: 'up', latency: Date.now() - start };
+          const ok = await p.fn();
+          return { name: p.name, status: ok ? 'up' : 'degraded', latency: Date.now() - start };
         } catch (err) {
-          const status = err.response ? 'degraded' : 'down';
+          const status = err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' ? 'down' : 'degraded';
           return { name: p.name, status, latency: Date.now() - start, error: err.message };
         }
       })
