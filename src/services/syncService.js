@@ -1,6 +1,6 @@
 import logger from '../utils/logger.js';
 import supabaseService from '../database/supabase.js';
-import { latest as dramaboxLatest, trendings as dramaboxTrending } from '../lib/dramabox.js';
+import { latest as dramaboxLatest, trendings as dramaboxTrending, populersearch as dramaboxPopuler, foryou as dramaboxForyou, dubindo as dramaboxDubindo } from '../lib/dramabox.js';
 import reelshortAPI from '../lib/reelshort.js';
 import { getAllDramas as dramabiteGetAll } from '../lib/dramabite.js';
 import meloloAPI from '../lib/melolo.js';
@@ -78,24 +78,38 @@ async function syncDramabox() {
     logger.info('[Sync] Starting Dramabox sync...');
     const items = [];
 
-    // Fetch latest (multiple pages) — latest(pageNo, pageSize) returns array directly
-    for (let page = 1; page <= 5; page++) {
+    // Rank endpoints (latest=rankType3, trending=rankType1, populer=rankType2)
+    for (const fetchFn of [dramaboxLatest, dramaboxTrending, dramaboxPopuler]) {
       try {
-        const list = await dramaboxLatest(page, 20);
-        if (!Array.isArray(list) || list.length === 0) break;
-        items.push(...list);
+        const list = await fetchFn();
+        if (Array.isArray(list)) items.push(...list);
       } catch (e) {
-        logger.warn(`[Sync] Dramabox latest page ${page} failed:`, e.message);
-        break;
+        logger.warn('[Sync] Dramabox rank fetch failed:', e.message);
       }
     }
 
-    // Fetch trending — trendings() returns array directly
-    try {
-      const list = await dramaboxTrending();
-      if (Array.isArray(list)) items.push(...list);
-    } catch (e) {
-      logger.warn('[Sync] Dramabox trending failed:', e.message);
+    // For-you recommendations (call 3x — uses random page internally)
+    for (let i = 0; i < 3; i++) {
+      try {
+        const list = await dramaboxForyou();
+        if (Array.isArray(list)) items.push(...list);
+      } catch (e) {
+        logger.warn('[Sync] Dramabox foryou failed:', e.message);
+      }
+    }
+
+    // Classify (dubindo) — classify 1=terpopuler, 2=terbaru, pageSize=15
+    for (const classify of [1, 2]) {
+      for (let page = 1; page <= 10; page++) {
+        try {
+          const list = await dramaboxDubindo(classify, page);
+          if (!Array.isArray(list) || list.length === 0) break;
+          items.push(...list);
+        } catch (e) {
+          logger.warn(`[Sync] Dramabox dubindo c=${classify} p=${page} failed:`, e.message);
+          break;
+        }
+      }
     }
 
     const normalized = items.map(normalizeDramabox);

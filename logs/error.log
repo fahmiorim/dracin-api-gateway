@@ -22,3 +22,34 @@
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:24:33.072Z"}
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:24:43.915Z"}
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:24:45.573Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:08.909Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:08.940Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:08.958Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:09.110Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:09.129Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:09.158Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:13.591Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:14.302Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:24.611Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:25.345Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.016Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.025Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.066Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.208Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.245Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:39:58.301Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:04.779Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:04.809Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:04.829Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:06.536Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:07.327Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.640Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.691Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.753Z"}
+{"level":"error","message":"Error searching contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.841Z"}
+{"level":"error","message":"Error getting sync logs:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.934Z"}
+{"level":"error","message":"Error getting contents stats:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:25.988Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:31.966Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:32.591Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:43.390Z"}
+{"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:44.148Z"}

@@ -9,9 +9,12 @@ const server = app.listen(config.port, () => {
   startExpiryNotificationJob();
 
   // Initial metadata sync (delayed 5s to let server fully start)
-  setTimeout(() => {
-    runSync().catch(err => logger.error('Initial sync error:', err.message));
-  }, 5000);
+  // Skip in dev mode to avoid repeated syncs on nodemon restarts
+  if (process.env.NODE_ENV !== 'development') {
+    setTimeout(() => {
+      runSync().catch(err => logger.error('Initial sync error:', err.message));
+    }, 5000);
+  }
 
   // Schedule cron sync every 6 hours
   startCronSync();
