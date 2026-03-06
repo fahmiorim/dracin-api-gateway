@@ -1053,6 +1053,29 @@ paths:
         "404":
           description: Konten tidak ditemukan
 
+  /contents/featured:
+    get:
+      tags:
+        - Contents
+      summary: Konten unggulan (homepage)
+      description: Konten terbaru dari cache untuk ditampilkan di halaman utama website/app
+      parameters:
+        - name: platform
+          in: query
+          description: Filter berdasarkan platform
+          schema:
+            type: string
+            enum: [dramabox, reelshort, melolo, dramabite]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        "200":
+          description: Daftar konten unggulan
+
   /contents/{id}/episodes:
     get:
       tags:
@@ -1069,6 +1092,92 @@ paths:
       responses:
         "200":
           description: Daftar episode
+
+  /contents/{id}/stream:
+    get:
+      tags:
+        - Contents
+      summary: Streaming URL episode (real-time)
+      description: |
+        Mengambil URL video streaming secara real-time dari platform asli.
+        **Parameter per platform:**
+        - dramabox → `episode` (nomor episode)
+        - reelshort → `episode` + opsional `chapter_id` (auto-resolve jika tidak ada)
+        - melolo → `video_id` (dari endpoint episodes)
+        - dramabite → `episode` (nomor episode)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: episode
+          in: query
+          description: Nomor episode (dramabox / reelshort / dramabite)
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - name: chapter_id
+          in: query
+          description: Chapter ID dari episode list (opsional, khusus ReelShort)
+          schema:
+            type: string
+            example: "ncqn2kbi1h"
+        - name: video_id
+          in: query
+          description: Video ID dari episode list (wajib untuk Melolo)
+          schema:
+            type: string
+            example: "vid123456"
+      responses:
+        "200":
+          description: Stream URL berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Stream URL berhasil diambil"
+                  data:
+                    type: object
+                    properties:
+                      stream_url:
+                        type: string
+                        format: uri
+                        example: "https://cdn.example.com/video/episode1.m3u8"
+                      stream_url_m3u8:
+                        type: string
+                        format: uri
+                      backup_url:
+                        type: string
+                        format: uri
+                      chapter_id:
+                        type: string
+                      episode:
+                        type: integer
+                        example: 1
+                      duration:
+                        type: integer
+                      platform:
+                        type: string
+                        enum: [dramabox, reelshort, melolo, dramabite]
+                      expires_at:
+                        type: string
+                        format: date-time
+        "400":
+          description: Parameter tidak lengkap
+        "404":
+          description: Konten atau episode tidak ditemukan
+        "503":
+          description: Gagal mengambil stream dari platform upstream
 
   /search:
     get:

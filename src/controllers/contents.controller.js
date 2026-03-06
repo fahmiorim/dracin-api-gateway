@@ -1,9 +1,9 @@
 import logger from '../utils/logger.js';
 import supabaseService from '../database/supabase.js';
-import { detail as dramaboxDetail } from '../lib/dramabox.js';
+import { detail as dramaboxDetail, linkStream } from '../lib/dramabox.js';
 import reelshortAPI from '../lib/reelshort.js';
 import meloloAPI from '../lib/melolo.js';
-import { episodeList as dramabiteEpisodes } from '../lib/dramabite.js';
+import { episodeList as dramabiteEpisodes, episodeDetail } from '../lib/dramabite.js';
 
 const fail = (res, status, message) =>
   res.status(status).json({ success: false, message, timestamp: new Date().toISOString() });
@@ -49,6 +49,122 @@ export const listContents = async (req, res, next) => {
   }
 };
 
+// ─── GET /contents/:id/stream ──────────────────────────────────────────────
+
+export const getContentStream = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { episode, chapter_id, video_id } = req.query;
+
+    const item = await supabaseService.getContentById(id);
+    if (!item) return fail(res, 404, 'Konten tidak ditemukan');
+
+    logger.info('Stream requested', { requestId: req.id, id, platform: item.platform, episode });
+
+    switch (item.platform) {
+      case 'dramabox': {
+        if (!episode) return fail(res, 400, 'Parameter episode (nomor episode) diperlukan');
+        const episodeNum = parseInt(episode);
+        const chapters = await linkStream(item.external_id);
+        if (!Array.isArray(chapters) || chapters.length === 0)
+          return fail(res, 503, 'Gagal mengambil stream dari Dramabox');
+        const chapter = chapters.find(c => c.chapterIndex === episodeNum);
+        if (!chapter || !chapter.playUrl)
+          return fail(res, 404, `Episode ${episodeNum} tidak ditemukan atau tidak bisa diputar`);
+        return res.json({
+          success: true,
+          message: 'Stream URL berhasil diambil',
+          data: {
+            stream_url: chapter.playUrl,
+            chapter_id: chapter.chapterId,
+            episode: episodeNum,
+            platform: 'dramabox'
+          },
+          timestamp: new Date().toISOString(),
+          requestId: req.id
+        });
+      }
+
+      case 'reelshort': {
+        if (!episode) return fail(res, 400, 'Parameter episode (nomor episode) diperlukan');
+        const episodeNum = parseInt(episode);
+        const filteredTitle = item.metadata?.filtered_title;
+        if (!filteredTitle)
+          return fail(res, 400, 'filtered_title tidak tersedia, coba sync ulang konten ini');
+        let chId = chapter_id;
+        if (!chId) {
+          const eps = await reelshortAPI.getEpisodes(item.external_id, filteredTitle);
+          const ep = eps.find(e => e.episode === episodeNum);
+          if (!ep) return fail(res, 404, `Episode ${episodeNum} tidak ditemukan`);
+          chId = ep.chapter_id;
+        }
+        const videoData = await reelshortAPI.getVideoUrl(episodeNum, filteredTitle, item.external_id, chId);
+        if (!videoData) return fail(res, 503, 'Gagal mengambil stream dari ReelShort');
+        return res.json({
+          success: true,
+          message: 'Stream URL berhasil diambil',
+          data: {
+            stream_url: videoData.video_url,
+            episode: episodeNum,
+            duration: videoData.duration,
+            platform: 'reelshort'
+          },
+          timestamp: new Date().toISOString(),
+          requestId: req.id
+        });
+      }
+
+      case 'melolo': {
+        const vidId = video_id;
+        if (!vidId) return fail(res, 400, 'Parameter video_id diperlukan untuk konten Melolo');
+        const { result, error } = await meloloAPI.getVideoModel(vidId);
+        if (error || !result) return fail(res, 503, 'Gagal mengambil stream dari Melolo');
+        return res.json({
+          success: true,
+          message: 'Stream URL berhasil diambil',
+          data: {
+            stream_url: result.main_url,
+            backup_url: result.backup_url,
+            platform: 'melolo'
+          },
+          timestamp: new Date().toISOString(),
+          requestId: req.id
+        });
+      }
+
+      case 'dramabite': {
+        if (!episode) return fail(res, 400, 'Parameter episode (nomor episode) diperlukan');
+        const vid = parseInt(episode);
+        const cid = parseInt(item.external_id);
+        const detail = await episodeDetail(cid, vid);
+        const linkInfo = detail?.data?.link_info || detail?.link_info;
+        if (!linkInfo?.video_link)
+          return fail(res, 503, 'Gagal mengambil stream dari Dramabite');
+        return res.json({
+          success: true,
+          message: 'Stream URL berhasil diambil',
+          data: {
+            stream_url: linkInfo.video_link,
+            stream_url_m3u8: linkInfo.video_link_m3u8,
+            episode: vid,
+            platform: 'dramabite',
+            expires_at: linkInfo.validity_period
+              ? new Date(Date.now() + linkInfo.validity_period * 1000).toISOString()
+              : null
+          },
+          timestamp: new Date().toISOString(),
+          requestId: req.id
+        });
+      }
+
+      default:
+        return fail(res, 400, `Platform '${item.platform}' tidak dikenali`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 // ─── GET /contents/:id ────────────────────────────────────────────────────────
 
 export const getContentById = async (req, res, next) => {
@@ -64,6 +180,36 @@ export const getContentById = async (req, res, next) => {
       success: true,
       message: 'OK',
       data: item,
+      timestamp: new Date().toISOString(),
+      requestId: req.id
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── GET /contents/featured ─────────────────────────────────────────────────
+
+export const getContentFeatured = async (req, res, next) => {
+  try {
+    const { platform, limit = '20' } = req.query;
+    const parsedLimit = Math.min(parseInt(limit) || 20, 100);
+
+    const { data, count } = await supabaseService.searchContents({
+      query: null,
+      platform: platform || null,
+      limit: parsedLimit,
+      offset: 0
+    });
+
+    logger.info('Featured contents listed', { requestId: req.id, count: data.length, platform });
+
+    res.json({
+      success: true,
+      message: `${data.length} konten unggulan`,
+      data,
+      count: data.length,
+      limit: parsedLimit,
       timestamp: new Date().toISOString(),
       requestId: req.id
     });
