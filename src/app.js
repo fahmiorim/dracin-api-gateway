@@ -97,7 +97,11 @@ app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Swagger UI - protected with admin API key
+// Only protect root path; static assets (CSS/JS) must pass through freely
 const swaggerAuthMiddleware = (req, res, next) => {
+  const isAsset = req.path !== '/' && req.path !== '';
+  if (isAsset) return next();
+
   const key = req.headers['x-api-key'] || req.query.api_key;
   const adminKey = process.env.ADMIN_API_KEY;
   if (!adminKey || key === adminKey) return next();
