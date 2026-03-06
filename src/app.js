@@ -16,6 +16,7 @@ import meloloRoutes from './routes/melolo.js';
 import dramabiteRoutes from './routes/dramabite.js';
 import adminRoutes from './routes/admin.js';
 import searchRoutes from './routes/search.js';
+import contentsRoutes from './routes/contents.js';
 
 // Load Swagger specification
 let swaggerDocument;
@@ -94,7 +95,10 @@ app.use('/reelshort', tenantApiKeyAuth, tenantRateLimit, reelshortRoutes);
 app.use('/melolo', tenantApiKeyAuth, tenantRateLimit, meloloRoutes);
 app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
 
-// Cross-platform search (from cached metadata)
+// Unified contents API (from cached metadata)
+app.use('/contents', tenantApiKeyAuth, tenantRateLimit, contentsRoutes);
+
+// Cross-platform search (alias → /contents?q=...)
 app.use('/search', tenantApiKeyAuth, tenantRateLimit, searchRoutes);
 
 // Admin routes - requires admin authentication

@@ -404,6 +404,24 @@ class SupabaseService {
     }
   }
 
+  async getContentById(id) {
+    try {
+      const { data, error } = await this.supabase
+        .from('contents')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (error) {
+        if (error.code === 'PGRST116') return null;
+        throw error;
+      }
+      return data;
+    } catch (error) {
+      logger.error('Error getting content by id:', error.message);
+      return null;
+    }
+  }
+
   async searchContents({ query, platform, limit = 20, offset = 0 }) {
     try {
       let q = this.supabase
