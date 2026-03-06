@@ -21,7 +21,8 @@ import {
   triggerSync,
   getSyncStatusController,
   getContents,
-  getConfig
+  getConfig,
+  clearContents
 } from '../controllers/admin.controller.js';
 
 const router = express.Router();
@@ -40,6 +41,7 @@ router.get('/expiring', getExpiringClients);
 router.get('/plans', getPlans);
 router.get('/health', getPlatformHealth);
 router.post('/cache/clear', clearCache);
+router.delete('/contents', clearContents);
 router.get('/rate-limits', getRateLimitStatus);
 router.get('/audit', getAuditLogs);
 

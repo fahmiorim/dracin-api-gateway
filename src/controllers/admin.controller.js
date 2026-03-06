@@ -257,6 +257,28 @@ export const getPlatformHealth = async (req, res, next) => {
 };
 
 /**
+ * Clear all contents from Supabase (optionally per platform)
+ * DELETE /admin/contents?platform=dramabox
+ */
+export const clearContents = async (req, res, next) => {
+  try {
+    const { platform } = req.query;
+    const VALID = ['dramabox', 'reelshort', 'melolo', 'dramabite'];
+    if (platform && !VALID.includes(platform)) {
+      return res.status(400).json(createErrorResponse(`Platform tidak valid. Gunakan: ${VALID.join(', ')}`));
+    }
+    const deleted = await supabaseService.deleteAllContents(platform || null);
+    logger.info(`Admin cleared contents`, { platform: platform || 'all', deleted, requestId: req.id });
+    res.json(createSuccessResponse(
+      { deleted, platform: platform || 'all' },
+      platform ? `${deleted} konten ${platform} dihapus` : `${deleted} konten dihapus`
+    ));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Clear cache
  */
 export const clearCache = (req, res) => {

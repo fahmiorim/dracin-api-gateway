@@ -377,6 +377,23 @@ class SupabaseService {
 
   // ─── Contents Methods ───────────────────────────────────────────────────────
 
+  async deleteAllContents(platform = null) {
+    try {
+      let q = this.supabase.from('contents').delete();
+      if (platform) {
+        q = q.eq('platform', platform);
+      } else {
+        q = q.neq('id', '00000000-0000-0000-0000-000000000000'); // delete all rows
+      }
+      const { error, count } = await q.select('id');
+      if (error) throw error;
+      return count || 0;
+    } catch (error) {
+      logger.error('Error deleting contents:', error.message);
+      return 0;
+    }
+  }
+
   async upsertContents(items) {
     if (!items || items.length === 0) return 0;
     try {
