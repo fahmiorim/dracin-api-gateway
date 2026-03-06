@@ -8,6 +8,12 @@ import { episodeList as dramabiteEpisodes, episodeDetail } from '../lib/dramabit
 const fail = (res, status, message) =>
   res.status(status).json({ success: false, message, timestamp: new Date().toISOString() });
 
+const sanitize = (item) => {
+  if (!item) return item;
+  const { platform, external_id, metadata, ...clean } = item;
+  return clean;
+};
+
 // ─── GET /contents ────────────────────────────────────────────────────────────
 
 export const listContents = async (req, res, next) => {
@@ -29,7 +35,7 @@ export const listContents = async (req, res, next) => {
     res.json({
       success: true,
       message: `${count} konten ditemukan`,
-      data,
+      data: data.map(sanitize),
       count,
       limit: parsedLimit,
       offset: parsedOffset,
@@ -172,7 +178,7 @@ export const getContentById = async (req, res, next) => {
     res.json({
       success: true,
       message: 'OK',
-      data: item,
+      data: sanitize(item),
       timestamp: new Date().toISOString(),
       requestId: req.id
     });
@@ -200,7 +206,7 @@ export const getContentFeatured = async (req, res, next) => {
     res.json({
       success: true,
       message: `${data.length} konten unggulan`,
-      data,
+      data: data.map(sanitize),
       count: data.length,
       limit: parsedLimit,
       timestamp: new Date().toISOString(),
@@ -266,8 +272,6 @@ export const getContentEpisodes = async (req, res, next) => {
       content: {
         id: item.id,
         title: item.title,
-        platform: item.platform,
-        external_id: item.external_id,
         cover_url: item.cover_url
       },
       timestamp: new Date().toISOString(),
