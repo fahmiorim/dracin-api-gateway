@@ -129,7 +129,20 @@ if (swaggerDocument) {
     swaggerOptions: {
       persistAuthorization: true,
       tryItOutEnabled: true
-    }
+    },
+    customJsStr: `
+      (function() {
+        var pollCount = 0;
+        var interval = setInterval(function() {
+          var apiKey = new URLSearchParams(window.location.search).get('api_key');
+          if (apiKey && window.ui) {
+            window.ui.preauthorizeApiKey('ApiKeyAuth', apiKey);
+            clearInterval(interval);
+          }
+          if (++pollCount > 100) clearInterval(interval);
+        }, 100);
+      })();
+    `
   }));
 
   app.get('/', (req, res) => {
