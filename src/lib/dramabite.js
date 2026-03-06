@@ -27,7 +27,7 @@ const apiRequest = async (endpoint, params = {}) => {
     });
     
     // Dramabite API returns response directly, not wrapped in .data
-    return response.data || response;
+    return response.data ?? {};
   } catch (error) {
     logger.error(`Error fetching ${endpoint}:`, error.message);
     throw new Error(`Failed to fetch ${endpoint}: ${error.message}`);
@@ -59,7 +59,7 @@ export const episodeList = async (cid) => {
     throw new Error('CID (drama ID) is required');
   }
   const raw = await apiRequest('/episode_list', { cid });
-  logger.debug('episodeList raw:', JSON.stringify(raw).slice(0, 300));
+  logger.debug('episodeList keys:', Object.keys(raw || {}));
   return raw;
 };
 
@@ -84,7 +84,7 @@ export const playEndRecommend = async (cid) => {
     throw new Error('CID (drama ID) is required');
   }
   const raw = await apiRequest('/play_end_recommend', { cid });
-  logger.debug('playEndRecommend raw:', JSON.stringify(raw).slice(0, 300));
+  logger.debug('playEndRecommend keys:', Object.keys(raw || {}));
   return raw;
 };
 
@@ -110,12 +110,13 @@ export const getAllDramas = async (maxPages = 3) => {
     extractVideos(homepageData?.module_list);
     
     // Get additional modules
+    // endModule returns a SINGLE module object: { video_list: [...], has_next_page: bool, ... }
     for (let page = 0; page < maxPages; page++) {
       try {
         const moduleData = await endModule(page);
-        // endModule returns { data: { drama_module: [...] } }
-        const modules = moduleData?.data?.drama_module || moduleData?.data?.module_list || moduleData?.module_list || [];
-        extractVideos(modules);
+        const videoList = moduleData?.video_list || moduleData?.drama_list || [];
+        if (Array.isArray(videoList)) allDramas.push(...videoList);
+        if (!moduleData?.has_next_page) break;
       } catch (error) {
         logger.warn(`Failed to fetch module page ${page}:`, error.message);
         break;
