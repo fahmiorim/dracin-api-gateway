@@ -14,7 +14,6 @@ import dramaboxRoutes from './routes/dramabox.js';
 import reelshortRoutes from './routes/reelshort.js';
 import meloloRoutes from './routes/melolo.js';
 import dramabiteRoutes from './routes/dramabite.js';
-import adminRoutes from './routes/admin.js';
 import searchRoutes from './routes/search.js';
 import contentsRoutes from './routes/contents.js';
 
@@ -100,9 +99,6 @@ app.use('/contents', tenantApiKeyAuth, tenantRateLimit, contentsRoutes);
 
 // Cross-platform search (alias → /contents?q=...)
 app.use('/search', tenantApiKeyAuth, tenantRateLimit, searchRoutes);
-
-// Admin routes - requires admin authentication
-app.use('/api/admin', adminRoutes);
 
 // ─── Load public swagger doc ─────────────────────────────────────────────────
 let swaggerPublic;
