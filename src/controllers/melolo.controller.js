@@ -18,10 +18,11 @@ export const searchMelolo = async (req, res, next) => {
     const { result, error } = await meloloAPI.searchNovels(query, offset, limit);
 
     if (error) {
-      if (error.includes('HTTP 404')) {
-        return res.status(404).json({
-          success: false,
+      if (error.includes('HTTP 404') || error.includes('404')) {
+        return res.json({
+          success: true,
           message: 'No novels found',
+          data: [],
           timestamp: new Date().toISOString(),
           requestId: req.id
         });
