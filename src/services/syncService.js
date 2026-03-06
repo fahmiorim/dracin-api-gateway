@@ -8,6 +8,7 @@ import meloloAPI from '../lib/melolo.js';
 const SYNC_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
 let syncTimer = null;
 let isSyncing = false;
+let syncProgress = {}; // Track per-platform progress
 
 // ─── Normalizers ────────────────────────────────────────────────────────────
 
@@ -16,9 +17,9 @@ const normalizeDramabox = (item) => ({
   external_id: String(item.bookId),
   title: item.bookName || item.title || null,
   description: item.introduction || item.desc || null,
-  cover_url: item.coverWap || item.cover || null,
+  cover_url: item.coverWap || item.bookCover || item.cover || null,
   episode_count: item.chapterCount || item.episodeCount || 0,
-  genres: Array.isArray(item.tags) ? item.tags : [],
+  genres: Array.isArray(item.tags) || Array.isArray(item.tagV3s) ? (item.tags || item.tagV3s || []) : [],
   metadata: {
     protagonist: item.protagonist || null,
     rank: item.rankVo?.hotCode || null,
@@ -74,6 +75,7 @@ const normalizeDramabite = (item) => ({
 async function syncDramabox() {
   const logId = await supabaseService.startSyncLog('dramabox');
   let count = 0;
+  syncProgress.dramabox = { status: 'running', started: Date.now(), items: 0 };
   try {
     logger.info('[Sync] Starting Dramabox sync...');
     const items = [];
@@ -127,9 +129,11 @@ async function syncDramabox() {
     const normalized = items.map(normalizeDramabox);
     const unique = deduplicateByExternalId(normalized);
     count = await supabaseService.upsertContents(unique);
+    syncProgress.dramabox = { status: 'done', finished: Date.now(), items: count };
     await supabaseService.finishSyncLog(logId, 'success', count);
     logger.info(`[Sync] Dramabox done: ${count} items upserted`);
   } catch (error) {
+    syncProgress.dramabox = { status: 'failed', finished: Date.now(), items: 0, error: error.message };
     logger.error('[Sync] Dramabox failed:', error.message);
     await supabaseService.finishSyncLog(logId, 'failed', 0, error.message);
   }
@@ -139,6 +143,7 @@ async function syncDramabox() {
 async function syncReelShort() {
   const logId = await supabaseService.startSyncLog('reelshort');
   let count = 0;
+  syncProgress.reelshort = { status: 'running', started: Date.now(), items: 0 };
   try {
     logger.info('[Sync] Starting ReelShort sync...');
     const bookshelves = await reelshortAPI.getRawBookshelves();
@@ -161,9 +166,11 @@ async function syncReelShort() {
 
     const unique = deduplicateByExternalId(items);
     count = await supabaseService.upsertContents(unique);
+    syncProgress.reelshort = { status: 'done', finished: Date.now(), items: count };
     await supabaseService.finishSyncLog(logId, 'success', count);
     logger.info(`[Sync] ReelShort done: ${count} items upserted`);
   } catch (error) {
+    syncProgress.reelshort = { status: 'failed', finished: Date.now(), items: 0, error: error.message };
     logger.error('[Sync] ReelShort failed:', error.message);
     await supabaseService.finishSyncLog(logId, 'failed', 0, error.message);
   }
@@ -173,6 +180,7 @@ async function syncReelShort() {
 async function syncMelolo() {
   const logId = await supabaseService.startSyncLog('melolo');
   let count = 0;
+  syncProgress.melolo = { status: 'running', started: Date.now(), items: 0 };
   try {
     logger.info('[Sync] Starting Melolo sync...');
     const items = [];
@@ -200,9 +208,11 @@ async function syncMelolo() {
 
     const unique = deduplicateByExternalId(items);
     count = await supabaseService.upsertContents(unique);
+    syncProgress.melolo = { status: 'done', finished: Date.now(), items: count };
     await supabaseService.finishSyncLog(logId, 'success', count);
     logger.info(`[Sync] Melolo done: ${count} items upserted`);
   } catch (error) {
+    syncProgress.melolo = { status: 'failed', finished: Date.now(), items: 0, error: error.message };
     logger.error('[Sync] Melolo failed:', error.message);
     await supabaseService.finishSyncLog(logId, 'failed', 0, error.message);
   }
@@ -212,15 +222,18 @@ async function syncMelolo() {
 async function syncDramabite() {
   const logId = await supabaseService.startSyncLog('dramabite');
   let count = 0;
+  syncProgress.dramabite = { status: 'running', started: Date.now(), items: 0 };
   try {
     logger.info('[Sync] Starting Dramabite sync...');
     const dramas = await dramabiteGetAll(10);
     const normalized = dramas.map(normalizeDramabite);
     const unique = deduplicateByExternalId(normalized);
     count = await supabaseService.upsertContents(unique);
+    syncProgress.dramabite = { status: 'done', finished: Date.now(), items: count };
     await supabaseService.finishSyncLog(logId, 'success', count);
     logger.info(`[Sync] Dramabite done: ${count} items upserted`);
   } catch (error) {
+    syncProgress.dramabite = { status: 'failed', finished: Date.now(), items: 0, error: error.message };
     logger.error('[Sync] Dramabite failed:', error.message);
     await supabaseService.finishSyncLog(logId, 'failed', 0, error.message);
   }
@@ -286,5 +299,5 @@ export function stopCronSync() {
 }
 
 export function getSyncStatus() {
-  return { isSyncing, nextSyncIn: syncTimer ? `${SYNC_INTERVAL_MS / 3600000}h interval` : 'not scheduled' };
+  return { isSyncing, progress: syncProgress, nextSyncIn: syncTimer ? `${SYNC_INTERVAL_MS / 3600000}h interval` : 'not scheduled' };
 }
