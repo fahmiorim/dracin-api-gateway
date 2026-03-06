@@ -54,7 +54,7 @@ export const listContents = async (req, res, next) => {
 export const getContentStream = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { episode, chapter_id, video_id } = req.query;
+    const { episode } = req.query;
 
     const item = await supabaseService.getContentById(id);
     if (!item) return fail(res, 404, 'Konten tidak ditemukan');
@@ -76,9 +76,7 @@ export const getContentStream = async (req, res, next) => {
           message: 'Stream URL berhasil diambil',
           data: {
             stream_url: chapter.playUrl,
-            chapter_id: chapter.chapterId,
-            episode: episodeNum,
-            platform: 'dramabox'
+            episode: episodeNum
           },
           timestamp: new Date().toISOString(),
           requestId: req.id
@@ -90,24 +88,19 @@ export const getContentStream = async (req, res, next) => {
         const episodeNum = parseInt(episode);
         const filteredTitle = item.metadata?.filtered_title;
         if (!filteredTitle)
-          return fail(res, 400, 'filtered_title tidak tersedia, coba sync ulang konten ini');
-        let chId = chapter_id;
-        if (!chId) {
-          const eps = await reelshortAPI.getEpisodes(item.external_id, filteredTitle);
-          const ep = eps.find(e => e.episode === episodeNum);
-          if (!ep) return fail(res, 404, `Episode ${episodeNum} tidak ditemukan`);
-          chId = ep.chapter_id;
-        }
-        const videoData = await reelshortAPI.getVideoUrl(episodeNum, filteredTitle, item.external_id, chId);
-        if (!videoData) return fail(res, 503, 'Gagal mengambil stream dari ReelShort');
+          return fail(res, 400, 'Konten ini perlu di-sync ulang sebelum bisa diputar');
+        const eps = await reelshortAPI.getEpisodes(item.external_id, filteredTitle);
+        const ep = eps.find(e => e.episode === episodeNum);
+        if (!ep) return fail(res, 404, `Episode ${episodeNum} tidak ditemukan`);
+        const videoData = await reelshortAPI.getVideoUrl(episodeNum, filteredTitle, item.external_id, ep.chapter_id);
+        if (!videoData) return fail(res, 503, 'Gagal mengambil stream, coba lagi');
         return res.json({
           success: true,
           message: 'Stream URL berhasil diambil',
           data: {
             stream_url: videoData.video_url,
             episode: episodeNum,
-            duration: videoData.duration,
-            platform: 'reelshort'
+            duration: videoData.duration
           },
           timestamp: new Date().toISOString(),
           requestId: req.id
@@ -115,17 +108,25 @@ export const getContentStream = async (req, res, next) => {
       }
 
       case 'melolo': {
-        const vidId = video_id;
-        if (!vidId) return fail(res, 400, 'Parameter video_id diperlukan untuk konten Melolo');
-        const { result, error } = await meloloAPI.getVideoModel(vidId);
-        if (error || !result) return fail(res, 503, 'Gagal mengambil stream dari Melolo');
+        if (!episode) return fail(res, 400, 'Parameter episode (nomor episode) diperlukan');
+        const episodeNum = parseInt(episode);
+        const { result: rawDetails } = await meloloAPI.getVideoDetails(item.external_id);
+        if (!rawDetails) return fail(res, 503, 'Gagal mengambil daftar episode, coba lagi');
+        const videos = meloloAPI._extractVideosFromDetails(rawDetails);
+        const videoEntry = videos[episodeNum - 1] ||
+          videos.find(v => String(v.chapter) === String(episodeNum));
+        if (!videoEntry?.video_id)
+          return fail(res, 404, `Episode ${episodeNum} tidak ditemukan`);
+        const { result, error } = await meloloAPI.getVideoModel(videoEntry.video_id);
+        if (error || !result) return fail(res, 503, 'Gagal mengambil stream, coba lagi');
         return res.json({
           success: true,
           message: 'Stream URL berhasil diambil',
           data: {
             stream_url: result.main_url,
             backup_url: result.backup_url,
-            platform: 'melolo'
+            episode: episodeNum,
+            duration: videoEntry.duration
           },
           timestamp: new Date().toISOString(),
           requestId: req.id
@@ -147,7 +148,6 @@ export const getContentStream = async (req, res, next) => {
             stream_url: linkInfo.video_link,
             stream_url_m3u8: linkInfo.video_link_m3u8,
             episode: vid,
-            platform: 'dramabite',
             expires_at: linkInfo.validity_period
               ? new Date(Date.now() + linkInfo.validity_period * 1000).toISOString()
               : null

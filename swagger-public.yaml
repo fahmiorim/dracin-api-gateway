@@ -188,16 +188,8 @@ paths:
       tags: [Contents]
       summary: Streaming URL episode
       description: |
-        Mengambil URL video streaming untuk episode tertentu secara real-time dari platform asli.
-        URL bisa kadaluarsa — selalu minta URL baru sebelum memutar video.
-
-        **Parameter per platform:**
-        | Platform | Parameter wajib |
-        |---|---|
-        | `dramabox` | `episode` (nomor episode, misal: `1`) |
-        | `reelshort` | `episode` + opsional `chapter_id` (auto-resolve jika tidak ada) |
-        | `melolo` | `video_id` (dari endpoint episodes) |
-        | `dramabite` | `episode` (nomor episode, misal: `1`) |
+        Mengambil URL video streaming untuk episode tertentu secara real-time.
+        URL bisa kadaluarsa — selalu minta URL baru setiap kali ingin memutar video.
       parameters:
         - name: id
           in: path
@@ -209,30 +201,45 @@ paths:
             example: '550e8400-e29b-41d4-a716-446655440000'
         - name: episode
           in: query
-          description: Nomor episode (untuk dramabox, reelshort, dramabite)
+          required: true
+          description: Nomor episode (1-based)
           schema:
             type: integer
             minimum: 1
             example: 1
-        - name: chapter_id
-          in: query
-          description: Chapter ID dari episode list (opsional, khusus ReelShort — auto-resolve jika tidak diisi)
-          schema:
-            type: string
-            example: 'ncqn2kbi1h'
-        - name: video_id
-          in: query
-          description: Video ID dari episode list (wajib untuk Melolo)
-          schema:
-            type: string
-            example: 'vid123456'
       responses:
         '200':
           description: Stream URL berhasil diambil
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StreamResponse'
+                type: object
+                properties:
+                  stream_url:
+                    type: string
+                    format: uri
+                    description: URL video streaming utama
+                    example: 'https://cdn.example.com/video/episode1.m3u8'
+                  stream_url_m3u8:
+                    type: string
+                    format: uri
+                    description: URL M3U8 alternatif (jika tersedia)
+                  backup_url:
+                    type: string
+                    format: uri
+                    description: URL backup (jika tersedia)
+                  episode:
+                    type: integer
+                    description: Nomor episode
+                    example: 1
+                  duration:
+                    type: integer
+                    description: Durasi video dalam detik
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: Waktu kadaluarsa URL (jika ada)
+                    example: '2026-03-07T05:30:00.000Z'
         '400':
           description: Parameter tidak lengkap
         '404':

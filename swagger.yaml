@@ -1115,23 +1115,12 @@ paths:
             example: "550e8400-e29b-41d4-a716-446655440000"
         - name: episode
           in: query
-          description: Nomor episode (dramabox / reelshort / dramabite)
+          required: true
+          description: Nomor episode (1-based) — berlaku untuk semua platform
           schema:
             type: integer
             minimum: 1
             example: 1
-        - name: chapter_id
-          in: query
-          description: Chapter ID dari episode list (opsional, khusus ReelShort)
-          schema:
-            type: string
-            example: "ncqn2kbi1h"
-        - name: video_id
-          in: query
-          description: Video ID dari episode list (wajib untuk Melolo)
-          schema:
-            type: string
-            example: "vid123456"
       responses:
         "200":
           description: Stream URL berhasil diambil
