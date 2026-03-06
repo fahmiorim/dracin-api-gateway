@@ -158,38 +158,6 @@ paths:
                 items:
                   $ref: "#/components/schemas/Drama"
 
-  /dramabox/search:
-    get:
-      tags:
-        - Dramabox
-      summary: Search dramas
-      description: Mencari drama berdasarkan keyword
-      parameters:
-        - name: query
-          in: query
-          description: Kata kunci pencarian
-          required: true
-          schema:
-            type: string
-            minLength: 1
-            maxLength: 100
-            example: "cinta"
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Drama"
-        "400":
-          description: Bad request - query parameter required
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
   /dramabox/popular-searches:
     get:
       tags:
@@ -241,6 +209,38 @@ paths:
                   $ref: "#/components/schemas/Drama"
         "400":
           description: Bad request - invalid classify parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dramabox/search:
+    get:
+      tags:
+        - Dramabox
+      summary: Search dramas
+      description: Mencari drama berdasarkan keyword
+      parameters:
+        - name: query
+          in: query
+          description: Kata kunci pencarian
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+            example: "cinta"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Drama"
+        "400":
+          description: Bad request - query parameter required
           content:
             application/json:
               schema:
@@ -303,6 +303,63 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /reelshort/recommend:
+    get:
+      tags:
+        - ReelShort
+      summary: Get recommended ReelShort dramas
+      description: Mendapatkan drama yang direkomendasikan
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
+
+  /reelshort/newrelease:
+    get:
+      tags:
+        - ReelShort
+      summary: Get new releases
+      description: Mendapatkan drama rilis terbaru
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
+
+  /reelshort/dramadub:
+    get:
+      tags:
+        - ReelShort
+      summary: Get drama with dubbing
+      description: Mendapatkan drama dengan dubbing
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/ReelShortBookshelf"
 
   /reelshort/search:
     get:
@@ -417,12 +474,12 @@ paths:
                   data:
                     $ref: "#/components/schemas/ReelShortVideo"
 
-  /reelshort/recommend:
+  /melolo/recommend:
     get:
       tags:
-        - ReelShort
-      summary: Get recommended ReelShort dramas
-      description: Mendapatkan drama yang direkomendasikan
+        - Melolo
+      summary: Get recommended novels
+      description: Mendapatkan daftar novel yang direkomendasikan
       responses:
         "200":
           description: Successful response
@@ -433,46 +490,23 @@ paths:
                 properties:
                   success:
                     type: boolean
+                  message:
+                    type: string
                   data:
-                    $ref: "#/components/schemas/ReelShortBookshelf"
-
-  /reelshort/dramadub:
-    get:
-      tags:
-        - ReelShort
-      summary: Get drama with dubbing
-      description: Mendapatkan drama dengan dubbing
-      responses:
-        "200":
-          description: Successful response
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MeloloRecommendation"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  requestId:
+                    type: string
+        "404":
+          description: No recommendations found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    $ref: "#/components/schemas/ReelShortBookshelf"
-
-  /reelshort/newrelease:
-    get:
-      tags:
-        - ReelShort
-      summary: Get new releases
-      description: Mendapatkan drama rilis terbaru
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    $ref: "#/components/schemas/ReelShortBookshelf"
+                $ref: "#/components/schemas/Error"
 
   /melolo/search:
     get:
@@ -630,40 +664,6 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Video URL not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /melolo/recommend:
-    get:
-      tags:
-        - Melolo
-      summary: Get recommended novels
-      description: Mendapatkan daftar novel yang direkomendasikan
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/MeloloRecommendation"
-                  timestamp:
-                    type: string
-                    format: date-time
-                  requestId:
-                    type: string
-        "404":
-          description: No recommendations found
           content:
             application/json:
               schema:
