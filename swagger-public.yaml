@@ -2,17 +2,11 @@ openapi: 3.0.3
 info:
   title: Dracin API
   description: |
-    API untuk mengakses konten drama dari berbagai platform.
+    API untuk mengakses konten drama dan streaming video.
 
     ## Autentikasi
     Semua endpoint membutuhkan API key melalui header `X-API-Key`.
     Hubungi admin untuk mendapatkan API key kamu.
-
-    ## Platform yang tersedia
-    - **dramabox** — Dramabox
-    - **reelshort** — ReelShort
-    - **melolo** — Melolo
-    - **dramabite** — Dramabite
   version: 1.0.0
 
 servers:
@@ -24,16 +18,16 @@ security:
 
 tags:
   - name: Contents
-    description: Akses konten drama dari semua platform
+    description: Akses dan streaming konten drama
   - name: Search
-    description: Pencarian lintas platform
+    description: Pencarian konten
 
 paths:
   /contents:
     get:
       tags: [Contents]
       summary: List semua konten
-      description: Mengambil semua konten dengan pagination. Gunakan /search untuk mencari konten.
+      description: Mengambil semua konten dengan pagination.
       parameters:
         - name: limit
           in: query
@@ -88,14 +82,12 @@ paths:
     get:
       tags: [Contents]
       summary: List episode konten
-      description: |
-        Mengambil daftar episode secara real-time dari server platform asli.
-        Data ini tidak di-cache karena link episode bisa berubah.
+      description: Mengambil daftar episode untuk konten tertentu.
       parameters:
         - name: id
           in: path
           required: true
-          description: UUID konten dari database
+          description: ID konten
           schema:
             type: string
             format: uuid
@@ -124,10 +116,6 @@ paths:
                         type: string
                       title:
                         type: string
-                      platform:
-                        type: string
-                      external_id:
-                        type: string
                       cover_url:
                         type: string
         '404':
@@ -139,14 +127,8 @@ paths:
     get:
       tags: [Contents]
       summary: Konten unggulan (homepage)
-      description: Mengambil konten terbaru yang sudah di-sync untuk ditampilkan di halaman utama. Bisa difilter per platform.
+      description: Mengambil konten unggulan untuk ditampilkan di halaman utama.
       parameters:
-        - name: platform
-          in: query
-          description: Filter berdasarkan platform
-          schema:
-            type: string
-            enum: [dramabox, reelshort, melolo, dramabite]
         - name: limit
           in: query
           description: Jumlah data (maks 100)
@@ -229,13 +211,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '503':
-          description: Gagal mengambil stream dari platform upstream
+          description: Gagal mengambil stream, coba beberapa saat lagi
 
   /search:
     get:
       tags: [Search]
-      summary: Cari konten lintas platform
-      description: Mencari konten dari semua platform sekaligus berdasarkan kata kunci.
+      summary: Cari konten
+      description: Mencari konten berdasarkan kata kunci.
       parameters:
         - name: q
           in: query
@@ -244,12 +226,6 @@ paths:
           schema:
             type: string
           example: dendam
-        - name: platform
-          in: query
-          description: Batasi pencarian ke platform tertentu
-          schema:
-            type: string
-            enum: [dramabox, reelshort, melolo, dramabite]
         - name: limit
           in: query
           schema:
@@ -314,11 +290,6 @@ components:
         id:
           type: string
           format: uuid
-        platform:
-          type: string
-          enum: [dramabox, reelshort, melolo, dramabite]
-        external_id:
-          type: string
         title:
           type: string
         description:
@@ -332,9 +303,6 @@ components:
           type: array
           items:
             type: string
-        last_synced_at:
-          type: string
-          format: date-time
 
     ContentListResponse:
       type: object
@@ -383,32 +351,25 @@ components:
             stream_url:
               type: string
               format: uri
-              description: URL video streaming utama (m3u8 atau mp4)
+              description: URL video streaming utama
               example: 'https://cdn.example.com/video/episode1.m3u8'
             stream_url_m3u8:
               type: string
               format: uri
-              description: URL M3U8 (khusus Dramabite)
+              description: URL M3U8 alternatif (jika tersedia)
             backup_url:
               type: string
               format: uri
-              description: URL backup (khusus Melolo)
-            chapter_id:
-              type: string
-              description: Chapter ID (khusus Dramabox)
+              description: URL backup (jika tersedia)
             episode:
               type: integer
               description: Nomor episode
               example: 1
             duration:
               type: integer
-              description: Durasi dalam detik (khusus ReelShort)
-            platform:
-              type: string
-              enum: [dramabox, reelshort, melolo, dramabite]
-              example: dramabite
+              description: Durasi video dalam detik
             expires_at:
               type: string
               format: date-time
-              description: Waktu kadaluarsa URL (khusus Dramabite)
+              description: Waktu kadaluarsa URL (jika ada)
               example: '2026-03-07T05:30:00.000Z'

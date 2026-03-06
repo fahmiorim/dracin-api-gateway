@@ -4757,3 +4757,5 @@
 {"ip":"::1","level":"info","message":"Request received","method":"GET","requestId":"61b6a1f4-9f98-4581-a43d-012895c88d97","service":"dramabox-api-gateway","timestamp":"2026-03-06T21:52:05.277Z","url":"/contents?limit=20&offset=2","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"}
 {"clientId":"admin_client","clientName":"Administrator","level":"info","message":"API key authentication successful","requestId":"61b6a1f4-9f98-4581-a43d-012895c88d97","service":"dramabox-api-gateway","timestamp":"2026-03-06T21:52:05.278Z"}
 {"count":694,"level":"info","message":"Contents listed","requestId":"61b6a1f4-9f98-4581-a43d-012895c88d97","service":"dramabox-api-gateway","timestamp":"2026-03-06T21:52:05.482Z"}
+{"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T21:52:41.363Z"}
+{"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T21:52:41.402Z"}
