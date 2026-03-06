@@ -167,23 +167,15 @@ const foryou = async () => {
 
 const vip = async () => {
     try {
-        const payload = {
-            "homePageStyle": 0,
-            "isNeedRank": 1,
-            "index": 4,
-            "type": 0,
-            "channelId": 205
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/theater?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        return res.data.data;
+        const payload = { "homePageStyle": 0, "isNeedRank": 1, "index": 4, "type": 0, "channelId": 205 };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/theater?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
+        const responseData = validateApiResponse(res, 'GET VIP');
+        return responseData || {};
     } catch (error) {
         throw error;
     }

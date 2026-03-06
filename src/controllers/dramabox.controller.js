@@ -112,7 +112,7 @@ export const getVip = async (req, res, next) => {
 
     logger.info('VIP dramas retrieved successfully', {
       requestId: req.id,
-      count: result.length
+      count: Array.isArray(result) ? result.length : 1
     });
 
     res.json({
