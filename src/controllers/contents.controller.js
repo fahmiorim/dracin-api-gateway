@@ -10,7 +10,7 @@ const fail = (res, status, message) =>
 
 const sanitize = (item) => {
   if (!item) return item;
-  const { platform, external_id, metadata, ...clean } = item;
+  const { platform, external_id, metadata, last_synced_at, ...clean } = item;
   return clean;
 };
 
