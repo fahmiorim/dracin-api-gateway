@@ -1,6 +1,8 @@
 import express from 'express';
 import { apiKeyAuth } from '../middleware/auth.js';
 import {
+  adminLogin,
+  getAdminStats,
   createApiClient,
   listApiClients,
   updateApiClient,
@@ -11,8 +13,13 @@ import {
 
 const router = express.Router();
 
-// Apply admin authentication to all admin routes
+// Public admin routes (no auth)
+router.post('/login', adminLogin);
+
+// Apply admin authentication to all routes below
 router.use(apiKeyAuth);
+
+router.get('/stats', getAdminStats);
 
 /**
  * @swagger

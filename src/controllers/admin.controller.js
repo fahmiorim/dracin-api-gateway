@@ -8,6 +8,91 @@ import supabaseService from '../database/supabase.js';
 const fallbackClients = new Map();
 
 /**
+ * Admin Login - validate admin API key
+ */
+export const adminLogin = async (req, res, next) => {
+  try {
+    const { apiKey } = req.body;
+
+    if (!apiKey) {
+      return res.status(400).json(createErrorResponse('API key is required'));
+    }
+
+    const adminKey = process.env.ADMIN_API_KEY;
+    if (!adminKey || apiKey !== adminKey) {
+      return res.status(401).json(createErrorResponse('Invalid admin API key'));
+    }
+
+    logger.info('Admin login successful', { requestId: req.id });
+
+    res.json(createSuccessResponse({ apiKey, role: 'admin' }, 'Login successful'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get overall admin dashboard stats
+ */
+export const getAdminStats = async (req, res, next) => {
+  try {
+    if (supabaseService.isReady()) {
+      try {
+        const clients = await supabaseService.listClients();
+        const now = new Date();
+
+        const total = clients.length;
+        const active = clients.filter(c => c.is_active && (!c.expires_at || new Date(c.expires_at) > now)).length;
+        const expired = clients.filter(c => c.expires_at && new Date(c.expires_at) <= now).length;
+        const inactive = clients.filter(c => !c.is_active).length;
+        const totalRequests = clients.reduce((sum, c) => sum + (c.total_requests || 0), 0);
+        const recentClients = [...clients]
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 5)
+          .map(c => ({
+            clientId: c.client_id,
+            name: c.name,
+            email: c.email,
+            isActive: c.is_active,
+            totalRequests: c.total_requests || 0,
+            createdAt: c.created_at
+          }));
+
+        return res.json(createSuccessResponse({
+          total,
+          active,
+          expired,
+          inactive,
+          totalRequests,
+          recentClients
+        }, 'Stats retrieved successfully'));
+      } catch (supabaseError) {
+        logger.warn('Supabase stats failed, using fallback:', supabaseError.message);
+      }
+    }
+
+    // Fallback to in-memory
+    const now = new Date();
+    const clients = Array.from(fallbackClients.values());
+    const total = clients.length;
+    const active = clients.filter(c => c.isActive && (!c.expiresAt || new Date(c.expiresAt) > now)).length;
+    const expired = clients.filter(c => c.expiresAt && new Date(c.expiresAt) <= now).length;
+    const totalRequests = clients.reduce((sum, c) => sum + (c.totalRequests || 0), 0);
+
+    res.json(createSuccessResponse({
+      total,
+      active,
+      expired,
+      inactive: total - active - expired,
+      totalRequests,
+      recentClients: clients.slice(-5).reverse()
+    }, 'Stats retrieved successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Generate API Key
  */
 const generateApiKey = () => {

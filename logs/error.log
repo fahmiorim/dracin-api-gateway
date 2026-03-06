@@ -1,0 +1,3 @@
+{"level":"error","message":"🚨 [42000005973] Skip idx 21.","service":"dramabox-api-gateway","timestamp":"2026-03-06T02:01:12.194Z"}
+{"level":"error","message":"🚨 [42000005973] Skip idx 26.","service":"dramabox-api-gateway","timestamp":"2026-03-06T02:01:19.648Z"}
+{"level":"error","message":"💀 [42000005973] Terlalu banyak error beruntun. Stop.","service":"dramabox-api-gateway","timestamp":"2026-03-06T02:01:19.649Z"}
