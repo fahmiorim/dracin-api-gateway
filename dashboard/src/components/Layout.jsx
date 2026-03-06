@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink, BookOpen } from 'lucide-react';
 
 const navItems = [
   { to: '/overview', icon: LayoutDashboard, label: 'Overview' },
@@ -9,6 +9,22 @@ const navItems = [
   { to: '/health', icon: Heart, label: 'Platform Health' },
   { to: '/audit', icon: Shield, label: 'Audit Log' }
 ];
+
+function DocsLink() {
+  const adminKey = localStorage.getItem('adminKey') || '';
+  const url = `http://localhost:3000/docs${adminKey ? `?api_key=${adminKey}` : ''}`;
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+    >
+      <BookOpen className="w-4 h-4" />
+      API Docs
+    </a>
+  );
+}
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -54,6 +70,7 @@ export default function Layout() {
         </nav>
 
         <div className="px-3 py-4 border-t border-gray-100 space-y-1">
+          <DocsLink />
           <a
             href="/portal"
             target="_blank"

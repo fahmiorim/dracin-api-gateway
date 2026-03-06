@@ -96,26 +96,50 @@ app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
 // Admin routes - requires admin authentication
 app.use('/api/admin', adminRoutes);
 
-// Swagger UI at /docs path (not root to avoid conflicts)
+// Swagger UI - protected with admin API key
+const swaggerAuthMiddleware = (req, res, next) => {
+  const key = req.headers['x-api-key'] || req.query.api_key;
+  const adminKey = process.env.ADMIN_API_KEY;
+  if (!adminKey || key === adminKey) return next();
+  return res.status(401).send(`
+    <html><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f9fafb">
+    <div style="text-align:center;border:1px solid #e5e7eb;padding:40px;border-radius:12px;background:white">
+      <h2 style="margin:0 0 8px">API Docs</h2>
+      <p style="color:#6b7280;margin:0 0 20px">Requires admin API key</p>
+      <form>
+        <input name="api_key" type="password" placeholder="Enter admin API key"
+          style="padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;width:260px">
+        <button type="submit"
+          style="margin-left:8px;padding:8px 16px;background:#4f6ef7;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px">
+          Access
+        </button>
+      </form>
+    </div></body></html>
+  `);
+};
+
 if (swaggerDocument) {
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+  app.use('/docs', swaggerAuthMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'Dramabox API Documentation',
+    customSiteTitle: 'Dracin API Documentation',
     swaggerOptions: {
       persistAuthorization: true,
       tryItOutEnabled: true
     }
   }));
-  
-  // Redirect root to /docs
-  app.get('/', (req, res) => {
-    res.redirect('/docs');
-  });
-} else {
-  // Fallback if swagger not loaded
+
   app.get('/', (req, res) => {
     res.json({
-      name: 'Dramabox API Gateway',
+      name: 'Dracin API Gateway',
+      version: '1.0.0',
+      status: 'running',
+      documentation: '/docs'
+    });
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json({
+      name: 'Dracin API Gateway',
       version: '1.0.0',
       status: 'running',
       documentation: '/docs (not available)'
