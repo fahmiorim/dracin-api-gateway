@@ -173,10 +173,40 @@ export const listApiClients = async (req, res, next) => {
 export const updateApiClient = async (req, res, next) => {
   try {
     const { clientId } = req.params;
-    const updates = req.body;
+    const { name, email, rateLimit, allowedEndpoints, isActive, expiresAt } = req.body;
 
-    // Find client by clientId
-    const clientEntry = Array.from(apiClients.entries()).find(([key, client]) => 
+    // Try Supabase first
+    if (supabaseService.isReady()) {
+      try {
+        const supabaseUpdates = {};
+        if (name !== undefined) supabaseUpdates.name = name;
+        if (email !== undefined) supabaseUpdates.email = email;
+        if (rateLimit !== undefined) supabaseUpdates.rate_limit = rateLimit;
+        if (allowedEndpoints !== undefined) supabaseUpdates.allowed_endpoints = allowedEndpoints;
+        if (isActive !== undefined) supabaseUpdates.is_active = isActive;
+        if (expiresAt !== undefined) supabaseUpdates.expires_at = new Date(expiresAt);
+
+        const updated = await supabaseService.updateClient(clientId, supabaseUpdates);
+
+        cache.clear();
+        logger.info('API client updated in Supabase', { clientId, requestId: req.id });
+
+        return res.json(createSuccessResponse({
+          clientId: updated.client_id,
+          name: updated.name,
+          email: updated.email,
+          rateLimit: updated.rate_limit,
+          allowedEndpoints: updated.allowed_endpoints,
+          isActive: updated.is_active,
+          expiresAt: updated.expires_at
+        }, 'API client updated successfully'));
+      } catch (supabaseError) {
+        logger.warn('Supabase update failed, using fallback:', supabaseError.message);
+      }
+    }
+
+    // Fallback to in-memory
+    const clientEntry = Array.from(fallbackClients.entries()).find(([, client]) =>
       client.clientId === clientId
     );
 
@@ -185,18 +215,11 @@ export const updateApiClient = async (req, res, next) => {
     }
 
     const [apiKey, client] = clientEntry;
+    const updatedClient = { ...client, ...req.body };
+    fallbackClients.set(apiKey, updatedClient);
 
-    // Update client
-    const updatedClient = { ...client, ...updates };
-    apiClients.set(apiKey, updatedClient);
-
-    // Clear cache
     cache.clear();
-
-    logger.info('API client updated', {
-      clientId,
-      requestId: req.id
-    });
+    logger.info('API client updated (fallback)', { clientId, requestId: req.id });
 
     res.json(createSuccessResponse(updatedClient, 'API client updated successfully'));
   } catch (error) {
@@ -211,11 +234,23 @@ export const deleteApiClient = async (req, res, next) => {
   try {
     const { clientId } = req.params;
 
-    // Find and delete client
+    // Try Supabase first
+    if (supabaseService.isReady()) {
+      try {
+        await supabaseService.deleteClient(clientId);
+        cache.clear();
+        logger.info('API client deleted from Supabase', { clientId, requestId: req.id });
+        return res.json(createSuccessResponse(null, 'API client deleted successfully'));
+      } catch (supabaseError) {
+        logger.warn('Supabase delete failed, using fallback:', supabaseError.message);
+      }
+    }
+
+    // Fallback to in-memory
     let deleted = false;
-    for (const [apiKey, client] of apiClients.entries()) {
+    for (const [apiKey, client] of fallbackClients.entries()) {
       if (client.clientId === clientId) {
-        apiClients.delete(apiKey);
+        fallbackClients.delete(apiKey);
         deleted = true;
         break;
       }
@@ -225,13 +260,8 @@ export const deleteApiClient = async (req, res, next) => {
       return res.status(404).json(createErrorResponse('Client not found'));
     }
 
-    // Clear cache
     cache.clear();
-
-    logger.info('API client deleted', {
-      clientId,
-      requestId: req.id
-    });
+    logger.info('API client deleted (fallback)', { clientId, requestId: req.id });
 
     res.json(createSuccessResponse(null, 'API client deleted successfully'));
   } catch (error) {
@@ -245,9 +275,26 @@ export const deleteApiClient = async (req, res, next) => {
 export const regenerateApiKey = async (req, res, next) => {
   try {
     const { clientId } = req.params;
+    const newApiKey = generateApiKey();
 
-    // Find client
-    const clientEntry = Array.from(apiClients.entries()).find(([key, client]) => 
+    // Try Supabase first
+    if (supabaseService.isReady()) {
+      try {
+        const updated = await supabaseService.updateClient(clientId, { api_key: newApiKey });
+        cache.clear();
+        logger.info('API key regenerated in Supabase', { clientId, requestId: req.id });
+        return res.json(createSuccessResponse({
+          clientId: updated.client_id,
+          apiKey: newApiKey,
+          message: 'Please save this new API key securely'
+        }, 'API key regenerated successfully'));
+      } catch (supabaseError) {
+        logger.warn('Supabase regenerate failed, using fallback:', supabaseError.message);
+      }
+    }
+
+    // Fallback to in-memory
+    const clientEntry = Array.from(fallbackClients.entries()).find(([, client]) =>
       client.clientId === clientId
     );
 
@@ -256,25 +303,15 @@ export const regenerateApiKey = async (req, res, next) => {
     }
 
     const [oldApiKey, client] = clientEntry;
+    fallbackClients.delete(oldApiKey);
+    fallbackClients.set(newApiKey, client);
 
-    // Generate new API key
-    const newApiKey = generateApiKey();
-
-    // Update with new key
-    apiClients.delete(oldApiKey);
-    apiClients.set(newApiKey, client);
-
-    // Clear cache
     cache.clear();
-
-    logger.info('API key regenerated', {
-      clientId,
-      requestId: req.id
-    });
+    logger.info('API key regenerated (fallback)', { clientId, requestId: req.id });
 
     res.json(createSuccessResponse({
       clientId: client.clientId,
-      apiKey: newApiKey, // Only show once
+      apiKey: newApiKey,
       message: 'Please save this new API key securely'
     }, 'API key regenerated successfully'));
 
@@ -290,14 +327,34 @@ export const getClientStats = async (req, res, next) => {
   try {
     const { clientId } = req.params;
 
-    // Find client
-    const client = Array.from(apiClients.values()).find(c => c.clientId === clientId);
+    // Try Supabase first
+    if (supabaseService.isReady()) {
+      try {
+        const data = await supabaseService.getClientStats(clientId);
+        return res.json(createSuccessResponse({
+          clientId: data.client_id,
+          name: data.name,
+          totalRequests: data.total_requests,
+          lastUsed: data.last_used,
+          rateLimit: data.rate_limit,
+          isActive: data.is_active,
+          expiresAt: data.expires_at,
+          createdAt: data.created_at,
+          recentUsage: data.recentUsage
+        }, 'Client statistics retrieved successfully'));
+      } catch (supabaseError) {
+        logger.warn('Supabase stats failed, using fallback:', supabaseError.message);
+      }
+    }
+
+    // Fallback to in-memory
+    const client = Array.from(fallbackClients.values()).find(c => c.clientId === clientId);
 
     if (!client) {
       return res.status(404).json(createErrorResponse('Client not found'));
     }
 
-    const stats = {
+    res.json(createSuccessResponse({
       clientId: client.clientId,
       name: client.name,
       totalRequests: client.totalRequests,
@@ -306,9 +363,7 @@ export const getClientStats = async (req, res, next) => {
       isActive: client.isActive,
       expiresAt: client.expiresAt,
       createdAt: client.createdAt
-    };
-
-    res.json(createSuccessResponse(stats, 'Client statistics retrieved successfully'));
+    }, 'Client statistics retrieved successfully'));
   } catch (error) {
     next(error);
   }

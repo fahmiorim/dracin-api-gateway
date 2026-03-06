@@ -46,11 +46,17 @@ class SupabaseService {
 
   async insertDefaultAdmin() {
     try {
+      const adminApiKey = process.env.ADMIN_API_KEY;
+      if (!adminApiKey) {
+        logger.warn('ADMIN_API_KEY not set, skipping default admin insert');
+        return;
+      }
+
       const { data, error } = await this.supabase
         .from('api_clients')
         .upsert([{
           client_id: 'admin_client',
-          api_key: 'admin_key_2026',
+          api_key: adminApiKey,
           name: 'Administrator',
           email: 'admin@dracin-api.com',
           rate_limit: 10000,
@@ -181,11 +187,17 @@ class SupabaseService {
       });
 
       if (error) {
-        // Fallback to manual update
+        // Fallback: fetch current value then increment manually
+        const { data: current } = await this.supabase
+          .from('api_clients')
+          .select('total_requests')
+          .eq('client_id', clientId)
+          .single();
+
         await this.supabase
           .from('api_clients')
           .update({
-            total_requests: this.supabase.raw('total_requests + ?', [increment]),
+            total_requests: (current?.total_requests || 0) + increment,
             last_used: new Date()
           })
           .eq('client_id', clientId);
