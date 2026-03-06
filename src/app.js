@@ -104,19 +104,37 @@ app.use('/search', tenantApiKeyAuth, tenantRateLimit, searchRoutes);
 // Admin routes - requires admin authentication
 app.use('/api/admin', adminRoutes);
 
-// Swagger UI - protected with admin API key
-// Only protect root path; static assets (CSS/JS) must pass through freely
-const swaggerAuthMiddleware = (req, res, next) => {
+// ─── Load public swagger doc ─────────────────────────────────────────────────
+let swaggerPublic;
+try {
+  swaggerPublic = YAML.load('./swagger-public.yaml');
+} catch (e) {
+  logger.warn('swagger-public.yaml not found:', e.message);
+}
+
+// ─── Customer Docs — /docs (public swagger, no auth gate) ────────────────────
+if (swaggerPublic) {
+  app.use('/docs', swaggerUi.serve);
+  app.get('/docs', swaggerUi.setup(swaggerPublic, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Dracin API Docs',
+    swaggerOptions: { persistAuthorization: true, tryItOutEnabled: true }
+  }));
+}
+
+// ─── Internal Docs — secret URI from INTERNAL_DOCS_PATH env var ──────────────
+const internalDocsPath = process.env.INTERNAL_DOCS_PATH || '/internal-ref-change-me';
+
+const internalAuthMiddleware = (req, res, next) => {
   const isAsset = req.path !== '/' && req.path !== '';
   if (isAsset) return next();
-
   const key = req.headers['x-api-key'] || req.query.api_key;
   const adminKey = process.env.ADMIN_API_KEY;
   if (!adminKey || key === adminKey) return next();
   return res.status(401).send(`
     <html><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f9fafb">
     <div style="text-align:center;border:1px solid #e5e7eb;padding:40px;border-radius:12px;background:white">
-      <h2 style="margin:0 0 8px">API Docs</h2>
+      <h2 style="margin:0 0 8px">Internal API Reference</h2>
       <p style="color:#6b7280;margin:0 0 20px">Requires admin API key</p>
       <form>
         <input name="api_key" type="password" placeholder="Enter admin API key"
@@ -131,46 +149,36 @@ const swaggerAuthMiddleware = (req, res, next) => {
 };
 
 if (swaggerDocument) {
-  app.use('/docs', swaggerAuthMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'Dracin API Documentation',
-    swaggerOptions: {
-      persistAuthorization: true,
-      tryItOutEnabled: true
-    },
-    customJsStr: `
-      (function() {
-        var pollCount = 0;
-        var interval = setInterval(function() {
-          var apiKey = new URLSearchParams(window.location.search).get('api_key');
-          if (apiKey && window.ui) {
-            window.ui.preauthorizeApiKey('ApiKeyAuth', apiKey);
-            clearInterval(interval);
-          }
-          if (++pollCount > 100) clearInterval(interval);
-        }, 100);
-      })();
-    `
-  }));
-
-  app.get('/', (req, res) => {
-    res.json({
-      name: 'Dracin API Gateway',
-      version: '1.0.0',
-      status: 'running',
-      documentation: '/docs'
-    });
-  });
-} else {
-  app.get('/', (req, res) => {
-    res.json({
-      name: 'Dracin API Gateway',
-      version: '1.0.0',
-      status: 'running',
-      documentation: '/docs (not available)'
-    });
-  });
+  app.use(internalDocsPath, internalAuthMiddleware, swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, {
+      customCss: '.swagger-ui .topbar { display: none }',
+      customSiteTitle: 'Dracin Internal API Reference',
+      swaggerOptions: { persistAuthorization: true, tryItOutEnabled: true },
+      customJsStr: `
+        (function() {
+          var pollCount = 0;
+          var interval = setInterval(function() {
+            var apiKey = new URLSearchParams(window.location.search).get('api_key');
+            if (apiKey && window.ui) {
+              window.ui.preauthorizeApiKey('ApiKeyAuth', apiKey);
+              clearInterval(interval);
+            }
+            if (++pollCount > 100) clearInterval(interval);
+          }, 100);
+        })();
+      `
+    })
+  );
 }
+
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Dracin API Gateway',
+    version: '1.0.0',
+    status: 'running',
+    documentation: '/docs'
+  });
+});
 
 // 404 handler
 app.use(notFoundHandler);

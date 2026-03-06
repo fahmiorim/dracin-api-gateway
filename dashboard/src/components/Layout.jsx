@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink, BookOpen, Database } from 'lucide-react';
 
@@ -12,17 +13,27 @@ const navItems = [
 ];
 
 function DocsLink() {
-  const adminKey = localStorage.getItem('adminKey') || '';
-  const url = `http://localhost:3000/docs${adminKey ? `?api_key=${adminKey}` : ''}`;
+  const [docsUrl, setDocsUrl] = useState(null);
+
+  useEffect(() => {
+    import('../lib/api.js').then(({ api }) => {
+      api.getConfig()
+        .then(res => setDocsUrl(res.data?.data?.docsUrl || null))
+        .catch(() => {});
+    });
+  }, []);
+
+  if (!docsUrl) return null;
+
   return (
     <a
-      href={url}
+      href={docsUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
     >
       <BookOpen className="w-4 h-4" />
-      API Docs
+      API Docs (Internal)
     </a>
   );
 }

@@ -20,7 +20,8 @@ import {
   getClientStats,
   triggerSync,
   getSyncStatusController,
-  getContents
+  getContents,
+  getConfig
 } from '../controllers/admin.controller.js';
 
 const router = express.Router();
@@ -423,5 +424,8 @@ router.get('/clients/:clientId/stats', getClientStats);
 router.post('/sync', triggerSync);
 router.get('/sync/status', getSyncStatusController);
 router.get('/contents', getContents);
+
+// Config
+router.get('/config', getConfig);
 
 export default router;

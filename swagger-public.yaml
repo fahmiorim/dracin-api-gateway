@@ -1,0 +1,291 @@
+openapi: 3.0.3
+info:
+  title: Dracin API
+  description: |
+    API untuk mengakses konten drama dari berbagai platform.
+
+    ## Autentikasi
+    Semua endpoint membutuhkan API key melalui header `X-API-Key`.
+    Hubungi admin untuk mendapatkan API key kamu.
+
+    ## Platform yang tersedia
+    - **dramabox** — Dramabox
+    - **reelshort** — ReelShort
+    - **melolo** — Melolo
+    - **dramabite** — Dramabite
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Development Server
+
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Contents
+    description: Akses konten drama dari semua platform
+  - name: Search
+    description: Pencarian lintas platform
+
+paths:
+  /contents:
+    get:
+      tags: [Contents]
+      summary: List semua konten
+      description: Mengambil daftar konten dari semua platform. Bisa difilter berdasarkan platform, genre, atau kata kunci.
+      parameters:
+        - name: q
+          in: query
+          description: Kata kunci pencarian (cari di judul)
+          schema:
+            type: string
+          example: cinta
+        - name: platform
+          in: query
+          description: Filter berdasarkan platform
+          schema:
+            type: string
+            enum: [dramabox, reelshort, melolo, dramabite]
+        - name: genre
+          in: query
+          description: Filter berdasarkan genre/tag
+          schema:
+            type: string
+          example: romance
+        - name: limit
+          in: query
+          description: Jumlah data per halaman (maks 100)
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          description: Offset untuk pagination
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Daftar konten berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /contents/{id}:
+    get:
+      tags: [Contents]
+      summary: Detail konten
+      description: Mengambil detail satu konten berdasarkan ID dari database.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID konten dari database
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detail konten berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /contents/{id}/episodes:
+    get:
+      tags: [Contents]
+      summary: List episode konten
+      description: |
+        Mengambil daftar episode secara real-time dari server platform asli.
+        Data ini tidak di-cache karena link episode bisa berubah.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID konten dari database
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Daftar episode berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "10 episode ditemukan"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  content:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      platform:
+                        type: string
+                      external_id:
+                        type: string
+                      cover_url:
+                        type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /search:
+    get:
+      tags: [Search]
+      summary: Cari konten lintas platform
+      description: Mencari konten dari semua platform sekaligus berdasarkan kata kunci.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Kata kunci pencarian (min 2 karakter)
+          schema:
+            type: string
+          example: dendam
+        - name: platform
+          in: query
+          description: Batasi pencarian ke platform tertentu
+          schema:
+            type: string
+            enum: [dramabox, reelshort, melolo, dramabite]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Hasil pencarian
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentListResponse'
+        '400':
+          description: Query terlalu pendek
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  responses:
+    Unauthorized:
+      description: API key tidak valid atau tidak disertakan
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Invalid or missing API key
+    NotFound:
+      description: Konten tidak ditemukan
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Konten tidak ditemukan
+
+  schemas:
+    Content:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        platform:
+          type: string
+          enum: [dramabox, reelshort, melolo, dramabite]
+        external_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        cover_url:
+          type: string
+          format: uri
+        episode_count:
+          type: integer
+        genres:
+          type: array
+          items:
+            type: string
+        last_synced_at:
+          type: string
+          format: date-time
+
+    ContentListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Content'
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        hasMore:
+          type: boolean
+
+    ContentDetailResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Content'

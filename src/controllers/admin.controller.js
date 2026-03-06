@@ -708,6 +708,22 @@ export const getClientStats = async (req, res, next) => {
 };
 
 /**
+ * Get admin config (internalDocsPath, etc.)
+ * GET /api/admin/config
+ */
+export const getConfig = async (req, res, next) => {
+  try {
+    const internalDocsPath = process.env.INTERNAL_DOCS_PATH || '/internal-ref-change-me';
+    const adminKey = process.env.ADMIN_API_KEY || '';
+    const docsUrl = `${internalDocsPath}?api_key=${adminKey}`;
+
+    res.json(createSuccessResponse({ internalDocsPath, docsUrl }, 'Config retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Trigger metadata sync for one or all platforms
  * POST /api/admin/sync
  */

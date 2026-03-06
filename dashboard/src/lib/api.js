@@ -66,5 +66,8 @@ export const api = {
     axios.get(`${BASE}/sync/status`, { headers: getHeaders() }),
 
   getContents: (params = {}) =>
-    axios.get(`${BASE}/contents`, { headers: getHeaders(), params })
+    axios.get(`${BASE}/contents`, { headers: getHeaders(), params }),
+
+  getConfig: () =>
+    axios.get(`${BASE}/config`, { headers: getHeaders() })
 };
