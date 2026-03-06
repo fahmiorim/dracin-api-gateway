@@ -1,9 +1,11 @@
 import app from './src/app.js';
 import { config } from './src/config/index.js';
 import logger from './src/utils/logger.js';
+import { startExpiryNotificationJob } from './src/jobs/expiryNotifications.js';
 
 // Start server
 const server = app.listen(config.port, () => {
+  startExpiryNotificationJob();
 });
 
 // Graceful shutdown

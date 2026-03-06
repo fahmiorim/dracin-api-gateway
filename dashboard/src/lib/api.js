@@ -38,5 +38,23 @@ export const api = {
     axios.get(`${BASE}/logs`, { headers: getHeaders(), params }),
 
   getExpiringClients: (days = 30) =>
-    axios.get(`${BASE}/expiring?days=${days}`, { headers: getHeaders() })
+    axios.get(`${BASE}/expiring?days=${days}`, { headers: getHeaders() }),
+
+  getPlans: () =>
+    axios.get(`${BASE}/plans`, { headers: getHeaders() }),
+
+  getPlatformHealth: () =>
+    axios.get(`${BASE}/health`, { headers: getHeaders() }),
+
+  clearCache: () =>
+    axios.post(`${BASE}/cache/clear`, {}, { headers: getHeaders() }),
+
+  getRateLimits: () =>
+    axios.get(`${BASE}/rate-limits`, { headers: getHeaders() }),
+
+  getAuditLogs: (params = {}) =>
+    axios.get(`${BASE}/audit`, { headers: getHeaders(), params }),
+
+  getPortalStats: (apiKey) =>
+    axios.get(`${BASE}/portal`, { headers: { 'x-api-key': apiKey } })
 };

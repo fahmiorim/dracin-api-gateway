@@ -2,7 +2,10 @@ import logger from '../utils/logger.js';
 import { createSuccessResponse, createErrorResponse } from '../utils/responseHelper.js';
 import { cache } from '../utils/cache.js';
 import crypto from 'crypto';
+import axios from 'axios';
 import supabaseService from '../database/supabase.js';
+import emailService from '../services/emailService.js';
+import { PLANS, getPlanByRateLimit } from '../config/plans.js';
 
 // Fallback in-memory storage
 const fallbackClients = new Map();
@@ -173,6 +176,174 @@ export const getExpiringClients = async (req, res, next) => {
 };
 
 /**
+ * Get available plans
+ */
+export const getPlans = (req, res) => {
+  const plans = Object.entries(PLANS).map(([key, val]) => ({
+    key,
+    ...val
+  }));
+  res.json(createSuccessResponse(plans, 'Plans retrieved'));
+};
+
+/**
+ * Health monitor - check all platform statuses
+ */
+export const getPlatformHealth = async (req, res, next) => {
+  try {
+    const baseUrl = `http://localhost:${process.env.PORT || 3000}`;
+    const adminKey = process.env.ADMIN_API_KEY;
+
+    const platforms = [
+      { name: 'Dramabox', endpoint: '/dramabox/latest?pageNo=1&pageSize=1' },
+      { name: 'ReelShort', endpoint: '/reelshort/newrelease' },
+      { name: 'Melolo', endpoint: '/melolo/recommendation' },
+      { name: 'Dramabite', endpoint: '/dramabite/homepage' }
+    ];
+
+    const results = await Promise.allSettled(
+      platforms.map(async (p) => {
+        const start = Date.now();
+        try {
+          await axios.get(`${baseUrl}${p.endpoint}`, {
+            headers: { 'x-api-key': adminKey },
+            timeout: 10000
+          });
+          return { name: p.name, status: 'up', latency: Date.now() - start };
+        } catch (err) {
+          const status = err.response ? 'degraded' : 'down';
+          return { name: p.name, status, latency: Date.now() - start, error: err.message };
+        }
+      })
+    );
+
+    const health = results.map(r => r.value || r.reason);
+    res.json(createSuccessResponse(health, 'Platform health retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Clear cache
+ */
+export const clearCache = (req, res) => {
+  try {
+    cache.clear();
+    if (supabaseService.isReady()) {
+      supabaseService.addAuditLog({ action: 'clear_cache', targetId: 'system', details: {} });
+    }
+    logger.info('Cache cleared by admin');
+    res.json(createSuccessResponse({ cleared: true }, 'Cache cleared successfully'));
+  } catch (error) {
+    res.status(500).json(createErrorResponse('Failed to clear cache'));
+  }
+};
+
+/**
+ * Get current rate limit usage per client
+ */
+export const getRateLimitStatus = (req, res) => {
+  try {
+    const statuses = [];
+    if (supabaseService.isReady()) {
+      // We can't enumerate cache keys easily, so return from fallbackClients + supabase
+    }
+
+    // Get from in-memory rate limit cache
+    for (const [key, item] of cache.cache.entries()) {
+      if (key.startsWith('rate_limit_') && item.value) {
+        const clientId = key.replace('rate_limit_', '');
+        statuses.push({
+          clientId,
+          count: item.value.count,
+          resetTime: item.value.resetTime
+        });
+      }
+    }
+
+    res.json(createSuccessResponse(statuses, 'Rate limit status retrieved'));
+  } catch (error) {
+    res.status(500).json(createErrorResponse('Failed to get rate limit status'));
+  }
+};
+
+/**
+ * Get audit logs
+ */
+export const getAuditLogs = async (req, res, next) => {
+  try {
+    const { days = 30, limit = 100 } = req.query;
+    const logs = await supabaseService.getAuditLogs({ days: parseInt(days), limit: parseInt(limit) });
+
+    // Enrich with client names
+    let clients = [];
+    if (supabaseService.isReady()) {
+      try { clients = await supabaseService.listClients(); } catch {}
+    }
+    const clientMap = Object.fromEntries(clients.map(c => [c.client_id, c.name]));
+    const enriched = logs.map(log => ({
+      ...log,
+      targetName: clientMap[log.target_id] || log.target_id
+    }));
+
+    res.json(createSuccessResponse(enriched, 'Audit logs retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Client self-service - get own stats using their API key
+ */
+export const getClientPortalStats = async (req, res, next) => {
+  try {
+    const apiKey = req.headers['x-api-key'] || req.query.api_key;
+    if (!apiKey) return res.status(400).json(createErrorResponse('API key required'));
+
+    let client = null;
+    if (supabaseService.isReady()) {
+      try { client = await supabaseService.findClientByApiKey(apiKey); } catch {}
+    }
+
+    if (!client) {
+      return res.status(401).json(createErrorResponse('Invalid API key'));
+    }
+
+    const now = new Date();
+    const expired = client.expires_at && new Date(client.expires_at) <= now;
+
+    let stats = null;
+    if (supabaseService.isReady()) {
+      try { stats = await supabaseService.getClientStats(client.client_id); } catch {}
+    }
+
+    const plan = getPlanByRateLimit(client.rate_limit || 100);
+
+    res.json(createSuccessResponse({
+      name: client.name,
+      email: client.email,
+      plan,
+      planName: PLANS[plan]?.name,
+      rateLimit: client.rate_limit,
+      isActive: client.is_active,
+      expiresAt: client.expires_at,
+      expired,
+      daysLeft: client.expires_at
+        ? Math.max(0, Math.ceil((new Date(client.expires_at) - now) / (24 * 60 * 60 * 1000)))
+        : null,
+      totalRequests: stats?.total_requests || client.total_requests || 0,
+      lastUsed: stats?.last_used || client.last_used,
+      createdAt: client.created_at,
+      recentUsage: stats?.recentUsage || [],
+      allowedEndpoints: client.allowed_endpoints || ['*']
+    }, 'Client stats retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Generate API Key
  */
 const generateApiKey = () => {
@@ -226,12 +397,11 @@ export const createApiClient = async (req, res, next) => {
         };
         
         const savedClient = await supabaseService.createClient(supabaseClient);
-        
-        logger.info('New API client created in Supabase', {
-          clientId: savedClient.client_id,
-          name: savedClient.name,
-          requestId: req.id
-        });
+
+        supabaseService.addAuditLog({ action: 'create_client', targetId: clientId, details: { name, email } });
+        emailService.sendWelcome(savedClient, apiKey).catch(() => {});
+
+        logger.info('New API client created in Supabase', { clientId: savedClient.client_id, name: savedClient.name });
 
         res.status(201).json(createSuccessResponse({
           clientId: savedClient.client_id,
@@ -403,8 +573,9 @@ export const deleteApiClient = async (req, res, next) => {
     if (supabaseService.isReady()) {
       try {
         await supabaseService.deleteClient(clientId);
+        supabaseService.addAuditLog({ action: 'delete_client', targetId: clientId, details: {} });
         cache.clear();
-        logger.info('API client deleted from Supabase', { clientId, requestId: req.id });
+        logger.info('API client deleted from Supabase', { clientId });
         return res.json(createSuccessResponse(null, 'API client deleted successfully'));
       } catch (supabaseError) {
         logger.warn('Supabase delete failed, using fallback:', supabaseError.message);
@@ -446,8 +617,9 @@ export const regenerateApiKey = async (req, res, next) => {
     if (supabaseService.isReady()) {
       try {
         const updated = await supabaseService.updateClient(clientId, { api_key: newApiKey });
+        supabaseService.addAuditLog({ action: 'regenerate_key', targetId: clientId, details: {} });
         cache.clear();
-        logger.info('API key regenerated in Supabase', { clientId, requestId: req.id });
+        logger.info('API key regenerated in Supabase', { clientId });
         return res.json(createSuccessResponse({
           clientId: updated.client_id,
           apiKey: newApiKey,

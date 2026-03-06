@@ -6,6 +6,12 @@ import {
   getAdminAnalytics,
   getAdminLogs,
   getExpiringClients,
+  getPlans,
+  getPlatformHealth,
+  clearCache,
+  getRateLimitStatus,
+  getAuditLogs,
+  getClientPortalStats,
   createApiClient,
   listApiClients,
   updateApiClient,
@@ -18,6 +24,7 @@ const router = express.Router();
 
 // Public admin routes (no auth)
 router.post('/login', adminLogin);
+router.get('/portal', getClientPortalStats);
 
 // Apply admin authentication to all routes below
 router.use(apiKeyAuth);
@@ -26,6 +33,11 @@ router.get('/stats', getAdminStats);
 router.get('/analytics', getAdminAnalytics);
 router.get('/logs', getAdminLogs);
 router.get('/expiring', getExpiringClients);
+router.get('/plans', getPlans);
+router.get('/health', getPlatformHealth);
+router.post('/cache/clear', clearCache);
+router.get('/rate-limits', getRateLimitStatus);
+router.get('/audit', getAuditLogs);
 
 /**
  * @swagger

@@ -1,11 +1,13 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity } from 'lucide-react';
+import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink } from 'lucide-react';
 
 const navItems = [
   { to: '/overview', icon: LayoutDashboard, label: 'Overview' },
   { to: '/api-keys', icon: Key, label: 'API Keys' },
   { to: '/analytics', icon: BarChart2, label: 'Analytics' },
-  { to: '/logs', icon: Activity, label: 'Activity Log' }
+  { to: '/logs', icon: Activity, label: 'Activity Log' },
+  { to: '/health', icon: Heart, label: 'Platform Health' },
+  { to: '/audit', icon: Shield, label: 'Audit Log' }
 ];
 
 export default function Layout() {
@@ -51,7 +53,16 @@ export default function Layout() {
           ))}
         </nav>
 
-        <div className="px-3 py-4 border-t border-gray-100">
+        <div className="px-3 py-4 border-t border-gray-100 space-y-1">
+          <a
+            href="/portal"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Client Portal
+          </a>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"

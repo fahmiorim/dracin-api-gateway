@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, CheckCircle, XCircle, BarChart3, RefreshCw, ArrowRight, AlertTriangle } from 'lucide-react';
+import { Users, CheckCircle, XCircle, BarChart3, RefreshCw, ArrowRight, AlertTriangle, Trash2 } from 'lucide-react';
 import { api } from '../lib/api.js';
 
 function StatCard({ icon: Icon, label, value, color }) {
@@ -32,6 +32,19 @@ export default function Overview() {
   const [expiring, setExpiring] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cacheClearing, setCacheClearing] = useState(false);
+  const [cacheMsg, setCacheMsg] = useState('');
+
+  const handleClearCache = async () => {
+    setCacheClearing(true);
+    setCacheMsg('');
+    try {
+      await api.clearCache();
+      setCacheMsg('Cache cleared!');
+      setTimeout(() => setCacheMsg(''), 3000);
+    } catch {}
+    finally { setCacheClearing(false); }
+  };
 
   const fetchStats = async () => {
     setLoading(true);
@@ -64,14 +77,24 @@ export default function Overview() {
           <h1 className="text-xl font-bold text-gray-900">Overview</h1>
           <p className="text-sm text-gray-500 mt-0.5">Dashboard ringkasan API Gateway</p>
         </div>
-        <button
-          onClick={fetchStats}
-          disabled={loading}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors"
-        >
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleClearCache}
+            disabled={cacheClearing}
+            className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50"
+          >
+            <Trash2 className={`w-4 h-4 ${cacheClearing ? 'animate-pulse text-red-500' : ''}`} />
+            {cacheMsg || 'Clear Cache'}
+          </button>
+          <button
+            onClick={fetchStats}
+            disabled={loading}
+            className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
       </div>
 
       {error && (

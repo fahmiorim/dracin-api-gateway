@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import { api } from '../lib/api.js';
 
+const PLANS = [
+  { key: 'FREE', name: 'Free', rateLimit: 100, color: 'bg-gray-100 text-gray-700' },
+  { key: 'BASIC', name: 'Basic', rateLimit: 1000, color: 'bg-blue-100 text-blue-700' },
+  { key: 'PRO', name: 'Pro', rateLimit: 10000, color: 'bg-purple-100 text-purple-700' },
+  { key: 'ENTERPRISE', name: 'Enterprise', rateLimit: 100000, color: 'bg-yellow-100 text-yellow-800' }
+];
+
 export default function CreateClientModal({ onClose, onCreated }) {
+  const [selectedPlan, setSelectedPlan] = useState('FREE');
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -10,6 +18,11 @@ export default function CreateClientModal({ onClose, onCreated }) {
     expiresAt: '',
     allowedEndpoints: '*'
   });
+
+  const handlePlanSelect = (plan) => {
+    setSelectedPlan(plan.key);
+    setForm(p => ({ ...p, rateLimit: plan.rateLimit }));
+  };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -45,6 +58,28 @@ export default function CreateClientModal({ onClose, onCreated }) {
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Plan</label>
+            <div className="grid grid-cols-2 gap-2">
+              {PLANS.map(plan => (
+                <button
+                  key={plan.key}
+                  type="button"
+                  onClick={() => handlePlanSelect(plan)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-lg border-2 transition-all ${
+                    selectedPlan === plan.key ? 'border-brand-500 bg-brand-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="text-left">
+                    <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-semibold ${plan.color}`}>{plan.name}</span>
+                    <p className="text-xs text-gray-500 mt-0.5">{plan.rateLimit.toLocaleString()}/15m</p>
+                  </div>
+                  {selectedPlan === plan.key && <div className="w-2 h-2 rounded-full bg-brand-500" />}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nama *</label>
             <input

@@ -2,11 +2,25 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Plus, Search, RefreshCw, Copy, RotateCcw, Pencil, Trash2,
-  CheckCircle, XCircle, Clock, Eye, EyeOff, ChevronRight, Loader2
+  CheckCircle, XCircle, Clock, Eye, EyeOff, ChevronRight, Loader2, Download
 } from 'lucide-react';
 import { api } from '../lib/api.js';
 import CreateClientModal from '../components/CreateClientModal.jsx';
 import EditClientModal from '../components/EditClientModal.jsx';
+
+const PLAN_BADGE = {
+  FREE: 'bg-gray-100 text-gray-600',
+  BASIC: 'bg-blue-100 text-blue-700',
+  PRO: 'bg-purple-100 text-purple-700',
+  ENTERPRISE: 'bg-yellow-100 text-yellow-800'
+};
+function getPlan(rateLimit) {
+  if (!rateLimit) return 'FREE';
+  if (rateLimit >= 100000) return 'ENTERPRISE';
+  if (rateLimit >= 10000) return 'PRO';
+  if (rateLimit >= 1000) return 'BASIC';
+  return 'FREE';
+}
 
 function StatusBadge({ isActive, expiresAt }) {
   const expired = expiresAt && new Date(expiresAt) <= new Date();
@@ -99,6 +113,22 @@ export default function ApiKeys() {
     finally { setActionLoading(''); }
   };
 
+  const handleExportCSV = () => {
+    const rows = [['Name', 'Email', 'Plan', 'Rate Limit', 'Status', 'Expires At', 'Total Requests', 'Created At']];
+    clients.forEach(c => {
+      const expired = c.expiresAt && new Date(c.expiresAt) <= new Date();
+      const rateLimit = c.rateLimit || 100;
+      const plan = rateLimit >= 100000 ? 'ENTERPRISE' : rateLimit >= 10000 ? 'PRO' : rateLimit >= 1000 ? 'BASIC' : 'FREE';
+      rows.push([c.name, c.email, plan, rateLimit, expired ? 'Expired' : c.isActive ? 'Active' : 'Inactive', c.expiresAt || '', c.totalRequests || 0, c.createdAt || '']);
+    });
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `api-clients-${new Date().toISOString().split('T')[0]}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const now = new Date();
   const filtered = clients.filter(c => {
     const matchSearch = c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -117,12 +147,21 @@ export default function ApiKeys() {
           <h1 className="text-xl font-bold text-gray-900">API Keys</h1>
           <p className="text-sm text-gray-500 mt-0.5">Kelola semua client API</p>
         </div>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus className="w-4 h-4" /> Buat Client Baru
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleExportCSV}
+            disabled={clients.length === 0}
+            className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 disabled:opacity-40"
+          >
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Buat Client Baru
+          </button>
+        </div>
       </div>
 
       {/* New key banner */}
@@ -185,6 +224,7 @@ export default function ApiKeys() {
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Client</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">API Key</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Plan</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Rate Limit</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Expires</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Status</th>
@@ -193,9 +233,9 @@ export default function ApiKeys() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {loading ? (
-                <tr><td colSpan={6} className="text-center py-10 text-gray-400 text-sm">Loading...</td></tr>
+                <tr><td colSpan={7} className="text-center py-10 text-gray-400 text-sm">Loading...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-10 text-gray-400 text-sm">Tidak ada data</td></tr>
+                <tr><td colSpan={7} className="text-center py-10 text-gray-400 text-sm">Tidak ada data</td></tr>
               ) : filtered.map(c => {
                 const isShowing = showKeyMap[c.clientId];
                 return (
@@ -209,6 +249,11 @@ export default function ApiKeys() {
                         <span>{isShowing ? c.apiKey : c.apiKey}</span>
                         <CopyButton text={c.apiKey} />
                       </div>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${PLAN_BADGE[getPlan(c.rateLimit)]}`}>
+                        {getPlan(c.rateLimit)}
+                      </span>
                     </td>
                     <td className="px-5 py-3.5">
                       <span className="text-gray-700">{c.rateLimit?.toLocaleString()}/15m</span>

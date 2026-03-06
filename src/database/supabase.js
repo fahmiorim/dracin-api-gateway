@@ -270,6 +270,34 @@ class SupabaseService {
     }
   }
 
+  async addAuditLog({ action, targetId, adminId = 'admin', details = {} }) {
+    try {
+      const { error } = await this.supabase
+        .from('api_audit_logs')
+        .insert([{ action, target_id: targetId, admin_id: adminId, details }]);
+      if (error) throw error;
+    } catch (error) {
+      logger.error('Error writing audit log:', error.message);
+    }
+  }
+
+  async getAuditLogs({ limit = 100, days = 30 } = {}) {
+    try {
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+      const { data, error } = await this.supabase
+        .from('api_audit_logs')
+        .select('*')
+        .gte('created_at', since)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      logger.error('Error fetching audit logs:', error.message);
+      return [];
+    }
+  }
+
   async getLogs({ limit = 100, clientId, endpoint, statusCode, days = 7 } = {}) {
     try {
       const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
