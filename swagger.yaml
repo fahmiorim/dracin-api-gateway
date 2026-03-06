@@ -94,50 +94,6 @@ paths:
                 timestamp: "2026-03-04T12:47:43.938Z"
                 requestId: "6b31b37d-0c23-4da5-8354-17d162ce3734"
 
-  /dramabite/homepage:
-    get:
-      tags:
-        - Dramabite
-      summary: Get homepage dramas
-      description: Mengambil daftar drama dari homepage Dramabite
-      parameters:
-        - name: page
-          in: query
-          description: Nomor halaman
-          required: false
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "Homepage dramas retrieved successfully"
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/DramabiteModule"
-                  pagination:
-                    $ref: "#/components/schemas/Pagination"
-                  timestamp:
-                    type: string
-                    format: date-time
-                    example: "2026-03-04T22:41:45.223Z"
-                  requestId:
-                    type: string
-                    format: uuid
-                    example: "e15c3e9c-15c7-4b49-84d9-0c8a2c27134f"
-
   /dramabox/trending:
     get:
       tags:
@@ -217,6 +173,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 100
+            example: "cinta"
       responses:
         "200":
           description: Successful response
@@ -263,6 +220,7 @@ paths:
           schema:
             type: string
             enum: [terpopuler, terbaru]
+            example: "terpopuler"
         - name: page
           in: query
           description: Nomor halaman
@@ -271,6 +229,7 @@ paths:
             type: integer
             default: 1
             minimum: 1
+            example: 1
       responses:
         "200":
           description: Successful response
@@ -358,6 +317,7 @@ paths:
           description: Kata kunci pencarian
           schema:
             type: string
+            example: "cinta"
       responses:
         "200":
           description: Successful response
@@ -386,12 +346,14 @@ paths:
           description: ID dari hasil search
           schema:
             type: string
+            example: "691e7400967bec54170e4a87"
         - name: filtered_title
           in: query
           required: true
           description: Slug dari hasil search
           schema:
             type: string
+            example: "balas-dendam-pewaris-sejati"
       responses:
         "200":
           description: Successful response
@@ -420,24 +382,28 @@ paths:
           description: ID dari hasil search
           schema:
             type: string
+            example: "691e7400967bec54170e4a87"
         - name: episodeNum
           in: path
           required: true
           description: Nomor episode
           schema:
             type: integer
+            example: 1
         - name: filtered_title
           in: query
           required: true
           description: Slug dari hasil search
           schema:
             type: string
+            example: "balas-dendam-pewaris-sejati"
         - name: chapter_id
           in: query
           required: true
           description: ID chapter dari episodes
           schema:
             type: string
+            example: "ncqn2kbi1h"
       responses:
         "200":
           description: Successful response
@@ -523,6 +489,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 100
+            example: "cinta"
         - name: offset
           in: query
           description: Offset untuk pagination
@@ -587,6 +554,7 @@ paths:
           required: true
           schema:
             type: string
+            example: "1234567890"
       responses:
         "200":
           description: Successful response
@@ -634,6 +602,7 @@ paths:
           required: true
           schema:
             type: string
+            example: "vid123456"
       responses:
         "200":
           description: Successful response
@@ -837,6 +806,7 @@ paths:
             type: string
             minLength: 2
             maxLength: 100
+            example: "cinta"
       responses:
         "200":
           description: Successful response
@@ -874,6 +844,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            example: 11246
       responses:
         "200":
           description: Successful response
@@ -911,6 +882,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            example: 11246
         - name: vid
           in: query
           description: Episode number
@@ -918,6 +890,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            example: 1
       responses:
         "200":
           description: Successful response
@@ -953,6 +926,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            example: 11246
       responses:
         "200":
           description: Successful response
@@ -990,6 +964,7 @@ paths:
           schema:
             type: integer
             minimum: 1
+            example: 11246
       responses:
         "200":
           description: Successful response
@@ -1071,6 +1046,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         "200":
           description: Detail konten
@@ -1089,6 +1065,7 @@ paths:
           schema:
             type: string
             format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
       responses:
         "200":
           description: Daftar episode
@@ -1105,6 +1082,7 @@ paths:
           description: Kata kunci pencarian (min 2 karakter)
           schema:
             type: string
+            example: "cinta"
         - name: platform
           in: query
           schema:

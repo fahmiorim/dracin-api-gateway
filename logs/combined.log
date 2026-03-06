@@ -4525,3 +4525,5 @@
 {"cid":11246,"count":0,"level":"info","message":"Dramabite play end recommendations retrieved successfully","requestId":"191dc444-2bea-4b7b-a156-1314c5c9178d","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:50:00.890Z"}
 {"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:50:56.695Z"}
 {"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:50:56.736Z"}
+{"level":"warn","message":"Email service not configured - SMTP_HOST, SMTP_USER, SMTP_PASS required","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:51:11.455Z"}
+{"level":"info","message":"Expiry notification job scheduled (daily 08:00)","service":"dramabox-api-gateway","timestamp":"2026-03-06T20:51:11.496Z"}
