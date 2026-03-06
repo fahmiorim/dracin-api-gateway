@@ -12,14 +12,14 @@ const fail = (res, status, message) =>
 
 export const listContents = async (req, res, next) => {
   try {
-    const { q, platform, genre, limit = '20', offset = '0' } = req.query;
+    const { platform, genre, limit = '20', offset = '0' } = req.query;
 
     const parsedLimit  = Math.min(parseInt(limit)  || 20, 100);
     const parsedOffset = parseInt(offset) || 0;
 
     let { data, count } = await supabaseService.searchContents({
-      query: q,
-      platform,
+      query: null,
+      platform: platform || null,
       limit: parsedLimit,
       offset: parsedOffset
     });
@@ -31,7 +31,7 @@ export const listContents = async (req, res, next) => {
       );
     }
 
-    logger.info('Contents listed', { requestId: req.id, count, q, platform });
+    logger.info('Contents listed', { requestId: req.id, count, platform });
 
     res.json({
       success: true,

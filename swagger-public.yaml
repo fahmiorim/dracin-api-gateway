@@ -35,12 +35,6 @@ paths:
       summary: List semua konten
       description: Mengambil daftar konten dari semua platform. Bisa difilter berdasarkan platform, genre, atau kata kunci.
       parameters:
-        - name: q
-          in: query
-          description: Kata kunci pencarian (cari di judul)
-          schema:
-            type: string
-          example: cinta
         - name: platform
           in: query
           description: Filter berdasarkan platform

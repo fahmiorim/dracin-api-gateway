@@ -1002,13 +1002,8 @@ paths:
       tags:
         - Contents
       summary: List semua konten (cache)
-      description: Mengambil konten dari semua platform dari Supabase cache. Filter berdasarkan platform, genre, atau kata kunci.
+      description: Mengambil semua konten dari Supabase cache dengan pagination. Filter opsional berdasarkan platform atau genre. Untuk pencarian gunakan /search.
       parameters:
-        - name: q
-          in: query
-          description: Kata kunci pencarian
-          schema:
-            type: string
         - name: platform
           in: query
           description: Filter platform
