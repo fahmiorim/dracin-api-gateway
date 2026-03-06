@@ -15,6 +15,7 @@ import reelshortRoutes from './routes/reelshort.js';
 import meloloRoutes from './routes/melolo.js';
 import dramabiteRoutes from './routes/dramabite.js';
 import adminRoutes from './routes/admin.js';
+import searchRoutes from './routes/search.js';
 
 // Load Swagger specification
 let swaggerDocument;
@@ -92,6 +93,9 @@ app.use('/dramabox', tenantApiKeyAuth, tenantRateLimit, dramaboxRoutes);
 app.use('/reelshort', tenantApiKeyAuth, tenantRateLimit, reelshortRoutes);
 app.use('/melolo', tenantApiKeyAuth, tenantRateLimit, meloloRoutes);
 app.use('/dramabite', tenantApiKeyAuth, tenantRateLimit, dramabiteRoutes);
+
+// Cross-platform search (from cached metadata)
+app.use('/search', tenantApiKeyAuth, tenantRateLimit, searchRoutes);
 
 // Admin routes - requires admin authentication
 app.use('/api/admin', adminRoutes);

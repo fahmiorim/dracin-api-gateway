@@ -375,6 +375,143 @@ class SupabaseService {
     }
   }
 
+  // ─── Contents Methods ───────────────────────────────────────────────────────
+
+  async upsertContents(items) {
+    if (!items || items.length === 0) return 0;
+    try {
+      const rows = items.map(item => ({
+        platform: item.platform,
+        external_id: item.external_id,
+        title: item.title,
+        description: item.description,
+        cover_url: item.cover_url,
+        episode_count: item.episode_count || 0,
+        genres: item.genres || [],
+        metadata: item.metadata || {},
+        last_synced_at: new Date().toISOString()
+      }));
+
+      const { error } = await this.supabase
+        .from('contents')
+        .upsert(rows, { onConflict: 'platform,external_id' });
+
+      if (error) throw error;
+      return rows.length;
+    } catch (error) {
+      logger.error('Error upserting contents:', error.message);
+      return 0;
+    }
+  }
+
+  async searchContents({ query, platform, limit = 20, offset = 0 }) {
+    try {
+      let q = this.supabase
+        .from('contents')
+        .select('*', { count: 'exact' });
+
+      if (platform) q = q.eq('platform', platform);
+      if (query)    q = q.ilike('title', `%${query}%`);
+
+      q = q.order('last_synced_at', { ascending: false })
+           .range(offset, offset + limit - 1);
+
+      const { data, error, count } = await q;
+      if (error) throw error;
+      return { data: data || [], count: count || 0 };
+    } catch (error) {
+      logger.error('Error searching contents:', error.message);
+      return { data: [], count: 0 };
+    }
+  }
+
+  async getContentsStats() {
+    try {
+      const { data, error } = await this.supabase
+        .from('contents')
+        .select('platform')
+        .order('platform');
+
+      if (error) throw error;
+
+      const stats = {};
+      for (const row of data || []) {
+        stats[row.platform] = (stats[row.platform] || 0) + 1;
+      }
+      return stats;
+    } catch (error) {
+      logger.error('Error getting contents stats:', error.message);
+      return {};
+    }
+  }
+
+  async getLastSyncTime(platform) {
+    try {
+      const q = this.supabase
+        .from('contents')
+        .select('last_synced_at')
+        .order('last_synced_at', { ascending: false })
+        .limit(1);
+
+      if (platform) q.eq('platform', platform);
+
+      const { data, error } = await q;
+      if (error) throw error;
+      return data?.[0]?.last_synced_at || null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  // ─── Sync Log Methods ────────────────────────────────────────────────────────
+
+  async startSyncLog(platform) {
+    try {
+      const { data, error } = await this.supabase
+        .from('sync_logs')
+        .insert({ platform, status: 'running', started_at: new Date().toISOString() })
+        .select('id')
+        .single();
+      if (error) throw error;
+      return data?.id || null;
+    } catch (error) {
+      logger.warn('Error starting sync log:', error.message);
+      return null;
+    }
+  }
+
+  async finishSyncLog(logId, status, itemsSynced, errorMessage = null) {
+    if (!logId) return;
+    try {
+      await this.supabase
+        .from('sync_logs')
+        .update({
+          status,
+          items_synced: itemsSynced,
+          error_message: errorMessage,
+          finished_at: new Date().toISOString()
+        })
+        .eq('id', logId);
+    } catch (error) {
+      logger.warn('Error finishing sync log:', error.message);
+    }
+  }
+
+  async getSyncLogs(limit = 20) {
+    try {
+      const { data, error } = await this.supabase
+        .from('sync_logs')
+        .select('*')
+        .order('started_at', { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      logger.error('Error getting sync logs:', error.message);
+      return [];
+    }
+  }
+
   isReady() {
     return this.isConnected;
   }

@@ -17,7 +17,10 @@ import {
   updateApiClient,
   deleteApiClient,
   regenerateApiKey,
-  getClientStats
+  getClientStats,
+  triggerSync,
+  getSyncStatusController,
+  getContents
 } from '../controllers/admin.controller.js';
 
 const router = express.Router();
@@ -415,5 +418,10 @@ router.post('/clients/:clientId/regenerate', regenerateApiKey);
  *         description: Unauthorized
  */
 router.get('/clients/:clientId/stats', getClientStats);
+
+// Content sync routes
+router.post('/sync', triggerSync);
+router.get('/sync/status', getSyncStatusController);
+router.get('/contents', getContents);
 
 export default router;

@@ -56,5 +56,15 @@ export const api = {
     axios.get(`${BASE}/audit`, { headers: getHeaders(), params }),
 
   getPortalStats: (apiKey) =>
-    axios.get(`${BASE}/portal`, { headers: { 'x-api-key': apiKey } })
+    axios.get(`${BASE}/portal`, { headers: { 'x-api-key': apiKey } }),
+
+  // Content sync
+  triggerSync: (platforms) =>
+    axios.post(`${BASE}/sync`, { platforms }, { headers: getHeaders() }),
+
+  getSyncStatus: () =>
+    axios.get(`${BASE}/sync/status`, { headers: getHeaders() }),
+
+  getContents: (params = {}) =>
+    axios.get(`${BASE}/contents`, { headers: getHeaders(), params })
 };

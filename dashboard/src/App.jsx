@@ -9,6 +9,7 @@ import ActivityLog from './pages/ActivityLog.jsx';
 import Health from './pages/Health.jsx';
 import AuditLog from './pages/AuditLog.jsx';
 import Portal from './pages/Portal.jsx';
+import Contents from './pages/Contents.jsx';
 
 function PrivateRoute({ children }) {
   const key = localStorage.getItem('adminKey');
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="logs" element={<ActivityLog />} />
           <Route path="health" element={<Health />} />
           <Route path="audit" element={<AuditLog />} />
+          <Route path="contents" element={<Contents />} />
         </Route>
         <Route path="/portal" element={<Portal />} />
         <Route path="*" element={<Navigate to="/" replace />} />

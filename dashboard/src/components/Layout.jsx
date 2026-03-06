@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Key, LogOut, Zap, BarChart2, Activity, Heart, Shield, ExternalLink, BookOpen, Database } from 'lucide-react';
 
 const navItems = [
   { to: '/overview', icon: LayoutDashboard, label: 'Overview' },
@@ -7,7 +7,8 @@ const navItems = [
   { to: '/analytics', icon: BarChart2, label: 'Analytics' },
   { to: '/logs', icon: Activity, label: 'Activity Log' },
   { to: '/health', icon: Heart, label: 'Platform Health' },
-  { to: '/audit', icon: Shield, label: 'Audit Log' }
+  { to: '/audit', icon: Shield, label: 'Audit Log' },
+  { to: '/contents', icon: Database, label: 'Content Cache' }
 ];
 
 function DocsLink() {

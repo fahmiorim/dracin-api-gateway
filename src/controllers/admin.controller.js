@@ -6,6 +6,7 @@ import axios from 'axios';
 import supabaseService from '../database/supabase.js';
 import emailService from '../services/emailService.js';
 import { PLANS, getPlanByRateLimit } from '../config/plans.js';
+import { runSync, getSyncStatus } from '../services/syncService.js';
 
 // Fallback in-memory storage
 const fallbackClients = new Map();
@@ -701,6 +702,83 @@ export const getClientStats = async (req, res, next) => {
       expiresAt: client.expiresAt,
       createdAt: client.createdAt
     }, 'Client statistics retrieved successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Trigger metadata sync for one or all platforms
+ * POST /api/admin/sync
+ */
+export const triggerSync = async (req, res, next) => {
+  try {
+    const { platforms } = req.body;
+    const targetPlatforms = Array.isArray(platforms) && platforms.length > 0
+      ? platforms
+      : ['dramabox', 'reelshort', 'melolo', 'dramabite'];
+
+    const status = getSyncStatus();
+    if (status.isSyncing) {
+      return res.status(409).json(createErrorResponse('Sync already in progress'));
+    }
+
+    logger.info('Admin triggered sync', { requestId: req.id, platforms: targetPlatforms });
+
+    // Run async — don't await so response returns immediately
+    runSync(targetPlatforms).catch(err =>
+      logger.error('Admin-triggered sync error:', err.message)
+    );
+
+    res.json(createSuccessResponse(
+      { platforms: targetPlatforms, status: 'started' },
+      `Sync started for: ${targetPlatforms.join(', ')}`
+    ));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get sync status and logs
+ * GET /api/admin/sync/status
+ */
+export const getSyncStatusController = async (req, res, next) => {
+  try {
+    const status = getSyncStatus();
+    const logs = await supabaseService.getSyncLogs(20);
+    const stats = await supabaseService.getContentsStats();
+
+    res.json(createSuccessResponse({
+      ...status,
+      stats,
+      recentLogs: logs
+    }, 'Sync status retrieved'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get contents with search/filter
+ * GET /api/admin/contents
+ */
+export const getContents = async (req, res, next) => {
+  try {
+    const { q, platform, limit = '20', offset = '0' } = req.query;
+
+    const { data, count } = await supabaseService.searchContents({
+      query: q,
+      platform,
+      limit: Math.min(parseInt(limit), 100),
+      offset: parseInt(offset)
+    });
+
+    res.json(createSuccessResponse(data, 'Contents retrieved successfully', {
+      count,
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    }));
   } catch (error) {
     next(error);
   }
