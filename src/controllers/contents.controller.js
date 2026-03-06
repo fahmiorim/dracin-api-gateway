@@ -12,26 +12,19 @@ const fail = (res, status, message) =>
 
 export const listContents = async (req, res, next) => {
   try {
-    const { platform, genre, limit = '20', offset = '0' } = req.query;
+    const { limit = '20', offset = '0' } = req.query;
 
     const parsedLimit  = Math.min(parseInt(limit)  || 20, 100);
     const parsedOffset = parseInt(offset) || 0;
 
-    let { data, count } = await supabaseService.searchContents({
+    const { data, count } = await supabaseService.searchContents({
       query: null,
-      platform: platform || null,
+      platform: null,
       limit: parsedLimit,
       offset: parsedOffset
     });
 
-    if (genre && data.length > 0) {
-      const g = genre.toLowerCase();
-      data = data.filter(item =>
-        Array.isArray(item.genres) && item.genres.some(tag => tag.toLowerCase().includes(g))
-      );
-    }
-
-    logger.info('Contents listed', { requestId: req.id, count, platform });
+    logger.info('Contents listed', { requestId: req.id, count });
 
     res.json({
       success: true,

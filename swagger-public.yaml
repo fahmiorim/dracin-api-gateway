@@ -33,20 +33,8 @@ paths:
     get:
       tags: [Contents]
       summary: List semua konten
-      description: Mengambil daftar konten dari semua platform. Bisa difilter berdasarkan platform, genre, atau kata kunci.
+      description: Mengambil semua konten dengan pagination. Gunakan /search untuk mencari konten.
       parameters:
-        - name: platform
-          in: query
-          description: Filter berdasarkan platform
-          schema:
-            type: string
-            enum: [dramabox, reelshort, melolo, dramabite]
-        - name: genre
-          in: query
-          description: Filter berdasarkan genre/tag
-          schema:
-            type: string
-          example: romance
         - name: limit
           in: query
           description: Jumlah data per halaman (maks 100)

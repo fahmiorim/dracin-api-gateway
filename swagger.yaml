@@ -1002,19 +1002,8 @@ paths:
       tags:
         - Contents
       summary: List semua konten (cache)
-      description: Mengambil semua konten dari Supabase cache dengan pagination. Filter opsional berdasarkan platform atau genre. Untuk pencarian gunakan /search.
+      description: Mengambil semua konten dari cache dengan pagination. Untuk pencarian gunakan /search.
       parameters:
-        - name: platform
-          in: query
-          description: Filter platform
-          schema:
-            type: string
-            enum: [dramabox, reelshort, melolo, dramabite]
-        - name: genre
-          in: query
-          description: Filter genre/tag
-          schema:
-            type: string
         - name: limit
           in: query
           schema:
