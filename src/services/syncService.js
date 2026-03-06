@@ -78,13 +78,25 @@ async function syncDramabox() {
     logger.info('[Sync] Starting Dramabox sync...');
     const items = [];
 
-    // Rank endpoints (latest=rankType3, trending=rankType1, populer=rankType2)
-    for (const fetchFn of [dramaboxLatest, dramaboxTrending, dramaboxPopuler]) {
+    // Trending & popular — single page (no pagination support)
+    for (const fetchFn of [dramaboxTrending, dramaboxPopuler]) {
       try {
         const list = await fetchFn();
         if (Array.isArray(list)) items.push(...list);
       } catch (e) {
         logger.warn('[Sync] Dramabox rank fetch failed:', e.message);
+      }
+    }
+
+    // Latest — paginated (supports pageNo param)
+    for (let page = 1; page <= 5; page++) {
+      try {
+        const list = await dramaboxLatest(page, 20);
+        if (!Array.isArray(list) || list.length === 0) break;
+        items.push(...list);
+      } catch (e) {
+        logger.warn(`[Sync] Dramabox latest page ${page} failed:`, e.message);
+        break;
       }
     }
 
@@ -167,15 +179,22 @@ async function syncMelolo() {
 
     // searchNovels(query, offset, limit) returns { result: [...], error }
     // result items: { series_id, title, last_chapter_index, thumb_url }
-    const keywords = ['cinta', 'takdir', 'dendam', 'rahasia', 'wanita', 'kaya', 'raja', 'istri', 'suami', 'balas'];
+    const keywords = [
+      'cinta', 'takdir', 'dendam', 'rahasia', 'wanita',
+      'kaya', 'raja', 'istri', 'suami', 'balas',
+      'menantu', 'pewaris', 'pengkhianatan', 'dokter', 'CEO',
+      'miliarder', 'tuan', 'misteri', 'benci', 'jodoh'
+    ];
     for (const kw of keywords) {
-      try {
-        const { result, error } = await meloloAPI.searchNovels(kw, 0, 20);
-        if (!error && Array.isArray(result)) {
+      for (const offset of [0, 20, 40]) {
+        try {
+          const { result, error } = await meloloAPI.searchNovels(kw, offset, 20);
+          if (error || !Array.isArray(result) || result.length === 0) break;
           items.push(...result.map(normalizeMelolo));
+        } catch (e) {
+          logger.warn(`[Sync] Melolo search '${kw}' offset=${offset} failed:`, e.message);
+          break;
         }
-      } catch (e) {
-        logger.warn(`[Sync] Melolo search '${kw}' failed:`, e.message);
       }
     }
 
