@@ -109,7 +109,7 @@ try {
 }
 
 // ─── Internal Docs — secret URI from INTERNAL_DOCS_PATH env var ──────────────
-const internalDocsPath = process.env.INTERNAL_DOCS_PATH || '/internal-ref-change-me';
+const internalDocsPath = '/ref-drc-x7k2m9q4bz';
 
 const internalAuthMiddleware = (req, res, next) => {
   const isAsset = req.path !== '/' && req.path !== '';

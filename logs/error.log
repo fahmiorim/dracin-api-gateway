@@ -53,3 +53,7 @@
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:32.591Z"}
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:43.390Z"}
 {"level":"error","message":"Error upserting contents:","service":"dramabox-api-gateway","timestamp":"2026-03-06T05:40:44.148Z"}
+{"dataKeys":["status","message","timestamp","ip","region","path","success"],"level":"error","message":"❌ GET LATEST: No data.data in response","service":"dramabox-api-gateway","status":200,"timestamp":"2026-03-06T20:20:02.657Z"}
+{"dataKeys":["status","message","timestamp","ip","region","path","success"],"level":"error","message":"❌ GET LATEST: No data.data in response","service":"dramabox-api-gateway","status":200,"timestamp":"2026-03-06T20:20:17.071Z"}
+{"dataKeys":["status","message","timestamp","ip","region","path","success"],"level":"error","message":"❌ GET LATEST: No data.data in response","service":"dramabox-api-gateway","status":200,"timestamp":"2026-03-06T20:20:18.060Z"}
+{"dataKeys":["status","message","timestamp","ip","region","path","success"],"level":"error","message":"❌ GET LATEST: No data.data in response","service":"dramabox-api-gateway","status":200,"timestamp":"2026-03-06T20:21:17.671Z"}
