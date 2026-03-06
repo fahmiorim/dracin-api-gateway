@@ -244,13 +244,14 @@ export const getContentEpisodes = async (req, res, next) => {
       }
 
       case 'melolo': {
-        const result = await meloloAPI.getVideoDetails(item.external_id);
-        episodes = result || [];
+        const { result: rawDetails } = await meloloAPI.getVideoDetails(item.external_id);
+        episodes = rawDetails ? meloloAPI._extractVideosFromDetails(rawDetails) : [];
         break;
       }
 
       case 'dramabite': {
-        episodes = await dramabiteEpisodes(item.external_id);
+        const raw = await dramabiteEpisodes(item.external_id);
+        episodes = raw?.episode_list || (Array.isArray(raw) ? raw : []);
         break;
       }
 
