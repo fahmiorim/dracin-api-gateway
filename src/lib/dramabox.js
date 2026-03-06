@@ -73,19 +73,15 @@ const latest = async (pageNo = 1, pageSize = 20) => {
 
 const search = async (keyword) => {
     try {
-        const payload = {
-            keyword: keyword, // keyword pencarian
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/search/suggest?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        return res.data.data.suggestList;
+        const payload = { keyword };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/search/suggest?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
+        const responseData = validateApiResponse(res, 'SEARCH', {});
+        return responseData.suggestList || [];
     } catch (error) {
         throw error;
     }
@@ -100,7 +96,8 @@ const populersearch = async () => {
         const sig = generateSignature(payload, localHeaders);
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${sig.timestamp}`;
         const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
-        return res.data.data.rankList;
+        const responseData = validateApiResponse(res, 'POPULER SEARCH');
+        return responseData.rankList || [];
     } catch (error) {
         throw error;
     }
@@ -115,7 +112,8 @@ const trendings = async () => {
         const sig = generateSignature(payload, localHeaders);
         const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${sig.timestamp}`;
         const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
-        return res.data.data.rankList;
+        const responseData = validateApiResponse(res, 'TRENDINGS');
+        return responseData.rankList || [];
     } catch (error) {
         throw error;
     }
