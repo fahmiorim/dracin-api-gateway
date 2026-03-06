@@ -67,33 +67,16 @@ const randomdrama = async () => {
 
 const latest = async (pageNo = 1, pageSize = 20) => {
     try {
-        const payload = {
-            "rankType": 3,
-            "pageNo": pageNo,
-            "pageSize": pageSize
-        }
-
-        // Coba generate signature saja untuk tes
-        const testSig = getSignatureHeaders(payload);
-        
-        // Check jika signature gagal
-        if (!testSig || !testSig.signature) {
-            logger.error('❌ Failed to generate signature for Dramabox API');
-            return [];
-        }
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        
-        // Add delay untuk menghindari rate limiting
-        await delay(Math.random() * 1000 + 500); // 500-1500ms random delay
-        
-        const res = await axios.post(url, payload, { headers: requestHeaders })
+        const payload = { "rankType": 3, "pageNo": pageNo, "pageSize": pageSize };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        await delay(Math.random() * 1000 + 500);
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
         const responseData = validateApiResponse(res, 'GET LATEST');
-        return responseData.rankList || []
+        return responseData.rankList || [];
     } catch (error) {
         logger.error(`❌ ERROR GET LATEST:`, error.response?.data || error.message);
         throw error;
@@ -115,6 +98,183 @@ const search = async (keyword) => {
         };
         const res = await axios.post(url, payload, { headers: requestHeaders })
         return res.data.data.suggestList;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const populersearch = async () => {
+    try {
+        const payload = { "rankType": 2 };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
+        return res.data.data.rankList;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const trendings = async () => {
+    try {
+        const payload = { "rankType": 1 };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } });
+        return res.data.data.rankList;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const foryou = async () => {
+    try {
+        const payload = { "isNeedRank": 1, "specialColumnId": 0, "pageNo": getRandomNumber() };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/recommendChannel?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } })
+        const responseData = validateApiResponse(res, 'GET FORYOU');
+        
+        // For-you endpoint has different response structure
+        if (responseData.chapterList && Array.isArray(responseData.chapterList)) {
+            return responseData.chapterList;
+        } else if (Array.isArray(responseData)) {
+            return responseData;
+        } else if (responseData.recommendList && Array.isArray(responseData.recommendList.records)) {
+            return responseData.recommendList.records;
+        } else {
+            logger.warn('GET FORYOU: Unexpected response structure', {
+                isArray: Array.isArray(responseData),
+                hasChapterList: !!responseData.chapterList,
+                hasRecommendList: !!responseData.recommendList,
+                availableKeys: Object.keys(responseData || {})
+            });
+            return [];
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+const vip = async () => {
+    try {
+        const payload = {
+            "homePageStyle": 0,
+            "isNeedRank": 1,
+            "index": 4,
+            "type": 0,
+            "channelId": 205
+        }
+
+        const testSig = getSignatureHeaders(payload);
+
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/theater?timestamp=${testSig.timestamp}`;
+        const requestHeaders = {
+            ...headers,
+            'sn': testSig.signature
+        };
+        const res = await axios.post(url, payload, { headers: requestHeaders })
+        return res.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const detail = async (bookId) => {
+    try {
+        const payload = {
+            "boundaryIndex": 0,
+            "comingPlaySectionId": -1,
+            "index": 1,
+            "currencyPlaySourceName": "首页发现_Untukmu_推荐列表",
+            "rid": "",
+            "enterReaderChapterIndex": 0,
+            "loadDirection": 1,
+            "startUpKey": "10942710-5e9e-48f2-8927-7c387e6f5fac",
+            "bookId": bookId,
+            "currencyPlaySource": "discover_175_rec",
+            "needEndRecommend": 0,
+            "preLoad": false,
+            "pullCid": ""
+        };
+
+        const currentToken = await fetchTokenString();
+        const localHeaders = { ...headers };
+        if (currentToken) {
+            localHeaders["tn"] = `Bearer ${currentToken}`;
+        }
+
+        const testSig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/chapterv2/batch/load?timestamp=${testSig.timestamp}`;
+        const requestHeaders = {
+            ...localHeaders,
+            'sn': testSig.signature
+        };
+
+        const res = await axios.post(url, payload, { headers: requestHeaders });
+
+        const rawData = res.data.data;
+        if (!rawData) {
+            throw new Error(`Data drama untuk ID ${bookId} tidak ditemukan di server Dramabox.`);
+        }
+
+        // Mapping untuk frontend agar sesuai API lama (webfic)
+        const mappedData = {
+            data: {
+                bookId: rawData.bookId,
+                bookName: rawData.bookName,
+                cover: rawData.bookCover,
+                introduction: rawData.introduction,
+                chapterCount: rawData.chapterCount,
+                score: rawData.score || rawData.rating || "9.5",
+                tags: rawData.tagV3s || []
+            }
+        };
+
+        return mappedData;
+    } catch (error) {
+        logger.error("❌ Detail Fetch Error:", error.message);
+        throw error;
+    }
+}
+
+const dubindo = async (classify, page) => {
+    try {
+        const payload = {
+            "typeList": [
+                { "type": 1, "value": "" },
+                { "type": 2, "value": "1" },
+                { "type": 3, "value": "" },
+                { "type": 4, "value": "" },
+                { "type": 4, "value": "" },
+                { "type": 5, "value": classify }
+            ],
+            "showLabels": false, "pageNo": page, "pageSize": 15
+        };
+        const localHeaders = { ...headers };
+        const freshToken = await fetchTokenString();
+        if (freshToken) localHeaders["tn"] = `Bearer ${freshToken}`;
+        await delay(Math.random() * 1000 + 500);
+        const sig = generateSignature(payload, localHeaders);
+        const url = `https://sapi.dramaboxdb.com/drama-box/he001/classify?timestamp=${sig.timestamp}`;
+        const res = await axios.post(url, payload, { headers: { ...localHeaders, 'sn': sig.signature } })
+        const responseData = validateApiResponse(res, 'GET DUB INDO');
+        
+        // Check if classifyBookList exists
+        if (!responseData.classifyBookList) {
+            return [];
+        }
+        
+        return responseData.classifyBookList.records || [];
     } catch (error) {
         throw error;
     }
@@ -379,226 +539,6 @@ async function scrapeProcess(targetBookId) {
     } catch (error) {
         logger.error(`Critical Error [${targetBookId}]:`, error.message);
         return [];
-    }
-}
-
-const populersearch = async () => {
-    try {
-        const payload = {
-            "rankType": 2
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        return res.data.data.rankList
-    } catch (error) {
-        throw error;
-    }
-}
-
-const trendings = async () => {
-    try {
-        const payload = {
-            "rankType": 1
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/rank?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        return res.data.data.rankList;
-    } catch (error) {
-        throw error;
-    }
-}
-
-const foryou = async () => {
-    try {
-        const payload = {
-            "isNeedRank": 1,
-            "specialColumnId": 0,
-            "pageNo": getRandomNumber()
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/recommendChannel?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        const responseData = validateApiResponse(res, 'GET FORYOU');
-        
-        // For-you endpoint has different response structure
-        if (responseData.chapterList && Array.isArray(responseData.chapterList)) {
-            return responseData.chapterList;
-        } else if (Array.isArray(responseData)) {
-            return responseData;
-        } else if (responseData.recommendList && Array.isArray(responseData.recommendList.records)) {
-            return responseData.recommendList.records;
-        } else {
-            logger.warn('GET FORYOU: Unexpected response structure', {
-                isArray: Array.isArray(responseData),
-                hasChapterList: !!responseData.chapterList,
-                hasRecommendList: !!responseData.recommendList,
-                availableKeys: Object.keys(responseData || {})
-            });
-            return [];
-        }
-    } catch (error) {
-        throw error;
-    }
-}
-
-const vip = async () => {
-    try {
-        const payload = {
-            "homePageStyle": 0,
-            "isNeedRank": 1,
-            "index": 4,
-            "type": 0,
-            "channelId": 205
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/theater?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        return res.data.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-const detail = async (bookId) => {
-    try {
-        const payload = {
-            "boundaryIndex": 0,
-            "comingPlaySectionId": -1,
-            "index": 1,
-            "currencyPlaySourceName": "首页发现_Untukmu_推荐列表",
-            "rid": "",
-            "enterReaderChapterIndex": 0,
-            "loadDirection": 1,
-            "startUpKey": "10942710-5e9e-48f2-8927-7c387e6f5fac",
-            "bookId": bookId,
-            "currencyPlaySource": "discover_175_rec",
-            "needEndRecommend": 0,
-            "preLoad": false,
-            "pullCid": ""
-        };
-
-        const currentToken = await fetchTokenString();
-        const localHeaders = { ...headers };
-        if (currentToken) {
-            localHeaders["tn"] = `Bearer ${currentToken}`;
-        }
-
-        const testSig = generateSignature(payload, localHeaders);
-        const url = `https://sapi.dramaboxdb.com/drama-box/chapterv2/batch/load?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...localHeaders,
-            'sn': testSig.signature
-        };
-
-        const res = await axios.post(url, payload, { headers: requestHeaders });
-
-        const rawData = res.data.data;
-        if (!rawData) {
-            throw new Error(`Data drama untuk ID ${bookId} tidak ditemukan di server Dramabox.`);
-        }
-
-        // Mapping untuk frontend agar sesuai API lama (webfic)
-        const mappedData = {
-            data: {
-                bookId: rawData.bookId,
-                bookName: rawData.bookName,
-                cover: rawData.bookCover,
-                introduction: rawData.introduction,
-                chapterCount: rawData.chapterCount,
-                score: rawData.score || rawData.rating || "9.5",
-                tags: rawData.tagV3s || []
-            }
-        };
-
-        return mappedData;
-    } catch (error) {
-        logger.error("❌ Detail Fetch Error:", error.message);
-        throw error;
-    }
-}
-
-const dubindo = async (classify, page) => {
-    try {
-        const payload = {
-            "typeList": [
-                {
-                    "type": 1,
-                    "value": ""
-                },
-                {
-                    "type": 2,
-                    "value": "1"
-                },
-                {
-                    "type": 3,
-                    "value": ""
-                },
-                {
-                    "type": 4,
-                    "value": ""
-                },
-                {
-                    "type": 4,
-                    "value": ""
-                },
-                {
-                    "type": 5,
-                    "value": classify // 1 = terpopuler, 2 = terbaru
-                }
-            ],
-            "showLabels": false,
-            "pageNo": page,
-            "pageSize": 15
-        }
-
-        const testSig = getSignatureHeaders(payload);
-
-        const url = `https://sapi.dramaboxdb.com/drama-box/he001/classify?timestamp=${testSig.timestamp}`;
-        const requestHeaders = {
-            ...headers,
-            'sn': testSig.signature
-        };
-
-        // Add delay untuk menghindari rate limiting
-        await delay(Math.random() * 1000 + 500); // 500-1500ms random delay
-
-        const res = await axios.post(url, payload, { headers: requestHeaders })
-        const responseData = validateApiResponse(res, 'GET DUB INDO');
-        
-        // Check if classifyBookList exists
-        if (!responseData.classifyBookList) {
-            return [];
-        }
-        
-        return responseData.classifyBookList.records || [];
-    } catch (error) {
-        throw error;
     }
 }
 
