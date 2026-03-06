@@ -112,16 +112,6 @@ try {
   logger.warn('swagger-public.yaml not found:', e.message);
 }
 
-// ─── Customer Docs — /docs (public swagger, no auth gate) ────────────────────
-if (swaggerPublic) {
-  app.use('/docs', swaggerUi.serve);
-  app.get('/docs', swaggerUi.setup(swaggerPublic, {
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'Dracin API Docs',
-    swaggerOptions: { persistAuthorization: true, tryItOutEnabled: true }
-  }));
-}
-
 // ─── Internal Docs — secret URI from INTERNAL_DOCS_PATH env var ──────────────
 const internalDocsPath = process.env.INTERNAL_DOCS_PATH || '/internal-ref-change-me';
 
@@ -149,7 +139,10 @@ const internalAuthMiddleware = (req, res, next) => {
 };
 
 if (swaggerDocument) {
-  app.use(internalDocsPath, internalAuthMiddleware, swaggerUi.serve,
+  app.use(
+    internalDocsPath,
+    internalAuthMiddleware,
+    swaggerUi.serveFiles(swaggerDocument),
     swaggerUi.setup(swaggerDocument, {
       customCss: '.swagger-ui .topbar { display: none }',
       customSiteTitle: 'Dracin Internal API Reference',
@@ -167,6 +160,19 @@ if (swaggerDocument) {
           }, 100);
         })();
       `
+    })
+  );
+}
+
+// ─── Customer Docs — /docs (public swagger, no auth gate) ────────────────────
+if (swaggerPublic) {
+  app.use(
+    '/docs',
+    swaggerUi.serveFiles(swaggerPublic),
+    swaggerUi.setup(swaggerPublic, {
+      customCss: '.swagger-ui .topbar { display: none }',
+      customSiteTitle: 'Dracin API Docs',
+      swaggerOptions: { persistAuthorization: true, tryItOutEnabled: true }
     })
   );
 }
