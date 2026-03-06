@@ -198,7 +198,7 @@ export const getPlatformHealth = async (req, res, next) => {
     const platforms = [
       { name: 'Dramabox', endpoint: '/dramabox/latest?pageNo=1&pageSize=1' },
       { name: 'ReelShort', endpoint: '/reelshort/newrelease' },
-      { name: 'Melolo', endpoint: '/melolo/recommendation' },
+      { name: 'Melolo', endpoint: '/melolo/recommend' },
       { name: 'Dramabite', endpoint: '/dramabite/homepage' }
     ];
 
